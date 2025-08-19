@@ -1,6 +1,7 @@
 import { DAYS } from "../../constants/days";
 import { findings } from "../../constants/findings";
 import { planCardsWeek1_Monday } from "../../constants/planCards"
+import { SCREENS } from "../../constants/screens";
 import { weekInfo } from "../../constants/weeksInfo"
 import { PlannerGame } from "../shared/games/PlannerGame"
 
@@ -16,6 +17,8 @@ export const Planner11 = () => {
             collegueMessage={collegueMessage} 
             findingId={findingId}
             finishMessage={finishMessage}
+            isNeverPlayed
+            lobbyScreen={SCREENS.LOBBY1M}
         />
     )
 }

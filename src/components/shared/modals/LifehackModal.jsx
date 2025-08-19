@@ -37,7 +37,12 @@ const TitleWrapper = styled.div`
 
 const TextWrapper = styled.div`
     margin-top: var(--spacing_x1);
+
+    & p {
+        font-weight: 300;
+    }
 `;
+
     
 export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
     const { addDayFinding } = useProgress();
@@ -57,7 +62,7 @@ export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew})
         <BlockStyled>
             <TitleWrapper>ЛАЙФХАК</TitleWrapper>
             <TextWrapper>
-                <p>{finding?.text}</p>
+                <p>{finding?.text()}</p>
                 {children}
             </TextWrapper>
         </BlockStyled>

@@ -58,30 +58,33 @@ const TabletInfo = styled(Block)`
     transform: translateX(-50%);
 `;
 
-export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, week, day }) => {
-    const { user, setUserInfo, currentWeek } = useProgress();
+export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ...props }) => {
+    const { user, next, currentWeek } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [isAchieveModal, setIsAchieveModal] = useState(false);
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
-
-    const weekName = `week${week ?? currentWeek}`;
-    const weekMessages = weekInfo.find(({ week }) => week === currentWeek);
+    
+    const week = props.week ?? currentWeek;
+    const day = props.day ?? CURRENT_DAY;
+    const weekName = `week${week}`;
+    const weekMessages = weekInfo.find((info) => info.week === week);
 
     const isLetterShown = isLaptopLetter || !user.readenLetter?.[weekName];
-    const isPlanerUndone = user.planners?.[currentWeek - 1][CURRENT_DAY] === undefined;
-    const isChallengeUndone = user.challenges?.[currentWeek - 1][CURRENT_DAY] === undefined;
-    const isBlenderUndone = user.blenders?.[currentWeek - 1][CURRENT_DAY] === undefined;
+    const isPlanerUndone = user.planners?.[week - 1][day] === undefined;
+    const isChallengeUndone = user.challenges?.[week - 1][day] === undefined;
+    const isBlenderUndone = user.blenders?.[week - 1][day] === undefined;
 
     const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
-    const isBulbShown = isAllDone && !user.findings.includes(findings.find(({ week, day }) => week === currentWeek && day === CURRENT_DAY).id);
+    const isBulbShown = isAllDone && !user.findings.includes(findings.find(({ week, day }) => week === week && day === day).id);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown || (!isPlanerUndone && isChallengeUndone);
     const isCup = !isPlanerUndone && isBlenderUndone;
     const isTablet = !isLetterShown && isPlanerUndone;
 
     const handleClickItem = (item) => {
+        console.log(item);
         switch (item) {
             case 'laptop':
                 if (!isLaptop) return;
@@ -105,19 +108,20 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, we
                 }
 
                 // Челлендж недели
-                // next()
+                next(props.challengeScreen);
                 break;
             case 'tablet':
                 if (!isTablet) return;
 
+                console.log('ALLLLEEEE');
                 // Планнер-игра
-                // next()
+                next(props.plannerScreen);
                 break;
             case 'cup':
-                if (!isTablet) return;
+                if (!isCup) return;
 
                 // Блендер-игра
-                // next()
+                next(props.blenderScreen);
                 break;
             default:
                 break;
@@ -146,7 +150,7 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, we
             <FindingModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
             {isTablet && (
                 <TabletInfo>
-                    <p>{weekMessages.plannersMessage?.[day ?? CURRENT_DAY]}</p>
+                    <p>{weekMessages.plannersMessage?.[day]}</p>
                 </TabletInfo>
             )}
             <ItemsStyled

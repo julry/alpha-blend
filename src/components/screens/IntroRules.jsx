@@ -6,6 +6,7 @@ import { Button, IconButton } from "../shared/Button";
 import styled from "styled-components";
 import { PersonIcon } from "../shared/svg/PersonIcon";
 import { LetterModal } from "../shared/modals/LetterModal";
+import { SCREENS } from "../../constants/screens";
 
 const ButtonStyled = styled(Button)`
     position: absolute;
@@ -82,7 +83,7 @@ export const IntroRules = () => {
 
     return (
         <>
-            <Lobby isLaptop={part === 3} isLaptopLetter={part === 3} onLaptopClick={handleNext} />
+            <Lobby isLaptop={part === 3} isLaptopLetter={part === 3} onLaptopClick={handleNext} plannerScreen={SCREENS.PLANNER1_1}/>
             <CommonModal
                 isOpen={part < 3}
                 isDisabledAnimation={part !== 0}

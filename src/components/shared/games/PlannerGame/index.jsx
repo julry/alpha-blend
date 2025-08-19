@@ -35,7 +35,7 @@ width: 100%;
 
 const MAX_AMOUNT = 9;
 
-export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, finishMessage }) => {
+export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, finishMessage, lobbyScreen }) => {
     const { next } = useProgress();
     const ratio = useSizeRatio();
     const [isRules, setIsRules] = useState(isNeverPlayed);
@@ -109,7 +109,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
                 </p>
             </CommonModal>
             <FindingModal isOpen={isFinding} onClose={handleShowFinish} id={findingId} isNew />
-            <CommonModal isOpen={isFinishModal} btnText="В комнату" onClose={() => next(SCREENS.LOBBY)}>
+            <CommonModal isOpen={isFinishModal} btnText="В комнату" onClose={() => next(lobbyScreen)}>
                 <p>{finishMessage}</p>
             </CommonModal>
             <RulesModal isOpen={isRules} onClose={() => setIsRules(false)} />
