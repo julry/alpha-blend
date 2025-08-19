@@ -1,0 +1,25 @@
+export const CONTAINER_SIZE = 330;
+
+export const TILE_COUNT_PER_DIMENSION = 4;
+
+export const MERGE_ANIMATION_DURATION = 100;
+
+export const MOVE_ANIMATION_DURATION = 200;
+
+export const DELETE_ANIMATION_DURATION = MOVE_ANIMATION_DURATION + MERGE_ANIMATION_DURATION + 100;
+
+export const FINISH_SCORE = 256;
+
+export const MAX_TIME = 1 * 60 + 30;
+// export const MAX_TIME = 5;
+
+export const ACTIONS = {
+    CLEAN_UP: 'CLEAN_UP',
+    CREATE_TILE: 'CREATE_TILE',
+    MOVE_UP: 'MOVE_UP',
+    MOVE_DOWN: 'MOVE_DOWN',
+    MOVE_LEFT: 'MOVE_LEFT',
+    MOVE_RIGHT: 'MOVE_RIGHT',
+    DELETE_TILE: 'DELETE_TILE',
+    RESTART: 'RESTART',
+}

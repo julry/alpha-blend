@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'StyreneALC';
+    src: url('../assets/fonts/StyreneALC-Bold.otf') format('opentype'),
+    local('Styrene A LC-Bold'), local('StyreneALCBold'), local('Styrene A LC Bold'),
+    local('StyreneALC-Bold'), local('styrenealc-bold');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'StyreneALC';
+    src: url('../assets/fonts/StyreneALC-Light.otf') format('opentype'),
+    local('Styrene A LC-Light'), local('StyreneALCLight'), local('Styrene A LC Light'),
+    local('StyreneALC-Light'), local('styrenealc-;light');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'StyreneALC';
+    src: url('../assets/fonts/StyreneALC-Regular.otf') format('opentype'),
+    local('Styrene A LC-Regular'), local('StyreneALCRegular'), local('Styrene A LC Regular'),
+    local('StyreneALC-Regular'), local('styrenealc-regular');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'StyreneALC';
+    src: url('../assets/fonts/StyreneALC-Black.otf') format('opentype'),
+    local('Styrene A LC-Black'), local('StyreneALCBlack'), local('Styrene A LC Black'),
+    local('StyreneALC-Black'), local('styrenealc-black');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'StyreneALC';
+    src: url('../assets/fonts/StyreneALC-Medium.otf') format('opentype'),
+    local('Styrene A LC-Medium'), local('StyreneALCMedium'), local('Styrene A LC Medium'), 
+    local('StyreneALC-Medium'), local('styrenealc-medium');
+    font-weight: 500;
+    font-style: normal;
+}
