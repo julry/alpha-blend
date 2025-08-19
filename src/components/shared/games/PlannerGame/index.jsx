@@ -25,12 +25,14 @@ const CardsContainer = styled.div`
 width: 100%;
     display: flex;
     gap: var(--spacing_x1);
+    overflow-y: visible;
+    height: fit-content;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
   white-space: nowrap; /* Предотвращает перенос элементов */
   touch-action: pan-x;
   scroll-snap-type: x mandatory;
-  padding: var(--spacing_x4);
+  padding: var(--spacing_x3) 0;
 `;
 
 const MAX_AMOUNT = 9;

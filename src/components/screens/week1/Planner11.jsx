@@ -1,9 +1,9 @@
-import { DAYS } from "../../constants/days";
-import { findings } from "../../constants/findings";
-import { planCardsWeek1_Monday } from "../../constants/planCards"
-import { SCREENS } from "../../constants/screens";
-import { weekInfo } from "../../constants/weeksInfo"
-import { PlannerGame } from "../shared/games/PlannerGame"
+import { DAYS } from "../../../constants/days";
+import { findings } from "../../../constants/findings";
+import { planCardsWeek1_Monday } from "../../../constants/planCards"
+import { SCREENS } from "../../../constants/screens";
+import { weekInfo } from "../../../constants/weeksInfo"
+import { PlannerGame } from "../../shared/games/PlannerGame"
 
 export const Planner11 = () => {
     const weekData = weekInfo.find((info) => info.week === 1);

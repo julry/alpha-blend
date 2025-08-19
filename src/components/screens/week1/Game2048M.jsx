@@ -1,7 +1,7 @@
-import { DAYS } from "../../constants/days";
-import { weekInfo } from "../../constants/weeksInfo";
-import { useProgress } from "../../contexts/ProgressContext"
-import { Game2048 } from "../shared/games/Game2048"
+import { DAYS } from "../../../constants/days";
+import { weekInfo } from "../../../constants/weeksInfo";
+import { useProgress } from "../../../contexts/ProgressContext"
+import { Game2048 } from "../../shared/games/Game2048"
 
 export const Game2048M = () => {
     const { user } = useProgress();

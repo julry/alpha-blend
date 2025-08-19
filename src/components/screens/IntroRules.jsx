@@ -18,7 +18,7 @@ const ButtonStyled = styled(Button)`
 
 const IconButtonStyled = styled(IconButton)`
     position: absolute;
-    left: var(--spacing_x4);
+    left: var(--spacing_x6);
     top: var(--spacing_x8);
     z-index: 1001;
     user-select: none;

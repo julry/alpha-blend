@@ -24,6 +24,7 @@ const ButtonStyled = styled(Button)`
     margin-bottom: var(--spacing_x6);
 `;
 
+
 const TitleWrapper = styled.div`
     background: #9A2EFC;
     border-radius: calc(var(--border-radius-lg) - var(--border-radius-sm));
@@ -42,9 +43,8 @@ const TextWrapper = styled.div`
         font-weight: 300;
     }
 `;
-
     
-export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
+export const LifehackModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
     const { addDayFinding } = useProgress();
     const finding = findings.find((hack) => id !== undefined ? hack.id === id : hack.week === week && hack.day === day);
 

@@ -11,6 +11,7 @@ import { findings } from "../../constants/findings";
 import { LetterModal } from "../shared/modals/LetterModal";
 import { weekInfo } from "../../constants/weeksInfo";
 import { Block } from "../shared/Block";
+import { LifehackModal } from "../shared/modals/LifehackModal";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -147,7 +148,7 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
             <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} />
-            <FindingModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
+            <LifehackModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
             {isTablet && (
                 <TabletInfo>
                     <p>{weekMessages.plannersMessage?.[day]}</p>

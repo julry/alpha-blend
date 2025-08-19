@@ -79,7 +79,7 @@ export const PlanCard = memo(({ card, isNotDraggable, shownPoints, isPicked, onC
             initial={{
                 scale: 1,
             }}
-            animate={isPicked ? { scale: 1.25 } : {}}
+            animate={isPicked ? { scale: 1.1 } : {}}
             transition={{ duration: 0.1 }}
             onClick={onClick}
         >

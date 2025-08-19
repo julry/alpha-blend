@@ -15,7 +15,9 @@ const ModalStyled = styled(Modal)`
 
 const BlockStyled = styled(Block)`
     position: absolute;
-    top: 50%;
+    top: calc(50% - var(--spacing_x8));
+    max-height: calc(100% - var(--spacing_x8) - var(--spacing_x10));
+    overflow-y: auto;
     left: 50%;
     transform: translate(-50%, -50%);
 `;
@@ -28,6 +30,13 @@ const ButtonStyled = styled(Button)`
 
 const TextWrapper = styled.div`
     margin-top: var(--spacing_x1);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing_x1) * 1.5);
+
+    & p {
+        font-weight: 300;
+    }
 `;
     
 export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
@@ -48,7 +57,7 @@ export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew})
         <BlockStyled>
             <Title>{finding?.title}</Title>
             <TextWrapper>
-                <p>{finding?.text}</p>
+                {finding?.text()}
                 {children}
             </TextWrapper>
         </BlockStyled>

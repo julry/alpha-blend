@@ -5,7 +5,8 @@ import { PlanCard } from "./PlanCard";
 
 const Wrapper = styled(FlexWrapper)`
     position: relative;
-    padding: var(--spacing_x6) 0;
+    padding: 0;
+    padding-top: var(--spacing_x6);
     height: auto;
     max-width: var(--content-width);
 

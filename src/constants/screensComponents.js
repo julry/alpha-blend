@@ -1,9 +1,9 @@
-import { Blender1M } from "../components/screens/Blender1M";
-import { Game2048M } from "../components/screens/Game2048M";
+import { Blender1M } from "../components/screens/week1/Blender1M";
+import { Game2048M } from "../components/screens/week1/Game2048M";
 import { IntroRegistration } from "../components/screens/IntroRegistration";
 import { IntroRules } from "../components/screens/IntroRules";
 import { Lobby1M } from "../components/screens/week1/Lobby1M";
-import { Planner11 } from "../components/screens/Planner11";
+import { Planner11 } from "../components/screens/week1/Planner11";
 import { Registration1 } from "../components/screens/Registration1";
 import { Registration2 } from "../components/screens/Registration2";
 import { Start } from "../components/screens/Start";
