@@ -58,7 +58,7 @@ const TabletInfo = styled(Block)`
     transform: translateX(-50%);
 `;
 
-export const Lobby = ({ isLaptop, isLaptopLetter,onTabletClick,  onLaptopClick, week, day, isCup, isTablet, }) => {
+export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, week, day }) => {
     const { user, setUserInfo, currentWeek } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
@@ -77,7 +77,9 @@ export const Lobby = ({ isLaptop, isLaptopLetter,onTabletClick,  onLaptopClick, 
     const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
     const isBulbShown = isAllDone && !user.findings.includes(findings.find(({ week, day }) => week === currentWeek && day === CURRENT_DAY).id);
 
-
+    const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown || (!isPlanerUndone && isChallengeUndone);
+    const isCup = !isPlanerUndone && isBlenderUndone;
+    const isTablet = !isLetterShown && isPlanerUndone;
 
     const handleClickItem = (item) => {
         switch (item) {
@@ -107,12 +109,6 @@ export const Lobby = ({ isLaptop, isLaptopLetter,onTabletClick,  onLaptopClick, 
                 break;
             case 'tablet':
                 if (!isTablet) return;
-
-                if (typeof onTabletClick === 'function') {
-                    onLaptopClick?.();
-
-                    return;
-                }
 
                 // Планнер-игра
                 // next()
@@ -146,9 +142,8 @@ export const Lobby = ({ isLaptop, isLaptopLetter,onTabletClick,  onLaptopClick, 
             <ProfileModal isOpen={isUserModal} onClose={() => setIsUserModal(false)} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
-
-            <LetterModal checkedWeek={week} isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} />
-            <FindingModal week={week} day={day} isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
+            <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} />
+            <FindingModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
             {isTablet && (
                 <TabletInfo>
                     <p>{weekMessages.plannersMessage?.[day ?? CURRENT_DAY]}</p>
