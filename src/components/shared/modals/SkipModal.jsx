@@ -28,19 +28,18 @@ const ButtonWrapper= styled.div`
 `;
 
 
-export const EndGameModal = ({ title, children, isOpen, onClose, onRetry }) => {
+export const SkipModal = ({ isOpen, onClose, onExit }) => {
     return (
         <ModalStyled isDarken isOpen={isOpen}>
             <BlockStyled>
                 <Title>
-                   {title ?? 'Время вышло!'}
+                    Уходишь?
                 </Title>
-                {children}
-                <p>У тебя ещё остались попытки.</p>
+                <p>Если ты сейчас выйдешь, ты потеряешь весь прогресс</p>
             </BlockStyled>
             <ButtonWrapper>
-                <Button onClick={onRetry}>Ещё раз</Button>
-                <Button type="secondary" onClick={onClose}>В комнату</Button>
+                <Button onClick={onClose}>Остаться</Button>
+                <Button type="secondary" onClick={onExit}>В комнату</Button>
             </ButtonWrapper>
         </ModalStyled>
     );

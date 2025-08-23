@@ -51,7 +51,8 @@ const ColorBlock = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    box-shadow: -14px -3px 40.7px -12px rgba(0, 0, 0, 0.35), inset 6px 6px 8.6px rgba(255, 255, 255, 0.8), inset -6px -6px 8.6px rgba(255, 255, 255, 0.8);
+    box-shadow: -14px -3px 40.7px -12px rgba(0, 0, 0, 0.35);
+    /* box-shadow: -14px -3px 40.7px -12px rgba(0, 0, 0, 0.35), inset 6px 6px 8.6px rgba(255, 255, 255, 0.8), inset -6px -6px 8.6px rgba(255, 255, 255, 0.8); */
     backdrop-filter: blur(4.7px);
     border-radius: var(--border-radius-md); 
     background: ${({$color}) => COLOR_TO_BG[$color]};

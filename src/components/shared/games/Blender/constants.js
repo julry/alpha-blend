@@ -15,9 +15,11 @@ export const DELETE_ANIMATION_DURATION = MOVE_ANIMATION_DURATION + MERGE_ANIMATI
 export const FINISH_SCORE = 256;
 
 export const MAX_TIME = 1 * 60 + 30;
-export const BLENDER_TIME = 3;
-export const PERSON_TIME = 30;
 
+export const BLENDER_TIME = 2;
+export const PERSON_TIME = 10;
+
+//TODO: доделать 
 export const persons = [
     {
         id: 'girl0',
@@ -25,6 +27,14 @@ export const persons = [
         width: 195,
         height: 292,
         bottom: 75,
+        headLeft: 30,
+        headTop: 0,
+        headWidth: 97,
+        headHeight: 89,
+        bodyLeft: 30,
+        bodyTop: 89,
+        bodyWidth: 106,
+        bodyHeight: 89,
     },
     {
         id: 'girl1',
@@ -32,6 +42,14 @@ export const persons = [
         width: 186,
         height: 279,
         bottom: 78,
+        headLeft: 30,
+        headTop: 0,
+        headWidth: 97,
+        headHeight: 89,
+        bodyLeft: 30,
+        bodyTop: 89,
+        bodyWidth: 106,
+        bodyHeight: 89,
     },
     {
         id: 'man0',
@@ -39,6 +57,14 @@ export const persons = [
         width: 174,
         height: 260,
         bottom: 133,
+         headLeft: 30,
+        headTop: 0,
+        headWidth: 97,
+        headHeight: 89,
+        bodyLeft: 30,
+        bodyTop: 89,
+        bodyWidth: 106,
+        bodyHeight: 89,
     },
 ]
 

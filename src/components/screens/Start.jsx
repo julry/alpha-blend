@@ -4,27 +4,43 @@ import { useProgress } from "../../contexts/ProgressContext";
 import { Block } from "../shared/Block";
 import { FlexWrapper } from "../shared/ContentWrapper";
 import window from '../../assets/images/window.png';
+import { WeekLobby } from "./WeekLobby";
+import { SCREENS } from "../../constants/screens";
 
-const Wrapper = styled(FlexWrapper)`
-    background: url(${window}) no-repeat 0 0 / cover;
+const Wrapper = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
 `;
-export const Start = () => {
-    const {next, user} = useProgress();
 
+const Content = styled(FlexWrapper)`
+    position: absolute;
+    inset: 0;
+`;
+
+export const Start = () => {
+    const {next, user, currentWeek} = useProgress();
+    
+    const canPlay = currentWeek > 0;
+    
     return (
         <Wrapper>
-            <Block>
-                <p>
-                    Отлично, ты зарегистрировался!{'\n'}
-                    {user.isVip ? 
-                        'А теперь к главному: в конце игры ты можешь выиграть iPhone 16 Pro Max 512 ГБ. Чем больше баллов — тем выше шанс на победу.' 
-                        : 'В конце тебя ждут классные призы — чем больше баллов, тем выше шанс на победу.'
-                    }
-                    <br />
-                    Готов играть? Тогда вперёд!
-                </p>
-            </Block>
-            <Button onClick={() => next()}>Далее</Button>
+            <WeekLobby isHideUnavailable />
+            <Content>
+                <Block>
+                    <p>
+                        Отлично, ты зарегистрировался!{'\n'}
+                        {user.isVip ? 
+                            'А теперь к главному: в конце игры ты можешь выиграть iPhone 16 Pro Max 512 ГБ. Чем больше баллов — тем выше шанс на победу.' 
+                            : 'В конце тебя ждут классные призы — чем больше баллов, тем выше шанс на победу.'
+                        }
+                        <br />
+                        <br />
+                        {canPlay ? 'Готов играть? Тогда вперёд!' : 'Игра начнется в понедельник, следи за новостями.'}
+                    </p>
+                </Block>
+                {canPlay && <Button onClick={() => next(SCREENS.LOBBY)}>Играть</Button>}
+            </Content>
         </Wrapper>
     )
 };

@@ -9,8 +9,8 @@ export const LetterModal = ({ isOpen, onClose, checkedWeek, isDarken}) => {
 
     const letterData = weekInfo.find(({week}) => week === (checkedWeek ?? currentWeek));
 
-    const isLast = part === letterData.parts;
-    const text = letterData[`text${part}`];
+    const isLast = part === letterData?.parts;
+    const text = letterData?.[`text${part}`];
 
     const handleClick = () => {
         if (isLast) {

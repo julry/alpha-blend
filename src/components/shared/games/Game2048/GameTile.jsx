@@ -33,7 +33,8 @@ const Tile = styled.div`
     top: ${({top, sizeRatio}) => top * sizeRatio}px;
     transform: scale(${({scale}) => scale});
     z-index: ${({value}) => value};
-    box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.45), inset 1px 1px 4.3px rgba(255, 255, 255, 0.45);
+    box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.45), inset 1px 1px 4.3px rgba(255, 255, 255, 0.45); */
 `;
 
 export function GameTile({ position, value }) {

@@ -16,6 +16,7 @@ import { CommonModal } from "../../modals/CommonModal";
 import { EndGameModal } from "../../modals/EndGameModal";
 import { LifeContainer } from "../parts/LifesContainer";
 import { SCREENS } from "../../../../constants/screens";
+import { SkipModal } from "../../modals/SkipModal";
 
 const WrapperInner = styled.div`
     display: flex;
@@ -34,10 +35,12 @@ const LifeContainerStyled = styled(LifeContainer)`
     margin: var(--spacing_x8) 0;
 `;
 
-export function Game2048({isFirst, userTries, collegueMessage}) {
-    const {next, addPoints2048,} = useProgress()
+const TRIES_AMOUNT = 3;
+
+export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
+    const {next} = useProgress()
     const ratio = useSizeRatio();
-    const [tries, setTries] = useState(userTries);
+    const [tries, setTries] = useState(TRIES_AMOUNT);
     const [isRulesModal, setIsRulesModal] = useState();
     const [isFirstMessage, setIsFirstMessage] = useState(isFirst);
     const [isSkipping, setIsSkipping] = useState(false);
@@ -45,11 +48,11 @@ export function Game2048({isFirst, userTries, collegueMessage}) {
     const [isFinishModal, setIsFinishModal] = useState(false);
     const isGameActive = useMemo(
         () => !(isRulesModal || isSkipping || isEndModal || isFirstMessage || isFinishModal),
-        [isRulesModal, isSkipping, isEndModal, isFirstMessage],
+        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isFinishModal],
     );
     const handleResultRef = useCallbackRef(handleResult);
 
-    const {startGame, restartGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, userTries);
+    const {startGame, restartGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, TRIES_AMOUNT);
 
     const handleRetry = () => {
         setIsEndModal();
@@ -74,7 +77,7 @@ export function Game2048({isFirst, userTries, collegueMessage}) {
     return (
         <>
             <FlexWrapper>
-                <BackHeader onInfoClick={() => setIsRulesModal(true)} onBack={() => setTries(prev => prev - 1)}>
+                <BackHeader onInfoClick={() => setIsRulesModal(true)} onBack={() => setIsSkipping(true)}>
                     <Timer initialTime={MAX_TIME} isStart={isGameActive} onFinish={handleResult}/>
                     <Amount $ratio={ratio}>{score}</Amount>
                 </BackHeader>
@@ -103,11 +106,11 @@ export function Game2048({isFirst, userTries, collegueMessage}) {
             <CommonModal isOpen={isEndModal && tries === 0} isCollegue onClose={handleCloseCollegue}>
                 <p>{collegueMessage}</p>
             </CommonModal>
-            <CommonModal isOpen={isFinishModal} onClose={() => next(SCREENS.LOBBY)} btnText="В комнату">
+            <CommonModal isOpen={isFinishModal} onClose={() => next(lobbyScreen)} btnText="В комнату">
                 <p>Сегодня с челленджем — всё.</p>
             </CommonModal>
-            {/* <SkipModal opened={isSkipping} onContinue={() => setIsSkipping(false)} onSkip={() => next()}/> */}
-            <EndGameModal isOpen={isEndModal && tries > 0} onRetry={handleRetry} onClose={() => next(SCREENS.LOBBY)}/>
+            <SkipModal opened={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)}/>
+            <EndGameModal isOpen={isEndModal && tries > 0} onRetry={handleRetry} onClose={() => next(lobbyScreen)}/>
         </>
     )
 }

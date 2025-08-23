@@ -4,7 +4,8 @@ export const ContentBlock = styled.div`
     padding: var(--spacing_x2);
     gap: var(--spacing_x2);
     background: #898FA5;
-    box-shadow: inset 0px -8px 24.8px rgba(93, 101, 129, 0.25);
+    /* box-shadow: inset 0px -8px 24.8px rgba(93, 101, 129, 0.25); */
+    /* box-shadow: inset 0px -8px 24.8px rgba(93, 101, 129, 0.25); */
     border-radius: var(--border-radius-lg);
     overflow: scroll;
     scrollbar-width: thin;

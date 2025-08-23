@@ -5,29 +5,6 @@ import { screens } from "../constants/screensComponents";
 import { getUrlParam } from "../utils/getUrlParam";
 import { DAYS } from '../constants/days';
 
-const INITIAL_CHALLENGES = [
-    {
-        [DAYS.Monday]: 3,
-        [DAYS.Wednesday]: 3,
-        [DAYS.Friday]: 3,
-    },
-    {
-        [DAYS.Monday]: 3,
-        [DAYS.Wednesday]: 3,
-        [DAYS.Friday]: 3,
-    },
-    {
-        [DAYS.Monday]: 3,
-        [DAYS.Wednesday]: 3,
-        [DAYS.Friday]: 3,
-    },
-    {
-        [DAYS.Monday]: 3,
-        [DAYS.Wednesday]: 3,
-        [DAYS.Friday]: 3,
-    },
-];
-
 const INITIAL_ACTIVITY_DATA = [
     {
         [DAYS.Monday]: undefined,
@@ -59,21 +36,20 @@ const INITIALS_LETTERS = {
 };
 
 const INITIAL_USER = {
-    id: '4242342',
-    name: 'test',
-    email: 'test@test.ru',
-    university: '',
-    isVip: true,
-    seenStartInfo: false, //после реги до планнера
-    seenActivityInfo: false, //плашки у кофе и ноута
-    seenBlenderRules: false,
-    isTgConnected: false,
+    id: '4242342', //saved
+    name: 'test', //saved
+    email: 'test@test.ru', //saved
+    university: 'hehehe', //saved
+    faculty: 'gell', //saved
+    isVip: true, // saved
+    seenStartInfo: false, // saved после реги до планнера
     challenges: INITIAL_ACTIVITY_DATA, //сердечки в челленджах по дням
     blenders: INITIAL_ACTIVITY_DATA, //сердечки в блендере по дням
     readenLetter: INITIALS_LETTERS, //прочитанные сообщения по неделям
     achievements: [],
     findings: [], // находки
     drinks: [], //напитка
+    lifehacks: [], // лайфхаки
     blenderTimes: 0, //количество игр в блендер ??
     perfectBlenderTimes: 0, //количество идеальных комбо ??
     planners: INITIAL_ACTIVITY_DATA, //баллы в планнере по дням. прошел: undefined -> points
@@ -84,8 +60,8 @@ const INITIAL_USER = {
     week4Points: 0,
 };
 
-const getMoscowTime = () => {
-    const dateNow = new Date();
+const getMoscowTime = (date) => {
+    const dateNow = date ?? new Date();
     const localOffset = dateNow.getTimezoneOffset();
     const utcPlus3Offset = -180;
     const totalOffset = utcPlus3Offset - localOffset;
@@ -96,10 +72,11 @@ const getMoscowTime = () => {
 const getCurrentWeek = () => {
     const today = getMoscowTime();
 
-    if (today < new Date(2025, 9, 7)) return 1;
-    if (today < new Date(2025, 9, 14)) return 2;
-    if (today < new Date(2025, 9, 21)) return 3;
-    if (today < new Date(2025, 9, 28)) return 4;
+    if (today < getMoscowTime(new Date(2025, 8, 8))) return 0;
+    if (today < getMoscowTime(new Date(2025, 8, 15))) return 1;
+    if (today < getMoscowTime(new Date(2025, 8, 22))) return 2;
+    if (today < getMoscowTime(new Date(2025, 8, 29))) return 3;
+    if (today < getMoscowTime(new Date(2025, 9, 6))) return 4;
 
     return 5;
 }
@@ -129,7 +106,6 @@ export const CURRENT_DAY = getCurrentDay();
 const INITIAL_STATE = {
     screen: SCREENS.INTRO_REG,
     points: 0,
-    vipPoints: 0,
     weekPoints: 0,
     user: INITIAL_USER,
     passedWeeks: [],
@@ -144,19 +120,12 @@ export function ProgressProvider(props) {
     const { children } = props
     const [currentScreen, setCurrentScreen] = useState(getUrlParam('screen') || INITIAL_STATE.screen);
     const [points, setPoints] = useState(INITIAL_STATE.points);
-    const [vipPoints, setVipPoints] = useState(INITIAL_STATE.vipPoints);
-    const [modal, setModal] = useState({ visible: false });
     const [weekPoints, setWeekPoints] = useState(INITIAL_STATE.weekPoints);
-    const [currentWeekPoints, setCurrentWeekPoints] = useState(INITIAL_STATE.weekPoints);
-    const [gamePoints, setGamePoints] = useState(0);
-    const [cardsSeen, setCardsSeen] = useState(INITIAL_STATE.cardsSeen);
     const [user, setUser] = useState(INITIAL_STATE.user);
     const [passedWeeks, setPassedWeeks] = useState(INITIAL_STATE.passedWeeks);
-    const [hasPassedThisTry, setHasPassedThisTry] = useState(false);
     const [currentWeek, setCurrentWeek] = useState(CURRENT_WEEK);
     const screen = screens[currentScreen];
-    const $whiteStarRef = useRef();
-    const $redStarRef = useRef();
+  
     const client = useRef();
 
     const getDbCurrentWeek = async () => {
@@ -193,72 +162,50 @@ export function ProgressProvider(props) {
     }
 
     const readWeekLetter = (week) => {
-        setUser((prev) => ({...prev, readenLetter: ({...prev.readenLetter, [`week${week}`]: true})}));
-        //TODO: add updateuser here
+        updateUser(({readenLetter: ({...user.readenLetter, [`week${week}`]: true}) }))
     }
 
     const addDayFinding = (id) => {
-        setUser((prev) => ({...prev, findings: [...prev.findings, id]}));
-        //TODO: add updateuser here
+        updateUser(({findings: [...user.findings, id]}))
     }
     
-
-    const addGamePoint = () => setGamePoints(prev => prev + 1);
-
-    const endGame = (level, additionalPoints) => {
-        const data = {
-            passedWeeks: [...passedWeeks, level].join(',')
-        };
-
-        const isAddWeek = level === currentWeek;
-
-        if (user.isVip) {
-            if (isAddWeek) {
-                data[`week${currentWeek}Points`] = weekPoints + 10;
-                setCurrentWeekPoints(prev => prev + 10);
-            }
-
-            setWeekPoints(prev => prev + 10);
-            data.targetPoints = vipPoints + additionalPoints;
-            setVipPoints(prev => prev = prev + additionalPoints);
-        } else {
-            data.points = points + 10;
-            setPoints(prev => prev + 10);
-        }
-
-        setGamePoints(0);
-        updateUser(data);
+    const endGame = () => {
+       
     };
 
     const updateUser = async (changed) => {
-        const {
-            isVip, recordId, id, name, email, registerWeek, refId,
-            university, isTgConnected, seenRules, week1Points, week2Points, week3Points, week4Points,
-        } = user;
+        const newUser = ({...user, ...changed});
+
+        setUserInfo(changed);
+
+        const { 
+            isVip, challenges, blenders, readenLetter,
+            planners, achievements, findings, drinks, lifehacks,
+            blenderTimes, perfectBlenderTimes,
+             ...otherUser
+        } = newUser;
+
+        const gameData = {
+            challenges,
+            blenders,
+            readenLetter,
+            achievements,
+            findings,
+            drinks,
+            lifehacks,
+            passedWeeks,
+        }
+        const jsonData = JSON.stringify(gameData);
 
         const data = {
-            id,
-            name,
-            email,
-            university,
-            isTarget: isVip,
-            isTgConnected: isTgConnected,
-            points,
-            targetPoints: vipPoints,
-            week1Points,
-            week2Points,
-            week3Points,
-            week4Points,
-            [`week${currentWeek > 4 ? 4 : currentWeek}Points`]: currentWeekPoints,
-            seenRules,
-            registerWeek,
-            refId,
-            ...changed,
-        };
+            ...otherUser,
+            isTarget: isVip, 
+            gameData: jsonData.toString(),
+            points, //общее количество баллов
+            [`week${currentWeek}Points`]: weekPoints,
+        }
 
-        setUser(prev => ({...prev, changed}));
-
-        if (!recordId) return { ...data, isEror: true };
+        // if (!recordId) return { ...data, isEror: true };
 
         // try {
         //     const result = await client.current.updateRecord(recordId, data);
@@ -324,12 +271,19 @@ export function ProgressProvider(props) {
     };
 
     const getUserInfo = async (email, isAfterTg) => {
+        // const data = 
+        // const gameData = JSON.parse(data.gameData);
+    
+        // setPassedWeeks(gameData.passedWeeks);
+        // setUserInfo({...gameData});
+        // setPoints(data.points);
+        // setWeekPoints(data[`week${currentWeek}Points`]);
         //    try {
-        //         // const record = await client?.current.findRecord('email', email);
-        //         // if (!record) return {isError: true}; 
-        //         // const {data, id} = record;
+                // const record = await client?.current.findRecord('email', email);
+                // if (!record) return {isError: true}; 
+                // const {data, id} = record;
         //         let userInfo = {};
-
+        //         let data
         //         userInfo = {
         //             recordId: id,
         //             id: data.id,
@@ -383,15 +337,8 @@ export function ProgressProvider(props) {
         setUserInfo,
         user,
         weekPoints,
-        addGamePoint,
-        setGamePoints,
-        gamePoints,
-        vipPoints,
-        setModal,
-        setVipPoints,
-        setWeekPoints,
+         setWeekPoints,
         setPoints,
-        modal,
         passedWeeks,
         setPassedWeeks,
         endGame,
@@ -399,8 +346,6 @@ export function ProgressProvider(props) {
         getUserInfo,
         registrateUser,
         currentWeek,
-        currentWeekPoints,
-        setCurrentWeekPoints,
         readWeekLetter,
         addDayFinding
     }

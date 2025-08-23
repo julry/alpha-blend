@@ -3,7 +3,7 @@ import { HighlightedItems } from "../shared/HighligthedItems"
 import { FlexWrapper } from "../shared/ContentWrapper";
 import lobbyBg from '../../assets/images/lobbyBg.png';
 import { IconButton } from "../shared/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PersonIcon } from "../shared/svg/PersonIcon";
 import { AchievesModal, FindingModal, ProfileModal, RulesModal } from "../shared/modals";
 import { CURRENT_DAY, useProgress } from "../../contexts/ProgressContext";
@@ -12,6 +12,7 @@ import { LetterModal } from "../shared/modals/LetterModal";
 import { weekInfo } from "../../constants/weeksInfo";
 import { Block } from "../shared/Block";
 import { LifehackModal } from "../shared/modals/LifehackModal";
+import { CommonModal } from "../shared/modals/CommonModal";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -66,6 +67,7 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
     const [isAchieveModal, setIsAchieveModal] = useState(false);
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
+    const [isFinishShown, setIsFinishShown] = useState(false);
     
     const week = props.week ?? currentWeek;
     const day = props.day ?? CURRENT_DAY;
@@ -73,19 +75,24 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
     const weekMessages = weekInfo.find((info) => info.week === week);
 
     const isLetterShown = isLaptopLetter || !user.readenLetter?.[weekName];
-    const isPlanerUndone = user.planners?.[week - 1][day] === undefined;
-    const isChallengeUndone = user.challenges?.[week - 1][day] === undefined;
-    const isBlenderUndone = user.blenders?.[week - 1][day] === undefined;
+    const isPlanerUndone = user.planners?.[week - 1]?.[day] === undefined;
+    const isChallengeUndone = user.challenges?.[week - 1]?.[day] === undefined;
+    const isBlenderUndone = user.blenders?.[week - 1]?.[day] === undefined;
 
     const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
-    const isBulbShown = isAllDone && !user.findings.includes(findings.find(({ week, day }) => week === week && day === day).id);
+    const isBulbShown = isAllDone && !user.lifehacks.includes(`week${week}day${day}`);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown || (!isPlanerUndone && isChallengeUndone);
     const isCup = !isPlanerUndone && isBlenderUndone;
     const isTablet = !isLetterShown && isPlanerUndone;
 
+    useEffect(() => {
+        if (!isAllDone || isBulbShown) return;
+
+        setIsFinishShown(true);
+    }, [isAllDone, isBulbShown])
+
     const handleClickItem = (item) => {
-        console.log(item);
         switch (item) {
             case 'laptop':
                 if (!isLaptop) return;
@@ -102,7 +109,7 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
                     return;
                 }
 
-                if (isLetterShown) {
+                if (isBulbShown) {
                     setIsFindingModal(true);
 
                     return;
@@ -114,7 +121,6 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
             case 'tablet':
                 if (!isTablet) return;
 
-                console.log('ALLLLEEEE');
                 // Планнер-игра
                 next(props.plannerScreen);
                 break;
@@ -147,13 +153,20 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
             <ProfileModal isOpen={isUserModal} onClose={() => setIsUserModal(false)} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
-            <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} />
-            <LifehackModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} />
+
+            <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} checkedWeek={week}/>
+            <LifehackModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} lifehack={weekMessages?.lifehacks?.[day]}/>
+            
             {isTablet && (
                 <TabletInfo>
-                    <p>{weekMessages.plannersMessage?.[day]}</p>
+                    <p>{weekMessages?.plannersMessage?.[day]}</p>
                 </TabletInfo>
             )}
+
+            <CommonModal isOpen={isFinishShown} onClose={() => setIsFinishShown(false)} btnText="Понятно">
+                {props.endMessage}
+            </CommonModal>
+
             <ItemsStyled
                 onClick={handleClickItem}
                 isLaptopLetter={isLetterShown}

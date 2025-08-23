@@ -44,15 +44,10 @@ const TextWrapper = styled.div`
     }
 `;
     
-export const LifehackModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
-    const { addDayFinding } = useProgress();
-    const finding = findings.find((hack) => id !== undefined ? hack.id === id : hack.week === week && hack.day === day);
-
+export const LifehackModal = ({ isOpen, onClose, children, lifehack}) => {
     const handleClick = () => {
-        if (isNew) {
             //TODO: запись на сервер
-            addDayFinding(id ?? finding.id);
-        }
+            // addDayFinding(id ?? finding.id);
         onClose?.();
     };
 
@@ -62,7 +57,7 @@ export const LifehackModal = ({ isOpen, onClose, children, id, week, day, isNew}
         <BlockStyled>
             <TitleWrapper>ЛАЙФХАК</TitleWrapper>
             <TextWrapper>
-                <p>{finding?.text()}</p>
+                <p>{lifehack?.text}</p>
                 {children}
             </TextWrapper>
         </BlockStyled>

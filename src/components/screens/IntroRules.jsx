@@ -26,7 +26,7 @@ const IconButtonStyled = styled(IconButton)`
 
 export const IntroRules = () => {
     const [part, setPart] = useState(0);
-    const { user, next } = useProgress();
+    const { user, next, setUserInfo } = useProgress();
 
     const getText = () => {
         if (part === 0) return (
@@ -75,6 +75,7 @@ export const IntroRules = () => {
 
     const handleNext = () => {
         setPart(prev => prev + 1);
+        setUserInfo({ seenStartInfo: true });
     };
 
     const handleClose = () => {
@@ -83,7 +84,7 @@ export const IntroRules = () => {
 
     return (
         <>
-            <Lobby isLaptop={part === 3} isLaptopLetter={part === 3} onLaptopClick={handleNext} plannerScreen={SCREENS.PLANNER1_1}/>
+            <Lobby isLaptop={part === 3} isLaptopLetter={part === 3} onLaptopClick={handleNext} plannerScreen={SCREENS.PLANNER1M}/>
             <CommonModal
                 isOpen={part < 3}
                 isDisabledAnimation={part !== 0}

@@ -57,7 +57,7 @@ export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew})
         <BlockStyled>
             <Title>{finding?.title}</Title>
             <TextWrapper>
-                {finding?.text()}
+                {typeof finding?.text === 'function' ? finding?.text() : finding?.text}
                 {children}
             </TextWrapper>
         </BlockStyled>

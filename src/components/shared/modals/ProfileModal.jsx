@@ -151,10 +151,11 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     <Subtitle>Почта</Subtitle>
                     <Text>{user.email}</Text>
                 </InfoBlock>
-                {user.university && (
+                {user.isVip && (
                     <InfoBlock>
-                        <Subtitle>Факультет</Subtitle>
+                        <Subtitle>Вуз и факультет</Subtitle>
                         <Text>{user.university}</Text>
+                        {user.faculty && (<Text>{user.university}</Text>)}
                     </InfoBlock>
                 )}
                 <PointsWrapper>

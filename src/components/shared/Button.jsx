@@ -15,7 +15,8 @@ const Wrapper = styled.button`
 
     ${({$isBottom}) =>  $isBottom ? 'margin-top: auto' : ''};
 
-    box-shadow: 0px 0px 46.4px -3px rgba(0, 0, 0, 0.15), inset 1.99778px 1.8619px 8.6px rgba(255, 255, 255, 0.15), inset 1.06858px 0.9959px 4.3px rgba(255, 255, 255, 0.15);
+    box-shadow: 0px 0px 46.4px -3px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0px 0px 46.4px -3px rgba(0, 0, 0, 0.15), inset 1.99778px 1.8619px 8.6px rgba(255, 255, 255, 0.15), inset 1.06858px 0.9959px 4.3px rgba(255, 255, 255, 0.15); */
 
     &:disabled {
         background: ${({$type}) => 'var(--btn-bg-' + $type + '-disabled)'};

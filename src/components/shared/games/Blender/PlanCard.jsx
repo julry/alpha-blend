@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useSizeRatio } from '../../../../hooks/useSizeRatio';
+import { ingridients } from '../../../../constants/ingridients';
 
 const Wrapper = styled.div`
     position: relative;
@@ -15,13 +16,15 @@ const Wrapper = styled.div`
 
 const Icon = styled.img`
     height: 100%;
-    width :100%;
+    width: 100%;
     flex-shrink: 0;
 `;
 
 export const PlanCard = ({ className, card, onClick }) => {
     const ratio = useSizeRatio();
-    const { icon, id } = card ?? {};
+    const shownCard = card?.img ? card : ingridients.find((ing) => ing.id === card?.id);
+
+    const { img, id } = shownCard ?? {};
 
     return (
         <Wrapper
@@ -30,7 +33,7 @@ export const PlanCard = ({ className, card, onClick }) => {
             onClick={onClick}
         >
             <Icon 
-                src={icon} 
+                src={img} 
                 alt={id} 
                 $ratio={ratio}
             />

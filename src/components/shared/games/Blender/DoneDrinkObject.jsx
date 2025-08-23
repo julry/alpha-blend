@@ -4,13 +4,14 @@ import { usePreview } from "react-dnd-multi-backend";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 
 const Wrapper = styled.div`
-    width: ${({ $size }) => $size}px;
+    width: ${({ $size }) => $size * 0.8}px;
     height: ${({ $size }) => $size}px;
 `;
 
 const Image = styled.img`
     width: 100%;
     height: 100%;
+    object-fit: cover;
 `;
 
 
@@ -40,16 +41,18 @@ export const DoneDrinkOject = ({ drink }) => {
         }
 
         return (
-            <StyledPreview style={style} $size={ratio * drink.size}>
-                <Image src={drink.openedPic}/>
-            </StyledPreview>
+            <>
+                <StyledPreview style={style} $size={ratio * drink.size}>
+                    <Image src={drink.openedPic}/>
+                </StyledPreview>
+                <Wrapper $size={ratio * drink.size} />
+            </>
         );
     };
 
     if (isDragging) {
         return <DrinkPreview />;
     }
-
 
     return (
         <Wrapper $size={ratio * drink.size} ref={drag}>

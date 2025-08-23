@@ -10,6 +10,7 @@ import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { CommonModal } from "../../modals/CommonModal";
 import { FindingModal } from "../../modals";
 import { BackHeader } from "../../BackHeader";
+import { SkipModal } from "../../modals/SkipModal";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -41,6 +42,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
     const { next } = useProgress();
     const ratio = useSizeRatio();
     const [isRules, setIsRules] = useState(isNeverPlayed);
+    const [isSkipping, setIsSkipping] = useState(false);
     const [dayCards, setDayCards] = useState([]);
     const [morningCards, setMorningCards] = useState([]);
     const [eveningCards, setEveningCards] = useState([]);
@@ -51,10 +53,6 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
     const [pickedCard, setPickedCard] = useState();
 
     const commonAmount = morningCards.length + dayCards.length + eveningCards.length;
-
-    const handleBack = () => {
-        next(SCREENS.LOBBY);
-    };
 
     useEffect(() => {
         //TODO: сделать пойнты
@@ -93,7 +91,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
     return (
         <>
             <Wrapper>
-                <BackHeader onBack={handleBack} onInfoClick={() => setIsRules(true)}>
+                <BackHeader onBack={() => setIsSkipping(true)} onInfoClick={() => setIsRules(true)}>
                     <Amount $ratio={ratio}>{commonAmount}/{MAX_AMOUNT}</Amount>
                 </BackHeader>
                 <TimeBlock title="утро" color="green" cards={morningCards} onClick={() => handleFieldPick('morning')} />
@@ -115,6 +113,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
                 <p>{finishMessage}</p>
             </CommonModal>
             <RulesModal isOpen={isRules} onClose={() => setIsRules(false)} />
+            <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)} />
         </>
 
     )

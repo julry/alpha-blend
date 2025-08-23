@@ -55,7 +55,8 @@ const DrinkInfo = styled.div`
     height: ${({ $ratio }) => $ratio * 30}px;
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.15), inset 1px 1px 4.3px rgba(255, 255, 255, 0.15);
+    box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.15), inset 1px 1px 4.3px rgba(255, 255, 255, 0.15); */
     border-radius: 100px;
     font-size: var(--font_xs);
     z-index: 5;

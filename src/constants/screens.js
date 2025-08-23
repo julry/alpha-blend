@@ -7,7 +7,7 @@ export const SCREENS = {
     INTRO_RULES: 'INTRO_RULES',
     LOBBY: 'LOBBY',
     LOBBY1M: 'LOBBY1M',
-    PLANNER1_1: 'PLAN1_1',
+    PLANNER1M: 'PLAN1M',
     FINISH: 'FINISH',
     PLUG: 'PLUG',
     GAME1M: 'GAME1M',

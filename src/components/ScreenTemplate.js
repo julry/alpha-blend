@@ -25,7 +25,7 @@ const WrapperInner = styled.div`
 `;
 
 const Content = styled.div`
-    --content-width: ${({$sizeRatio}) => $sizeRatio * 330}px;
+    --content-width: 88vw;
     --border-radius-lg: ${({$sizeRatio}) => $sizeRatio * 15}px;
     --border-radius-md: ${({$sizeRatio}) => $sizeRatio * 10}px;
     --border-radius-sm: ${({$sizeRatio}) => $sizeRatio * 5}px;
@@ -62,6 +62,7 @@ const Content = styled.div`
         border: 2px solid #000000;
         border-radius: 10px;
         box-sizing: content-box;
+        --content-width: ${({$sizeRatio}) => $sizeRatio * 330}px;
     }
 `;
 

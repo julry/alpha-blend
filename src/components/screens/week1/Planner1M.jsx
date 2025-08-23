@@ -5,7 +5,7 @@ import { SCREENS } from "../../../constants/screens";
 import { weekInfo } from "../../../constants/weeksInfo"
 import { PlannerGame } from "../../shared/games/PlannerGame"
 
-export const Planner11 = () => {
+export const Planner1M = () => {
     const weekData = weekInfo.find((info) => info.week === 1);
     const collegueMessage = weekData.plannersCollegueMessage[DAYS.Monday];
     const findingId = findings.find(({day, week}) => day === DAYS.Monday && week === 1).id;

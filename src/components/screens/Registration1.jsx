@@ -38,9 +38,10 @@ export const Registration1 = () => {
 
     const handleClick = async () => {
         const id = uid(7);
+        //TODO: тут где то надо будет применить логин из тг
         const refId = new URLSearchParams(window?.location?.search).get('refId');
 
-        setUserInfo({ university: `${univ.name} ${fac}`, isVip: !!fac && fac !== 'Другое', refId, id });
+        setUserInfo({ university: `${univ.name}`, faculty: fac !== 'Другое' ? fac : '', isVip: !!fac && fac !== 'Другое', refId, id });
         next();
     }
 

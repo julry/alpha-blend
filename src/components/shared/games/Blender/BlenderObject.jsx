@@ -8,6 +8,7 @@ import { BLENDER_TIME } from "./constants";
 import { uid } from "uid";
 import { drinks } from "../../../../constants/drinks";
 import blender from './assets/blender.png';
+import { AnimatePresence, motion } from "framer-motion";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -21,11 +22,11 @@ const Wrapper = styled.div`
 
 const IndigrientsPart = styled.div`
     position: absolute;
-    z-index: 4;
+    z-index: 6;
     height: ${({$ratio}) => $ratio * 114}px;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 85%;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: auto;
@@ -46,31 +47,40 @@ const ButtonPart = styled.div`
 `;
 
 const PlanCardStyled = styled(PlanCard)`
+    position: relative;
+    z-index: 5;
     height: ${({$ratio}) => $ratio * 32}px;
     width: ${({$ratio}) => $ratio * 32}px;
     padding: ${({$ratio}) => $ratio * 1}px;
     justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const LiquidWrapper = styled.div`
     display: flex;
     align-items: flex-end;
     position: absolute;
-    width: 70%;
+    width: 80%;
     height: 83%;
     bottom: 10px;
     left: 6px;
-    border-radius: 0 0 50px 50px;
+    z-index: 2;
+    border-radius: 0 0 10px 10px;
     overflow: hidden;
+    filter: blur(3px);
+    
 `;
+
 const Liquid = styled.div`
     width: 100%;
     height: 60%;
-    background: red;
+    background: ${({$color}) => $color ?? 'var(--color-red)'};
     filter: blur(5px);
     animation: shake 1s ease-in-out infinite;
+    clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);
 `
-  
 
 const Bubbles  = styled.div`
 position: absolute;
@@ -105,12 +115,22 @@ position: absolute;
   animation: bubble 1.2s ease-in infinite;
 }`
 
+const ErrorSign = styled(motion.div)`
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    height: ${({$ratio}) => $ratio * 50}px;
+    width: ${({$ratio}) => $ratio * 50}px;
+`;
 
 export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlenderClick, onBlenderStop}) => {
     const ratio = useSizeRatio();
     const [isBlendering, setIsBlendering] = useState(false);
     const [drink, setDrink] = useState();
     const [timerId, setTimerId] = useState();
+    const [isError, setIsError] = useState(false);
+
     useTimer({ isStart: isBlendering && !isStopped, initialTime: BLENDER_TIME, onFinish: handleBlenderFinish, timerId })
 
     const handleCardClick = (index) => {
@@ -121,16 +141,17 @@ export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlende
     const handleBlenderClick = () => {
         if (isBlendering || cards.length < 2) return;
 
-        setTimerId(uid());
-    
         const blendering = drinks.find(dr => cards.every(card => dr.recipe.includes(card.id)));
+        
+        if (!blendering) {
+            setIsError(true);
+            setTimeout(() => setIsError(false), 500);
+            return;
+        }
 
-        setDrink(blendering ?? {
-            id: 12,
-            size: 102,
-            title: 'заряд бодрости',
-            recipe: [],
-        });
+        setTimerId(uid());
+
+        setDrink({...blendering, ingridientsAmount: cards.length});
         setIsBlendering(true);
         onBlenderClick?.();
     };
@@ -146,16 +167,23 @@ export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlende
         <Wrapper $ratio={ratio}>
             <IndigrientsPart $ratio={ratio}>
                 {cards.map((card, index) => (
-                    <PlanCardStyled key={card.id + index} $ratio={ratio} onClick={() => handleCardClick(index)} />
+                    <PlanCardStyled key={card.id + index} $ratio={ratio} onClick={() => handleCardClick(index)} card={card}/>
                 ))}
-                {/* {isBlendering && ( */}
-                    <>
-                        <LiquidWrapper>
-                            <Liquid/>
-                            <Bubbles />
-                        </LiquidWrapper>
-                    </>
-                {/* )} */}
+                <AnimatePresence>
+                    {isError && (
+                        <ErrorSign $ratio={ratio} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                            <svg width="100%" height="100%" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.47089 1.471L10.5291 10.5292M10.5291 1.471L1.47089 10.5292" stroke="var(--color-red)" stroke-opacity="1" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </ErrorSign>
+                    )}
+                </AnimatePresence>
+                {isBlendering && (
+                    <LiquidWrapper>
+                        <Liquid $color={drink.color}/>
+                        <Bubbles />
+                    </LiquidWrapper>
+                )} 
             </IndigrientsPart>
             <ButtonPart onClick={handleBlenderClick} />
         </Wrapper>
