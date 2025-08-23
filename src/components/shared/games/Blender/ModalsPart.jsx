@@ -3,6 +3,7 @@ import { DrinkModal } from "../../modals/DrinkModal";
 import { EndGameModal } from "../../modals/EndGameModal";
 import { CommonModal } from "../../modals/CommonModal";
 import { RulesModal } from "./RulesModal";
+import { FirstRulesModal } from "./FirstRulesModal";
 
 export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, passedLevel, drinkInfo, collegueMessage, levelMessages}) => {
     return (
@@ -28,7 +29,8 @@ export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, passedLevel, dri
                 <p>Не допускай скопления 3 напитков на столе.</p>
             </EndGameModal>
             <DrinkModal isOpen={modalsState.isFinding} drink={drinkInfo} onClose={modalsFunc.handleCloseDrink}/>
-            <RulesModal isOpen={modalsState.sRules} onClose={() => modalsFunc.setIsRules(false)} />
+            <RulesModal isOpen={modalsState.isRules} onClose={() => modalsFunc.setIsRules(false)} />
+            <FirstRulesModal isOpen={modalsState.isFirstRules} modalsFuncs={modalsFunc} modalsState={modalsState}/>
         </>
     )
 }

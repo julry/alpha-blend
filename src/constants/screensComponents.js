@@ -9,6 +9,7 @@ import { Registration2 } from "../components/screens/Registration2";
 import { Start } from "../components/screens/Start";
 import BasketballGame from "../components/shared/games/BasketballGame";
 import { WeekLobby } from "../components/screens/WeekLobby";
+import { Blender1W } from "../components/screens/week1/Blender1W";
 
 import { SCREENS } from "./screens";
 
@@ -24,6 +25,7 @@ export const screens = {
     [SCREENS.GAME1M]: Game2048M,
     [SCREENS.GAME2M]: BasketballGame,
     [SCREENS.BLENDER1M]: Blender1M,
+    [SCREENS.BLENDER1W]: Blender1W,
     // [SCREENS.FINISH]: Finish,
 };
 

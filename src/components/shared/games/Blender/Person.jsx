@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { useTimer } from "../../../../hooks/useTimer";
-import { PlanCard } from "./PlanCard";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { useEffect, useMemo, useState } from "react";
-import { PERSON_TIME, persons } from "./constants";
+import { useEffect, useMemo } from "react";
+import { persons, QUEUE_TO_PERSON_TIME } from "./constants";
 import { Points } from "../parts/Points";
 import { motion, useAnimation } from "framer-motion";
+import { Info } from "./Info";
 
 const POSITION_TO_LEFT = {
     center: 50,
@@ -37,50 +37,6 @@ const Image = styled.img`
     object-fit: contain;
 `;
 
-const Info = styled(motion.div)`
-    position: absolute;
-    bottom: calc(100% + var(--spacing_x3));
-    left: 50%;
-    /* min-height: ${({ $ratio }) => $ratio * 76}px; */
-    background-color: white;
-    /* transform: translateX(-50%); */
-    padding: ${({ $ratio }) => $ratio * 4}px;
-    padding-right: ${({ $ratio }) => $ratio * 12}px;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid red;
-`;
-
-const TimeLine = styled(motion.div)`
-    position: absolute;
-    bottom: ${({ $ratio }) => $ratio * 4}px;
-    right: ${({ $ratio }) => $ratio * 4}px;
-    width: ${({ $ratio }) => $ratio * 4}px;
-    background: ${({ $color }) => $color};
-    border-radius: 100px;
-    transition-property: height, background-color;
-    transition-duration: 100ms, 300ms;
-`;
-
-const CardStyled = styled(PlanCard)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: ${({ $ratio }) => $ratio * 34}px;
-    height: ${({ $ratio }) => $ratio * 34}px;
-    padding: ${({ $ratio }) => $ratio * 1}px;
-
-    & + & {
-        margin-top: ${({ $ratio }) => $ratio * 4}px;
-    }
-
-    & img {
-        object-fit: cover;
-
-        width: ${({ $ratio }) => $ratio * 46}px;
-        height: ${({ $ratio }) => $ratio * 46}px;
-    }
-`;
-
 const PointsStyled = styled(Points)`
     bottom: calc(100% + var(--spacing_x3));
     top: auto;
@@ -108,17 +64,19 @@ const DropBody = styled.div`
     z-index: 10;
 `;
 
-export const Person = ({ isStopped, ingridients, isFinished, personId, drink, onEndTimer, onGetDrink, points, position = 'center' }) => {
+export const Person = ({ isStopped, ingridients, isFinished, queueAmount, personId, drink, onEndTimer, onGetDrink, points, position = 'center' }) => {
     const ratio = useSizeRatio();
     const person = persons.find(pers => pers.id === personId);
     const controls = useAnimation();
     const controlsInfo = useAnimation();
 
+    const personTime = useMemo(() => QUEUE_TO_PERSON_TIME[queueAmount], [])
+
     const handleEnd = () => {
         onEndTimer?.(personId);
     }
 
-    const { time } = useTimer({ isStart: false, onFinish: handleEnd, initialTime: PERSON_TIME });
+    const { time } = useTimer({ isStart: !isStopped, onFinish: handleEnd, initialTime: personTime });
 
     const [, drop] = useDrop(() => ({
         accept: 'DRINK',
@@ -126,6 +84,9 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
         drop: (item) => {
+            console.log('drop', item, 'to', drink);
+            console.log('ingridients', ingridients, 'of person, and item', item);
+
             if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
                 controlsInfo.start({
                     rotate: [-10, 10, 0], transition: {
@@ -137,7 +98,7 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
                 return;
             }
 
-            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, ingridientsAmount: ingridients.length });
+            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, isFinished });
         },
     }), []);
 
@@ -147,6 +108,9 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
         drop: (item) => {
+            console.log('drop', item, 'to', drink);
+            console.log('ingridients', ingridients, 'of person, and item', item);
+
             if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
                 controlsInfo.start({
                     rotate: [-10, 10, 0], transition: {
@@ -157,15 +121,15 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
                 return;
             }
 
-            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, ingridientsAmount: ingridients.length });
+            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, isFinished });
         },
     }), []);
 
     const timeColor = useMemo(() => {
-        if (time < PERSON_TIME / 3) {
+        if (time < personTime / 3) {
             return 'var(--color-red)';
         }
-        if (time < 2 * PERSON_TIME / 3) {
+        if (time < 2 * personTime / 3) {
             return '#D7E02A'
         }
 
@@ -173,13 +137,25 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
     }, [time]);
 
     useEffect(() => {
-        const heightPercentage = (time / PERSON_TIME) * 100;
+        const heightPercentage = (time / personTime) * 100;
         controls.start({ height: `calc(${heightPercentage}% - ${ratio * 8}px)`, backgroundColor: timeColor });
     }, [time, controls, timeColor, ratio]);
 
-    console.log(ingridients);
     return (
-        <Wrapper $ratio={ratio} bottom={person.bottom} width={person.width} height={person.height} $position={position}>
+        <Wrapper 
+            $ratio={ratio} 
+            bottom={person.bottom} 
+            width={person.width} 
+            height={person.height} 
+            $position={position}
+            initial={{
+                opacity: 0,
+                height: 0,
+            }}
+            animate={{ opacity: 1, height: ratio * person.height + 'px' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+        >
             <Image src={person.pic} alt="friend" />
             <DropHead
                 ref={dropHead}
@@ -198,19 +174,7 @@ export const Person = ({ isStopped, ingridients, isFinished, personId, drink, on
                 $bodyHeight={person.bodyHeight}
             />
             {!isFinished && (
-                <Info initial={{ translateX: '-50%', rotate: 0 }} $ratio={ratio} animate={controlsInfo}>
-                    <div>
-                        {ingridients.map((card) => (
-                            <CardStyled key={`key_${card}`} $ratio={ratio} card={{id: card}} />
-                        ))}
-                    </div>
-                    <TimeLine
-                        $ratio={ratio}
-                        initial={{ height: `calc(100% - ${ratio * 8}px)` }}
-                        animate={controls}
-                        transition={{ duration: 0.1 }}
-                    />
-                </Info>
+                <Info ingridients={ingridients} controls={controls} controlsInfo={controlsInfo}/>
             )}
             <PointsStyled $ratio={ratio} isShown={true} shownPoints={points} />
         </Wrapper>

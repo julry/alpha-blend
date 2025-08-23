@@ -124,7 +124,7 @@ const ErrorSign = styled(motion.div)`
     width: ${({$ratio}) => $ratio * 50}px;
 `;
 
-export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlenderClick, onBlenderStop}) => {
+export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
     const ratio = useSizeRatio();
     const [isBlendering, setIsBlendering] = useState(false);
     const [drink, setDrink] = useState();
@@ -141,7 +141,7 @@ export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlende
     const handleBlenderClick = () => {
         if (isBlendering || cards.length < 2) return;
 
-        const blendering = drinks.find(dr => cards.every(card => dr.recipe.includes(card.id)));
+        const blendering = drinks.find(dr => cards.every(card => dr.recipe.slice(0, cards.length).includes(card.id)));
         
         if (!blendering) {
             setIsError(true);
@@ -164,7 +164,7 @@ export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlende
     };
 
     return (
-        <Wrapper $ratio={ratio}>
+        <Wrapper $ratio={ratio} className={className}>
             <IndigrientsPart $ratio={ratio}>
                 {cards.map((card, index) => (
                     <PlanCardStyled key={card.id + index} $ratio={ratio} onClick={() => handleCardClick(index)} card={card}/>

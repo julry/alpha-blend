@@ -6,7 +6,6 @@ import { FlexWrapper } from "../../ContentWrapper";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { BackHeader } from "../../BackHeader";
 import { LifeContainer } from "../parts/LifesContainer";
-import { PlanCard } from "./PlanCard";
 import { BlenderObject } from "./BlenderObject";
 import { Person } from "./Person";
 import { DoneDrinkOject } from "./DoneDrinkObject";
@@ -14,6 +13,7 @@ import { AnimatePresence } from "framer-motion";
 
 import { useGame } from "./useGame";
 import { ModalsPart } from "./ModalsPart";
+import { CardsField } from "./CardsField";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -23,22 +23,6 @@ const Wrapper = styled(FlexWrapper)`
 const Amount = styled.p`
     font-size: ${({ $ratio }) => $ratio * 23}px;
     font-weight: 400;
-`;
-
-const CardsContainer = styled.div`
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: var(--container-width);
-    display: flex;
-    overflow-x: scroll;
-    -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
-    white-space: nowrap; /* Предотвращает перенос элементов */
-    touch-action: pan-x;
-    scroll-snap-type: x mandatory;
-    margin-top: auto;
-    background-color: white;
-    border-radius: var(--border-radius-lg);
 `;
 
 const Table = styled.div`
@@ -62,10 +46,6 @@ const BlenderShadow = styled.div`
     filter: blur(3.25px);
 `;
 
-const CardStyled = styled(PlanCard)`
-    width: ${({ $ratio }) => $ratio * 72}px;
-    height: ${({ $ratio }) => $ratio * 72}px;
-`;
 
 const DoneDrinksWrapper = styled.div `
     position: absolute;
@@ -96,6 +76,8 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
         doneDrinks,
         passedLevel,
         handleBack,
+        handleTrainingDrop,
+        isTraining,
     } = useGame({isNeverPlayed, lobbyScreen});
 
 
@@ -138,12 +120,13 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                     <AnimatePresence>
                         {shownFriends.map((friend) => (
                             <Person 
-                                key={`person_${friend.personId}_${friend.drink}`}
+                                key={`person_${friend.personId}_${friend.drink}_${isTraining}`}
                                 ingridients={friend.ingridients} 
+                                queueAmount={friend.queueAmount}
                                 personId={friend.person} 
                                 drink={friend.drink} 
                                 position={friend.position}
-                                onGetDrink={handleDropDrink}
+                                onGetDrink={isTraining ? handleTrainingDrop : handleDropDrink}
                                 onEndTimer={handleEndTimer}
                                 isStopped={isPaused}
                                 isFinished={friend.isFinished}
@@ -158,12 +141,9 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                     </DoneDrinksWrapper>
                 </DndProvider>
                 
-                <CardsContainer>
-                    {shownCards.map((card) => (
-                        <CardStyled key={card.id} $ratio={ratio} card={card} onClick={() => handleClickCard(card)}/>
-                    ))}
-                </CardsContainer>
+                <CardsField shownCards={shownCards} onCardClick={handleClickCard} />
             </Wrapper>
+
             <ModalsPart 
                 modalsFunc={modalFuncs}
                 modalsState={modalsState} 

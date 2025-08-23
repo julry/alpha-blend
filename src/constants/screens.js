@@ -13,6 +13,7 @@ export const SCREENS = {
     GAME1M: 'GAME1M',
     GAME2M: 'GAME2M',
     BLENDER1M: 'BLENDER1M',
+    BLENDER1W: 'BLENDER1W',
 }
 
 export const NEXT_SCREENS = {

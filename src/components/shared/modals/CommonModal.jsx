@@ -30,11 +30,11 @@ const ButtonStyled = styled(Button)`
 `;
 
 
-export const CommonModal = ({ isOpen, onClose, children, isCollegue, isDisabledAnimation, isDarken = true, btnText = 'Далее' }) => {
+export const CommonModal = ({ isOpen, onClose, children, isCollegue, isDisabledAnimation, isDarken = true, btnText = 'Далее', ...props }) => {
     const Content = isCollegue ? CollegueBlock : BlockStyled;
 
     return (
-        <ModalStyled isDarken={isDarken} isDisabledAnimation={isDisabledAnimation} isOpen={isOpen}>
+        <ModalStyled isDarken={isDarken} isDisabledAnimation={isDisabledAnimation} isOpen={isOpen} {...props}>
             <Content>
                 {children}
             </Content>

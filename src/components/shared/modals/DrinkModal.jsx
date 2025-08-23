@@ -24,6 +24,10 @@ const BlockStyled = styled(Block)`
         font-weight: 300;
         font-size: var(--font_xs);
     }
+
+    & h3 {
+        text-align: center;
+    }
 `;
 
 const InfoBlock = styled.div`
@@ -60,7 +64,7 @@ const Description = styled.p`
     flex: 1;
 `;
     
-export const DrinkModal = ({ isOpen, onClose, children, drink = {}}) => {
+export const DrinkModal = ({ isOpen, onClose, drink = {}}) => {
     return (
     <ModalStyled isOpen={isOpen} isDarken>
         <BlockStyled hasCloseIcon onClose={onClose}>
@@ -75,7 +79,7 @@ export const DrinkModal = ({ isOpen, onClose, children, drink = {}}) => {
                 <p><Bold>Ингридиенты</Bold></p>
                 <UlStyled>
                     {drink.ingridientsText.map((text) => (
-                        <LiStyled>{text}</LiStyled>
+                        <LiStyled key={text.slice(0, 20)}>{text}</LiStyled>
                     ))}
                 </UlStyled>
             </div>
@@ -83,7 +87,7 @@ export const DrinkModal = ({ isOpen, onClose, children, drink = {}}) => {
                 <p><Bold>Приготовление</Bold></p>
                 <UlStyled>
                     {drink.recipeText.map((text) => (
-                        <LiStyled>{text}</LiStyled>
+                        <LiStyled key={text.slice(0, 20)}>{text}</LiStyled>
                     ))}
                 </UlStyled>
             </div>
