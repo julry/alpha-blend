@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { useTimer } from "../../../../hooks/useTimer";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { persons, QUEUE_TO_PERSON_TIME } from "./constants";
 import { Points } from "../parts/Points";
 import { motion, useAnimation } from "framer-motion";
@@ -64,42 +64,47 @@ const DropBody = styled.div`
     z-index: 10;
 `;
 
-export const Person = ({ isStopped, ingridients, isFinished, queueAmount, personId, drink, onEndTimer, onGetDrink, points, position = 'center' }) => {
+export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, isFinished, queueAmount, friendId, personId, drink, onEndTimer, onGetDrink, points, position = 'center' }) => {
     const ratio = useSizeRatio();
-    const person = persons.find(pers => pers.id === personId);
     const controls = useAnimation();
     const controlsInfo = useAnimation();
-
-    const personTime = useMemo(() => QUEUE_TO_PERSON_TIME[queueAmount], [])
+    const isFinishedPerson = useRef(false);
+    const personTime = useMemo(() => QUEUE_TO_PERSON_TIME[queueAmount], []);
+    const person = useMemo(() => persons.find(pers => pers.id === personId), []);
 
     const handleEnd = () => {
-        onEndTimer?.(personId);
+        if (isFinishedPerson.current) return;
+
+        onEndTimer?.(friendId);
+        isFinishedPerson.current = true;
     }
 
     const { time } = useTimer({ isStart: !isStopped, onFinish: handleEnd, initialTime: personTime });
+
+    const handleDrop = (item) => {
+        if (isFinishedPerson.current) return;
+
+        if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
+            controlsInfo.start({
+                rotate: [-10, 10, 0], transition: {
+                    repeat: 3,
+                    duration: 0.1,
+                }
+            })
+
+            return;
+        }
+
+        onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId: friendId, isFinished: isFinishedPerson.current });
+        isFinishedPerson.current = true;
+    };
 
     const [, drop] = useDrop(() => ({
         accept: 'DRINK',
         collect: monitor => ({
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
-        drop: (item) => {
-            console.log('drop', item, 'to', drink);
-            console.log('ingridients', ingridients, 'of person, and item', item);
-
-            if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
-                controlsInfo.start({
-                    rotate: [-10, 10, 0], transition: {
-                        repeat: 3,
-                        duration: 0.1,
-                    }
-                })
-
-                return;
-            }
-
-            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, isFinished });
-        },
+        drop: handleDrop,
     }), []);
 
     const [, dropHead] = useDrop(() => ({
@@ -107,22 +112,7 @@ export const Person = ({ isStopped, ingridients, isFinished, queueAmount, person
         collect: monitor => ({
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
-        drop: (item) => {
-            console.log('drop', item, 'to', drink);
-            console.log('ingridients', ingridients, 'of person, and item', item);
-
-            if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
-                controlsInfo.start({
-                    rotate: [-10, 10, 0], transition: {
-                        repeat: 3,
-                        duration: 0.1,
-                    }
-                })
-                return;
-            }
-
-            onGetDrink?.({ personDrinkId: drink, time, doneDrink: item, personId, isFinished });
-        },
+        drop: handleDrop,
     }), []);
 
     const timeColor = useMemo(() => {
@@ -141,8 +131,16 @@ export const Person = ({ isStopped, ingridients, isFinished, queueAmount, person
         controls.start({ height: `calc(${heightPercentage}% - ${ratio * 8}px)`, backgroundColor: timeColor });
     }, [time, controls, timeColor, ratio]);
 
+    useEffect(() => {
+        if (blenderDrop && position === 'left') {
+            handleDrop(blenderDrop);
+            setBlenderDrop();
+        }
+    }, [blenderDrop])
+
     return (
         <Wrapper 
+            ref={drop}
             $ratio={ratio} 
             bottom={person.bottom} 
             width={person.width} 
@@ -157,26 +155,10 @@ export const Person = ({ isStopped, ingridients, isFinished, queueAmount, person
             transition={{ duration: 0.2 }}
         >
             <Image src={person.pic} alt="friend" />
-            <DropHead
-                ref={dropHead}
-                $ratio={ratio}
-                $headLeft={person.headLeft}
-                $headTop={person.headTop}
-                $headWidth={person.headWidth}
-                $headHeight={person.headHeight}
-            />
-            <DropBody
-                ref={drop}
-                $ratio={ratio}
-                $bodyLeft={person.bodyLeft}
-                $bodyTop={person.bodyTop}
-                $bodyWidth={person.bodyWidth}
-                $bodyHeight={person.bodyHeight}
-            />
             {!isFinished && (
                 <Info ingridients={ingridients} controls={controls} controlsInfo={controlsInfo}/>
             )}
-            <PointsStyled $ratio={ratio} isShown={true} shownPoints={points} />
+            <PointsStyled $ratio={ratio} isShown={points > 0} shownPoints={points} />
         </Wrapper>
     )
 }

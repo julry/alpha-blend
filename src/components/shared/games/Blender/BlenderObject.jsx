@@ -9,6 +9,7 @@ import { uid } from "uid";
 import { drinks } from "../../../../constants/drinks";
 import blender from './assets/blender.png';
 import { AnimatePresence, motion } from "framer-motion";
+import { useDrop } from "react-dnd";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -124,12 +125,21 @@ const ErrorSign = styled(motion.div)`
     width: ${({$ratio}) => $ratio * 50}px;
 `;
 
-export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
+export const BlenderObject = memo(({cards = [], onDrop, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
     const ratio = useSizeRatio();
     const [isBlendering, setIsBlendering] = useState(false);
     const [drink, setDrink] = useState();
     const [timerId, setTimerId] = useState();
     const [isError, setIsError] = useState(false);
+    const [, drop] = useDrop(() => ({
+        accept: 'DRINK',
+        collect: monitor => ({
+            hovered: monitor.canDrop() && monitor.isOver(),
+        }),
+        drop: (item) => {
+            onDrop(item);
+        },
+    }), []);
 
     useTimer({ isStart: isBlendering && !isStopped, initialTime: BLENDER_TIME, onFinish: handleBlenderFinish, timerId })
 
@@ -165,7 +175,7 @@ export const BlenderObject = memo(({cards = [], isStopped, onCardClick, onBlende
 
     return (
         <Wrapper $ratio={ratio} className={className}>
-            <IndigrientsPart $ratio={ratio}>
+            <IndigrientsPart ref={drop} $ratio={ratio}>
                 {cards.map((card, index) => (
                     <PlanCardStyled key={card.id + index} $ratio={ratio} onClick={() => handleCardClick(index)} card={card}/>
                 ))}

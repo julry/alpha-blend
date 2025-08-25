@@ -158,13 +158,13 @@ export const useGame = ({gameAreaRef}) => {
 
         // Фиксированный угол 45 градусов (вверх или вниз в зависимости от направления)
         const angle = Math.atan2(dragStart.y - touchY, touchX - dragStart.x);
-        const isRight = ballPosition.x > BOTTOM_HOOP_X;
-        const fixedAngle = (isRight ? 3 * Math.PI / 4 : Math.PI / 4); // 45 градусов
+        // const isRight = ballPosition.x > BOTTOM_HOOP_X;
+        // const fixedAngle = (isRight ? 3 * Math.PI / 4 : Math.PI / 4); // 45 градусов
 
         // Рассчитываем скорость с фиксированным углом
         const power = distance / 15;
-        const powerX = Math.cos(fixedAngle) * power;
-        const powerY = -Math.sin(fixedAngle) * power;
+        const powerX = Math.cos(angle) * power;
+        const powerY = -Math.sin(angle) * power;
 
         // Генерируем точки траектории
         const points = [];
@@ -173,7 +173,7 @@ export const useGame = ({gameAreaRef}) => {
         let vx = powerX;
         let vy = powerY;
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 4; i++) {
             x += vx;
             y += vy;
             vy += GRAVITY;
@@ -211,13 +211,15 @@ export const useGame = ({gameAreaRef}) => {
 
         // Фиксированный угол 45 градусов
         // const fixedAngle = Math.PI/4;
-        const isRight = ballPosition.x > BOTTOM_HOOP_X;
-        const fixedAngle = (isRight ? 3 * Math.PI / 4 : Math.PI / 4); // 45 градусов
+        const angle = Math.atan2(dragStart.y - touchY, touchX - dragStart.x);
+
+        // const isRight = ballPosition.x > BOTTOM_HOOP_X;
+        // const fixedAngle = (isRight ? 3 * Math.PI / 4 : Math.PI / 4); // 45 градусов
         const power = distance / 15;
 
         setBallVelocity({
-            x: Math.cos(fixedAngle) * power,
-            y: -Math.sin(fixedAngle) * power
+            x: Math.cos(angle) * power,
+            y: -Math.sin(angle) * power
         });
         setIsBallMoving(true);
         setTrajectory([]);

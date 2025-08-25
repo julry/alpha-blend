@@ -14,6 +14,7 @@ import { AnimatePresence } from "framer-motion";
 import { useGame } from "./useGame";
 import { ModalsPart } from "./ModalsPart";
 import { CardsField } from "./CardsField";
+import { useState } from "react";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -78,6 +79,8 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
         handleBack,
         handleTrainingDrop,
         isTraining,
+        blenderDrop,
+        setBlenderDrop,
     } = useGame({isNeverPlayed, lobbyScreen});
 
 
@@ -109,28 +112,31 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                 <BlenderShadow $ratio={ratio}/>
             
                 <DndProvider options={HTML5toTouch}>
-                    <BlenderObject 
-                        // canDrop={shownFriends.some(({position}) => position === 'left')}
+                    <BlenderObject
                         isStopped={isPaused} 
                         onCardClick={handleClickBlenderCard} 
                         cards={blenderCards} 
                         onBlenderStop={handleBlenderStop}
                         resetBlender={handleResetBlender}
+                        onDrop={setBlenderDrop}
                     />
                     <AnimatePresence>
                         {shownFriends.map((friend) => (
                             <Person 
-                                key={`person_${friend.personId}_${friend.drink}_${isTraining}`}
+                                key={`person_${friend.id}_${friend.drink}_${isTraining}`}
                                 ingridients={friend.ingridients} 
                                 queueAmount={friend.queueAmount}
                                 personId={friend.person} 
-                                drink={friend.drink} 
+                                friendId={friend.id} 
+                                drink={friend.drink}
                                 position={friend.position}
                                 onGetDrink={isTraining ? handleTrainingDrop : handleDropDrink}
                                 onEndTimer={handleEndTimer}
                                 isStopped={isPaused}
                                 isFinished={friend.isFinished}
                                 points={friend.points}
+                                blenderDrop={blenderDrop}
+                                setBlenderDrop={setBlenderDrop}
                             />
                         ))}
                     </AnimatePresence>

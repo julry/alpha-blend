@@ -13,16 +13,15 @@ const BasketballGame = () => {
   const [score, setScore] = useState(0);
   const [trajectory, setTrajectory] = useState([]);
   const [ballInBasket, setBallInBasket] = useState(true);
-  const [originalBallPosition, setOriginalBallPosition] = useState({ x: 80, y: 517 });
 
   const gameAreaRef = useRef(null);
   const animationRef = useRef(null);
   const dragStartRef = useRef(null);
   const dragCurrentRef = useRef(null);
 
-  const GRAVITY = 0.5;
-  const FRICTION = 0.99;
-  const BOUNCE = 0.8;
+  const GRAVITY = 0.3;
+  const FRICTION = 0.96;
+  const BOUNCE = 0.6;
 
   const checkBasketCollision = useCallback((ballX, ballY, basket) => {
     const basketCenterX = basket.x + basket.width / 2;
@@ -38,7 +37,7 @@ const BasketballGame = () => {
       Math.pow(ballY - basketCenterY, 2)
     );
     
-    return isInBasket && distanceToCenter < 25;
+    return isInBasket && distanceToCenter < 20;
   }, []);
 
   const updateBallPosition = useCallback(() => {
@@ -48,26 +47,23 @@ const BasketballGame = () => {
       let newVelX = velocity.x * FRICTION;
       let newVelY = velocity.y + GRAVITY;
 
-      // Столкновение с границами
-      if (newX <= 15 || newX >= 360) {
-        newX = newX <= 15 ? 15 : 360;
+      if (newX <= 0 || newX >= 375) {
+        newX = newX <= 0 ? 0 : 375;
         newVelX = -newVelX * BOUNCE;
       }
 
-      if (newY <= 15 || newY >= 662) {
-        newY = newY <= 15 ? 15 : 662;
+      if (newY <= 0 || newY >= 677) {
+        newY = newY <= 0 ? 0 : 677;
         newVelY = -newVelY * BOUNCE;
       }
 
-      // Проверка попадания в корзины
       let scored = false;
-      baskets.forEach(basket => {
+      const updatedBaskets = baskets.map(basket => {
         if (!basket.hasBall && checkBasketCollision(newX, newY, basket)) {
           scored = true;
-          setBaskets(prev => prev.map(b => 
-            b.id === basket.id ? { ...b, hasBall: true } : b
-          ));
+          return { ...basket, hasBall: true };
         }
+        return basket;
       });
 
       if (scored) {
@@ -75,8 +71,9 @@ const BasketballGame = () => {
         setScore(prev => prev + 1);
         setBallInBasket(true);
         
+        const newBasketId = Date.now();
         const newBasket = {
-          id: Date.now(),
+          id: newBasketId,
           x: Math.random() > 0.5 ? 50 : 250,
           y: Math.random() * 200 + 100,
           width: 60,
@@ -86,19 +83,16 @@ const BasketballGame = () => {
         };
         
         setBaskets(prev => [...prev.filter(b => !b.hasBall), newBasket]);
-        setOriginalBallPosition({
-          x: newBasket.x + newBasket.width / 2,
-          y: newBasket.y + newBasket.height / 2
-        });
         
-        return { x: newBasket.x + newBasket.width / 2, y: newBasket.y + newBasket.height / 2 };
+        // Не перемещаем мяч сразу, он будет лететь к новой корзине
+        return { x: newX, y: newY };
       }
 
       setVelocity({ x: newVelX, y: newVelY });
 
-      // Если мяч остановился и не попал в корзину
-      if (Math.abs(newVelX) < 0.5 && Math.abs(newVelY) < 0.5 && newY >= 650 && !scored) {
+      if (Math.abs(newVelX) < 0.1 && Math.abs(newVelY) < 0.1 && newY >= 650) {
         setGameState('failed');
+        return prev;
       }
 
       return { x: newX, y: newY };
@@ -112,14 +106,14 @@ const BasketballGame = () => {
       const currentX = dragCurrentRef.current.x;
       const currentY = dragCurrentRef.current.y;
 
-      // Расчет траектории (только 40% пути)
+      // Расчет траектории
       const points = [];
-      let velX = (startX - currentX) / 15;
-      let velY = (startY - currentY) / 15;
+      let velX = (startX - currentX) / 10;
+      let velY = (startY - currentY) / 10;
       let posX = ballPosition.x;
       let posY = ballPosition.y;
 
-      // Всего 6 точек траектории (40% от полного пути)
+      // Рассчитываем 6 точек траектории
       for (let i = 0; i < 6; i++) {
         velY += GRAVITY;
         posX += velX * 2;
@@ -128,20 +122,20 @@ const BasketballGame = () => {
         velY *= FRICTION;
 
         // Отскок от границ
-        if (posX < 15) {
-          posX = 15;
+        if (posX < 0) {
+          posX = 0;
           velX = -velX * BOUNCE;
         }
-        if (posX > 360) {
-          posX = 360;
+        if (posX > 375) {
+          posX = 375;
           velX = -velX * BOUNCE;
         }
-        if (posY < 15) {
-          posY = 15;
+        if (posY < 0) {
+          posY = 0;
           velY = -velY * BOUNCE;
         }
-        if (posY > 662) {
-          posY = 662;
+        if (posY > 677) {
+          posY = 677;
           velY = -velY * BOUNCE;
         }
 
@@ -175,13 +169,14 @@ const BasketballGame = () => {
     const y = touch.clientY - rect.top;
 
     const distance = Math.sqrt(Math.pow(x - ballPosition.x, 2) + Math.pow(y - ballPosition.y, 2));
-    if (distance < 30) {
+    if (distance < 25) {
       setIsDragging(true);
       dragStartRef.current = { x: ballPosition.x, y: ballPosition.y };
       dragCurrentRef.current = { x, y };
       setVelocity({ x: 0, y: 0 });
       setBallInBasket(false);
       
+      // Убираем мяч из корзины
       setBaskets(prev => prev.map(basket => ({
         ...basket,
         hasBall: false
@@ -197,12 +192,16 @@ const BasketballGame = () => {
     const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
 
-    dragCurrentRef.current = { x, y };
+    const maxDragDistance = 100;
+    const dragX = Math.max(Math.min(x, dragStartRef.current.x + maxDragDistance), dragStartRef.current.x - maxDragDistance);
+    const dragY = Math.max(Math.min(y, dragStartRef.current.y + maxDragDistance), dragStartRef.current.y - maxDragDistance);
+
+    dragCurrentRef.current = { x: dragX, y: dragY };
     
     // Обновляем позицию мяча при dragging
     setBallPosition({
-      x: dragStartRef.current.x + (dragStartRef.current.x - x) * 0.3,
-      y: dragStartRef.current.y + (dragStartRef.current.y - y) * 0.3
+      x: dragStartRef.current.x + (dragStartRef.current.x - dragX) * 0.3,
+      y: dragStartRef.current.y + (dragStartRef.current.y - dragY) * 0.3
     });
   };
 
@@ -223,7 +222,6 @@ const BasketballGame = () => {
 
   const resetGame = () => {
     setBallPosition({ x: 80, y: 517 });
-    setOriginalBallPosition({ x: 80, y: 517 });
     setVelocity({ x: 0, y: 0 });
     setBaskets([
       { id: 1, x: 50, y: 497, width: 60, height: 40, rotation: 45, hasBall: true },
@@ -231,7 +229,6 @@ const BasketballGame = () => {
     ]);
     setGameState('playing');
     setBallInBasket(true);
-    setTrajectory([]);
   };
 
   return (
@@ -272,29 +269,29 @@ const BasketballGame = () => {
           </div>
         ))}
 
-        {/* Мяч */}
+        {/* Мяч - всегда виден, кроме когда в корзине */}
         {!ballInBasket && (
           <div
             className="ball"
             style={{
               left: ballPosition.x - 15,
               top: ballPosition.y - 15,
-              transform: isDragging ? 'scale(1.1)' : 'scale(1)'
+              transform: isDragging ? 'scale(1.2)' : 'scale(1)'
             }}
           />
         )}
 
-        {/* Траектория (только 6 точек - 40% пути) */}
+        {/* Траектория */}
         {trajectory.map((point, index) => (
           <div
             key={index}
             className="trajectory-point"
             style={{
-              left: point.x - 4,
-              top: point.y - 4,
-              width: '8px',
-              height: '8px',
-              opacity: 1 - (index / trajectory.length * 0.7),
+              left: point.x - 3,
+              top: point.y - 3,
+              width: '6px',
+              height: '6px',
+              opacity: 1 - (index / trajectory.length * 0.8),
               transform: `scale(${1 - index * 0.15})`
             }}
           />

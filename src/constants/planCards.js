@@ -52,7 +52,7 @@ export const planCardsWeek1_Monday = [
     {
         id: 10,
         text: 'брейншторм\nхакатона',
-        points: 15,
+        points: 10,
         isSpecial: true,
     },
     {

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { SCREENS } from "../../../../constants/screens";
 import { useProgress } from "../../../../contexts/ProgressContext";
 import { FlexWrapper } from "../../ContentWrapper";
 import { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ import { weekInfo } from "../../../../constants/weeksInfo";
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
     height: 100%;
-`
+`;
 
 const Amount = styled.p`
     font-size: ${({ $ratio }) => $ratio * 23}px;
@@ -25,17 +24,17 @@ const Amount = styled.p`
 `;
 
 const CardsContainer = styled.div`
-width: 100%;
+    width: 100%;
     display: flex;
     gap: var(--spacing_x1);
     overflow-y: visible;
     height: fit-content;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
-  white-space: nowrap; /* Предотвращает перенос элементов */
-  touch-action: pan-x;
-  scroll-snap-type: x mandatory;
-  padding: var(--spacing_x3) 0;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
+    white-space: nowrap; /* Предотвращает перенос элементов */
+    touch-action: pan-x;
+    scroll-snap-type: x mandatory;
+    padding: var(--spacing_x3) 0;
 `;
 
 const MAX_AMOUNT = 9;
@@ -65,8 +64,10 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
 
     useEffect(() => {
         if (commonAmount === MAX_AMOUNT) {
+            const finished = finishPoints;
+            setFinishPoints(prev => prev + 15);
             setIsCollegue(true);
-            endGame({finishPoints, gameName: 'planners', week, day});
+            endGame({finishPoints: finished + 15, gameName: 'planners', week, day});
         }
     }, [commonAmount]);
 

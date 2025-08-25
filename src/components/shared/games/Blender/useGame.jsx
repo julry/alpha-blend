@@ -3,12 +3,12 @@ import { useProgress } from "../../../../contexts/ProgressContext";
 import { getPersonsArray } from "./utils";
 import { LEVEL_TO_PEOPLE_AMOUNT, LEVEL_TO_PROBABILITY } from "./constants";
 import { ingridients } from "../../../../constants/ingridients";
+import { uid } from "uid";
 
 const POSITIONS = ['center', 'right', 'left'];
 
-
 export const useGame = ({lobbyScreen, isNeverPlayed}) => {
-     const { next } = useProgress();
+    const { next } = useProgress();
     const [isRules, setIsRules] = useState(false);
     const [isFirstRules, setIsFirstRules] = useState(isNeverPlayed);
     const [level, setLevel] = useState(+(!isNeverPlayed));
@@ -28,6 +28,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     const [restartModal, setRestartModal] = useState(false);
     const [isTraining, setIsTraining] = useState(false);
     const [isFinishTraining, setIsFinishTraining] = useState(false);
+    const [blenderDrop, setBlenderDrop] = useState(false);
+
     const correctAmount = useRef(0);
     const shownAmount = useRef(0);
 
@@ -54,7 +56,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
 
     useEffect(() => {
         const shown = comingFriends.filter((friend) => friend.queue === queue);
-        const friends = shown.map((friend, index) => ({...friend, position: POSITIONS[index], queueAmount: shown.length}));
+        const friends = shown.map((friend, index) => ({...friend, id: `${friend.person}_${uid()}`, position: POSITIONS[index], queueAmount: shown.length}));
         setShownFriends(friends);
 
         shownAmount.current = friends.length;
@@ -130,24 +132,24 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         setBlenderCards([]);
     }
 
-    const personLeave = (personId, tryPoints) => {
-        setShownFriends(prev => prev.map((friend) => friend.person === personId ? ({...friend, isFinished: true, points: tryPoints}) : friend));
+    const personLeave = (personId, tryPoints, timer) => {
+        setBlenderDrop();
+        setShownFriends(prev => prev.map((friend) => friend.id === personId ? ({...friend, isFinished: true, points: tryPoints}) : friend));
         
         setTimeout(() => {
-            setShownFriends(prev => prev.filter((friend) => friend.person !== personId));
+            setShownFriends(prev => prev.filter((friend) => friend.id !== personId));
             shownAmount.current -= 1;
             if (shownAmount.current === 0 && !isTraining) {
                 handleChangePerson();
             }
-        }, 1000);
+        }, timer ?? 500);
     }
 
     const handleTrainingDrop = ({doneDrink, personId}) => {
         let tryPoints = 10;
 
         setDoneDrinks(prev => prev.filter(drink => drink.id !== doneDrink.id));
-        setShownFriends(prev => prev.map((friend) => friend.person === personId ? ({...friend, isFinished: true, points: tryPoints}) : friend));
-        
+        setShownFriends(prev => prev.map((friend) => friend.id === personId ? ({...friend, isFinished: true, points: tryPoints}) : friend));
 
         setTimeout(() => {
             setShownFriends([]);
@@ -159,7 +161,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
 
     const handleDropDrink = ({doneDrink, personId, isFinished}) => {
         if (isFinished) return;
-        
+
         let tryPoints = 10;
 
         correctAmount.current += 1;
@@ -170,7 +172,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     }
 
     const handleEndTimer = (personId) => {
-        personLeave(personId, 0);
+        personLeave(personId, 0, 0);
         correctAmount.current = 0;
     }
 
@@ -241,5 +243,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         handleResetBlender,
         passedLevel,
         isTraining,
+        blenderDrop, 
+        setBlenderDrop,
     }
 }
