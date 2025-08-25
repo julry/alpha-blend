@@ -1,13 +1,13 @@
 import isNil from "lodash/isNil";
 import styled from "styled-components";
 import {GameTile} from "./GameTile";
-import {TILE_COUNT_PER_DIMENSION, CONTAINER_SIZE} from "./constants";
+import {CONTAINER_SIZE} from "./constants";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 
 const Board = styled.div`
     position: relative;
-    width: ${({sizeRatio}) => `calc(${CONTAINER_SIZE}px * ${sizeRatio})`};
-    height: ${({sizeRatio}) => `calc(${CONTAINER_SIZE}px * ${sizeRatio})`};
+    width: ${({$sizeRatio}) => `calc(${CONTAINER_SIZE}px * ${$sizeRatio})`};
+    height: ${({$sizeRatio}) => `calc(${CONTAINER_SIZE}px * ${$sizeRatio})`};
     background: #898FA6;
     border-radius: var(--border-radius-lg);
     padding: var(--spacing_x2);
@@ -31,9 +31,8 @@ export function GameBoard({ className, tiles }) {
     };
 
     return (
-        <Board className={className} sizeRatio={sizeRatio}>
-            <Tiles sizeRatio={sizeRatio}>{renderTiles()}</Tiles>
-            {/* <Grid sizeRatio={sizeRatio}>{renderGrid()}</Grid> */}
+        <Board className={className} $sizeRatio={sizeRatio}>
+            <Tiles $sizeRatio={sizeRatio}>{renderTiles()}</Tiles>
         </Board>
     );
 }

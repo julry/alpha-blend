@@ -23,7 +23,6 @@ export const initialState = {
     tilesByIds: [],
     hasChanged: false,
     score: 0,
-    lastMerged: 0,
 };
 
 function gameReducer(
@@ -32,7 +31,7 @@ function gameReducer(
 ) {
     switch (action.type) {
         case ACTIONS.RESTART: {
-            return initialState;
+            return {...initialState, score: state.score};
         }
         case ACTIONS.DELETE_TILE: {
             const flattenBoard = flattenDeep(state.board);
@@ -103,7 +102,6 @@ function gameReducer(
             const newBoard = createBoard();
             const newTiles = {};
             let hasChanged = false;
-            let lastMerged;
             let { score } = state;
 
             for (let x = 0; x < TILE_COUNT_PER_DIMENSION; x++) {
@@ -116,7 +114,7 @@ function gameReducer(
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
                         if (previousTile?.value === currentTile.value) {
-                            score += previousTile.value * 2;
+                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -125,7 +123,6 @@ function gameReducer(
                                 ...currentTile,
                                 position: [x, newY - 1],
                             };
-                            lastMerged = currentTile.value * 2;
                             previousTile = undefined;
                             hasChanged = true;
                             
@@ -150,7 +147,6 @@ function gameReducer(
                 ...state,
                 board: newBoard,
                 tiles: newTiles,
-                lastMerged: lastMerged ? lastMerged : state.lastMerged,
                 hasChanged,
                 score,
             };
@@ -159,7 +155,6 @@ function gameReducer(
             const newBoard = createBoard();
             const newTiles = {};
             let hasChanged = false;
-            let lastMerged;
             let { score } = state;
 
             for (let x = 0; x < TILE_COUNT_PER_DIMENSION; x++) {
@@ -172,7 +167,7 @@ function gameReducer(
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
                         if (previousTile?.value === currentTile.value) {
-                            score += previousTile.value * 2;
+                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -181,7 +176,6 @@ function gameReducer(
                                 ...currentTile,
                                 position: [x, newY + 1],
                             };
-                            lastMerged = previousTile.value * 2;
                             previousTile = undefined;
                             hasChanged = true;
                             continue;
@@ -204,7 +198,6 @@ function gameReducer(
                 ...state,
                 board: newBoard,
                 tiles: newTiles,
-                lastMerged: lastMerged ? lastMerged : state.lastMerged,
                 hasChanged,
                 score,
             };
@@ -213,7 +206,6 @@ function gameReducer(
             const newBoard = createBoard();
             const newTiles = {};
             let hasChanged = false;
-            let lastMerged;
             let { score } = state;
 
             for (let y = 0; y < TILE_COUNT_PER_DIMENSION; y++) {
@@ -226,12 +218,11 @@ function gameReducer(
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
                         if (previousTile?.value === currentTile.value) {
-                            score += previousTile.value * 2;
+                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
                             };
-                            lastMerged = previousTile.value * 2;
                             newTiles[tileId] = {
                                 ...currentTile,
                                 position: [newX - 1, y],
@@ -258,7 +249,6 @@ function gameReducer(
                 ...state,
                 board: newBoard,
                 tiles: newTiles,
-                lastMerged: lastMerged ? lastMerged : state.lastMerged,
                 hasChanged,
                 score,
             };
@@ -267,7 +257,6 @@ function gameReducer(
             const newBoard = createBoard();
             const newTiles = {};
             let hasChanged = false;
-            let lastMerged;
             let { score } = state;
 
             for (let y = 0; y < TILE_COUNT_PER_DIMENSION; y++) {
@@ -280,7 +269,7 @@ function gameReducer(
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
                         if (previousTile?.value === currentTile.value) {
-                            score += previousTile.value * 2;
+                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -289,7 +278,6 @@ function gameReducer(
                                 ...currentTile,
                                 position: [newX + 1, y],
                             };
-                            lastMerged = previousTile.value * 2;
                             previousTile = undefined;
                             hasChanged = true;
                             continue;
@@ -314,7 +302,6 @@ function gameReducer(
                 board: newBoard,
                 tiles: newTiles,
                 hasChanged,
-                lastMerged: lastMerged ? lastMerged : state.lastMerged,
                 score,
             };
         }

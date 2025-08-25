@@ -32,7 +32,7 @@ export const RulesModal = ({ onClose, isOpen }) => {
                     Соединяй одинаковые плитки и зарабатывай очки.
                 </Text>
                 <Text>
-                    Каждое соединение — это 
+                    Каждое соединение — это <Bold><RedText>+5</RedText></Bold> баллов
                 </Text>
                  <Text>
                     Если соберёшь плитку 256, она исчезнет, а ты получишь <RedText>+15</RedText> <Bold>бонусных баллов</Bold>

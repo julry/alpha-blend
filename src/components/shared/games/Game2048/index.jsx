@@ -15,9 +15,9 @@ import { RulesModal } from "./RulesModal";
 import { CommonModal } from "../../modals/CommonModal";
 import { EndGameModal } from "../../modals/EndGameModal";
 import { LifeContainer } from "../parts/LifesContainer";
-import { SCREENS } from "../../../../constants/screens";
 import { SkipModal } from "../../modals/SkipModal";
 import { uid } from "uid";
+import { weekInfo } from "../../../../constants/weeksInfo";
 
 const WrapperInner = styled.div`
     display: flex;
@@ -38,8 +38,8 @@ const LifeContainerStyled = styled(LifeContainer)`
 
 const TRIES_AMOUNT = 3;
 
-export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
-    const {next} = useProgress()
+export function Game2048({isFirst, lobbyScreen, day}) {
+    const {next, endGame } = useProgress()
     const ratio = useSizeRatio();
     const [tries, setTries] = useState(TRIES_AMOUNT);
     const [isRulesModal, setIsRulesModal] = useState();
@@ -54,6 +54,8 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
     const handleResultRef = useCallbackRef(handleResult);
     const timerRef = useRef(uid());
 
+    const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 1).challengeCollegueMessage[day], [day]);
+
     const {startGame, restartGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, TRIES_AMOUNT);
 
     const handleRetry = () => {
@@ -65,7 +67,10 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
     function handleResult({isFromGame}) {
         setIsEndModal({shown: true, title: isFromGame ? 'Закончились клетки!' : undefined});
         setTries(prev => prev - 1);
-        // addPoints2048(points)
+        //TODO: мб нужно будет перенести
+        if (tries === 1) {
+            endGame({finishPoints: score, gameName: 'challenges', week: 1, day})
+        }
     }
 
     useEffect(() => {
@@ -81,7 +86,12 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
         <>
             <FlexWrapper>
                 <BackHeader onInfoClick={() => setIsRulesModal(true)} onBack={() => setIsSkipping(true)}>
-                    <Timer initialTime={MAX_TIME} isStart={isGameActive} onFinish={handleResult} key={timerRef.current}/>
+                    <Timer 
+                        initialTime={MAX_TIME} 
+                        isStart={isGameActive} 
+                        onFinish={() => handleResult({isFromGame: false})} 
+                        key={timerRef.current}
+                    />
                     <Amount $ratio={ratio}>{score}</Amount>
                 </BackHeader>
                 <LifeContainerStyled lives={tries}/>
