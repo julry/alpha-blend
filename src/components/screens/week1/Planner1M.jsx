@@ -1,24 +1,62 @@
+import styled from "styled-components";
 import { DAYS } from "../../../constants/days";
-import { findings } from "../../../constants/findings";
 import { planCardsWeek1_Monday } from "../../../constants/planCards"
 import { SCREENS } from "../../../constants/screens";
-import { weekInfo } from "../../../constants/weeksInfo"
+import { Block } from "../../shared/Block";
 import { PlannerGame } from "../../shared/games/PlannerGame"
+import { useRef, useState } from "react";
+import { Modal } from "../../shared/modals/Modal";
+
+const ModalStyled = styled(Modal)`
+    bottom: auto;
+`;
+
+const ChallengeInfo = styled(Block)`
+    position: absolute;
+    z-index: 4;
+    top: var(--spacing_x8);
+    left: 50%;
+    transform: translateX(-50%);
+`;
 
 export const Planner1M = () => {
-    const weekData = weekInfo.find((info) => info.week === 1);
-    const collegueMessage = weekData.plannersCollegueMessage[DAYS.Monday];
-    const findingId = findings.find(({day, week}) => day === DAYS.Monday && week === 1).id;
-    const finishMessage = weekData.plannersEndMessage[DAYS.Monday];
-   
+    const [isInfo, setIsInfo] = useState(false);
+    const infoShown = useRef({});
+
+    const handleCloseRules = () => {
+        if (infoShown.current?.shown) return;
+
+        setIsInfo(true);
+
+        infoShown.current.timeout = setTimeout(() => {
+            setIsInfo(false)
+        }, 8000);
+
+        infoShown.current.shown = true;
+    };
+
+    const handleCloseInfo = () => {
+        setIsInfo(false);
+        infoShown.current.timeout = undefined;
+    };
+
     return (
-        <PlannerGame 
-            cards={planCardsWeek1_Monday} 
-            collegueMessage={collegueMessage} 
-            findingId={findingId}
-            finishMessage={finishMessage}
-            isNeverPlayed
-            lobbyScreen={SCREENS.LOBBY1M}
-        />
+        <>
+            <PlannerGame 
+                cards={planCardsWeek1_Monday} 
+                isNeverPlayed
+                lobbyScreen={SCREENS.LOBBY1M}
+                week={1}
+                day={DAYS.Monday}
+                onCloseRules={handleCloseRules}
+            />
+            <ModalStyled isOpen={isInfo}>
+                <ChallengeInfo hasCloseIcon={true} onClose={handleCloseInfo}>
+                    <p>
+                        Помнишь письмо про хакатон? Это и есть челлендж недели. Не забудь добавить карточку в список дел — за неё дают больше баллов!
+                    </p>
+                </ChallengeInfo>
+            </ModalStyled>
+        </>
     )
 }

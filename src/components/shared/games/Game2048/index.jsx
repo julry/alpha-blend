@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import styled from "styled-components";
 import {useProgress} from "../../../../contexts/ProgressContext";
 import {useGame} from "./useGame";
@@ -17,6 +17,7 @@ import { EndGameModal } from "../../modals/EndGameModal";
 import { LifeContainer } from "../parts/LifesContainer";
 import { SCREENS } from "../../../../constants/screens";
 import { SkipModal } from "../../modals/SkipModal";
+import { uid } from "uid";
 
 const WrapperInner = styled.div`
     display: flex;
@@ -44,23 +45,25 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
     const [isRulesModal, setIsRulesModal] = useState();
     const [isFirstMessage, setIsFirstMessage] = useState(isFirst);
     const [isSkipping, setIsSkipping] = useState(false);
-    const [isEndModal, setIsEndModal] = useState(false);
+    const [isEndModal, setIsEndModal] = useState({shown: false, title: ''});
     const [isFinishModal, setIsFinishModal] = useState(false);
     const isGameActive = useMemo(
-        () => !(isRulesModal || isSkipping || isEndModal || isFirstMessage || isFinishModal),
+        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isFinishModal),
         [isRulesModal, isSkipping, isEndModal, isFirstMessage, isFinishModal],
     );
     const handleResultRef = useCallbackRef(handleResult);
+    const timerRef = useRef(uid());
 
     const {startGame, restartGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, TRIES_AMOUNT);
 
     const handleRetry = () => {
-        setIsEndModal();
+        setIsEndModal({shown: false});
+        timerRef.current = uid();
         restartGame();
     }
 
-    function handleResult() {
-        setIsEndModal(true);
+    function handleResult({isFromGame}) {
+        setIsEndModal({shown: true, title: isFromGame ? 'Закончились клетки!' : undefined});
         setTries(prev => prev - 1);
         // addPoints2048(points)
     }
@@ -70,7 +73,7 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
     }, []);
 
     const handleCloseCollegue = () => {
-        setIsEndModal(false);
+        setIsEndModal({shown: false});
         setIsFinishModal(true);
     };
 
@@ -78,7 +81,7 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
         <>
             <FlexWrapper>
                 <BackHeader onInfoClick={() => setIsRulesModal(true)} onBack={() => setIsSkipping(true)}>
-                    <Timer initialTime={MAX_TIME} isStart={isGameActive} onFinish={handleResult}/>
+                    <Timer initialTime={MAX_TIME} isStart={isGameActive} onFinish={handleResult} key={timerRef.current}/>
                     <Amount $ratio={ratio}>{score}</Amount>
                 </BackHeader>
                 <LifeContainerStyled lives={tries}/>
@@ -103,14 +106,14 @@ export function Game2048({isFirst, collegueMessage, lobbyScreen}) {
                     За каждое соединение ты получаешь баллы, чем больше число — тем больше очков. Всё просто — удачи и вперёд в игру!
                 </p>
             </CommonModal>
-            <CommonModal isOpen={isEndModal && tries === 0} isCollegue onClose={handleCloseCollegue}>
+            <CommonModal isOpen={isEndModal?.shown && tries === 0} isCollegue onClose={handleCloseCollegue}>
                 <p>{collegueMessage}</p>
             </CommonModal>
             <CommonModal isOpen={isFinishModal} onClose={() => next(lobbyScreen)} btnText="В комнату">
                 <p>Сегодня с челленджем — всё.</p>
             </CommonModal>
             <SkipModal opened={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)}/>
-            <EndGameModal isOpen={isEndModal && tries > 0} onRetry={handleRetry} onClose={() => next(lobbyScreen)}/>
+            <EndGameModal isOpen={isEndModal?.shown && tries > 0} onRetry={handleRetry} onClose={() => next(lobbyScreen)} title={isEndModal?.title}/>
         </>
     )
 }

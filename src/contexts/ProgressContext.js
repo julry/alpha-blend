@@ -169,10 +169,24 @@ export function ProgressProvider(props) {
         updateUser(({findings: [...user.findings, id]}))
     }
     
-    const endGame = () => {
-       
-    };
+    const endGame = ({finishPoints, gameName, week, day}) => {
+        setPoints(prev => prev + finishPoints);
 
+        if (week === currentWeek) {
+            setWeekPoints(prev => prev + finishPoints);
+        }
+
+        const gameData = user[gameName] ?? INITIAL_ACTIVITY_DATA;
+
+        const result = gameData.map((planner, index) => week - 1 === index ? ({...planner, [day]: finishPoints}) : planner);
+
+        updateUser({
+            points: points + finishPoints, 
+            [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
+            [gameName]: result,
+        });
+    }
+  
     const updateUser = async (changed) => {
         const newUser = ({...user, ...changed});
 

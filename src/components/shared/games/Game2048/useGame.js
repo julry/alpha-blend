@@ -5,7 +5,6 @@ import flattenDeep from "lodash/flattenDeep";
 import { uid } from "uid";
 import { ACTIONS, TILE_COUNT_PER_DIMENSION, MOVE_ANIMATION_DURATION } from "./constants";
 import { FINISH_SCORE } from "./constants";
-import { MERGE_ANIMATION_DURATION } from "./constants";
 import { DELETE_ANIMATION_DURATION } from "./constants";
 
 function createBoard() {
@@ -429,7 +428,7 @@ export function useGame(onWin, onLose) {
         if (hasTileValue(2024)) {
             onWin?.(result)
         } else if (!hasMoves()) {
-            onLose?.(result)
+            onLose?.({isFromGame: true})
         }
     }, [gameState, onWin, onLose]);
 

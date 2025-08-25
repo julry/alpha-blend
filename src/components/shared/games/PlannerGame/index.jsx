@@ -11,6 +11,8 @@ import { CommonModal } from "../../modals/CommonModal";
 import { FindingModal } from "../../modals";
 import { BackHeader } from "../../BackHeader";
 import { SkipModal } from "../../modals/SkipModal";
+import { findings } from "../../../../constants/findings";
+import { weekInfo } from "../../../../constants/weeksInfo";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -38,8 +40,8 @@ width: 100%;
 
 const MAX_AMOUNT = 9;
 
-export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, finishMessage, lobbyScreen }) => {
-    const { next } = useProgress();
+export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCloseRules }) => {
+    const { next, endGame } = useProgress();
     const ratio = useSizeRatio();
     const [isRules, setIsRules] = useState(isNeverPlayed);
     const [isSkipping, setIsSkipping] = useState(false);
@@ -51,12 +53,21 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
     const [isFinding, setIsFinding] = useState(false);
     const [isFinishModal, setIsFinishModal] = useState(false);
     const [pickedCard, setPickedCard] = useState();
+    const [finishPoints, setFinishPoints] = useState(0);
+
+    const weekData = weekInfo.find((info) => info.week === week);
+    const collegueMessage = weekData.plannersCollegueMessage[day];
+    const findingId = findings.find((finding) => finding.day === day && finding.week === week).id;
+    const finishMessage = weekData.plannersEndMessage[day];
+       
 
     const commonAmount = morningCards.length + dayCards.length + eveningCards.length;
 
     useEffect(() => {
-        //TODO: сделать пойнты
-        if (commonAmount === MAX_AMOUNT) setIsCollegue(true)
+        if (commonAmount === MAX_AMOUNT) {
+            setIsCollegue(true);
+            endGame({finishPoints, gameName: 'planners', week, day});
+        }
     }, [commonAmount]);
 
     const handleFieldPick = (time) => {
@@ -75,6 +86,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
             setEveningCards(prev => [...prev, pickedCard]);
         };
 
+        setFinishPoints(prev => prev + pickedCard.points);
         setShownCards(prev => prev.filter(({ id }) => id !== pickedCard.id));
         setPickedCard();
     };
@@ -86,6 +98,11 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
     const handleShowFinish = () => {
         setIsFinding(false);
         setIsFinishModal(true);
+    };
+
+    const handleCloseRules = () => {
+        onCloseRules?.();
+        setIsRules(false);
     };
 
     return (
@@ -112,7 +129,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, collegueMessage, findingId, 
             <CommonModal isOpen={isFinishModal} btnText="В комнату" onClose={() => next(lobbyScreen)}>
                 <p>{finishMessage}</p>
             </CommonModal>
-            <RulesModal isOpen={isRules} onClose={() => setIsRules(false)} />
+            <RulesModal isOpen={isRules} onClose={handleCloseRules} />
             <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)} />
         </>
 

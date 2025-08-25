@@ -120,7 +120,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
     const [isRefInfoModal, setIsRefInfoModal] = useState(false);
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
-    const { user, currentWeek } = useProgress();
+    const { user, currentWeek, weekPoints, points } = useProgress();
 
     const handleCopy = () => {
         const link = new URL(window.location.origin);
@@ -161,12 +161,12 @@ export const ProfileModal = ({isOpen, ...props}) => {
                 <PointsWrapper>
                     {user.isVip && (
                         <FlexBlock>
-                            <PointsInfo $ratio={ratio}>{user[`week${currentWeek}Points`]}</PointsInfo>
+                            <PointsInfo $ratio={ratio}>{weekPoints ?? 0}</PointsInfo>
                             <Subtitle>Баллов{'\n'}за неделю</Subtitle>
                         </FlexBlock>
                     )}
                     <FlexBlock>
-                        <PointsInfo $ratio={ratio}>{user.points}</PointsInfo>
+                        <PointsInfo $ratio={ratio}>{points ?? 0}</PointsInfo>
                         <Subtitle>Баллов{'\n'}за все время</Subtitle>
                     </FlexBlock>
                 </PointsWrapper>
