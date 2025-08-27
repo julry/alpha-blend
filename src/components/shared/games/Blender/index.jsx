@@ -51,6 +51,7 @@ const BlenderShadow = styled.div`
 const DoneDrinksWrapper = styled.div `
     position: absolute;
     display: flex;
+    align-items: flex-end;
     gap: var(--spacing_x1);
     left:  ${({ $ratio }) => $ratio * 120}px;
     bottom: ${({ $ratio }) => $ratio * 119}px;
@@ -141,8 +142,8 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                         ))}
                     </AnimatePresence>
                     <DoneDrinksWrapper $ratio={ratio}>
-                        {doneDrinks.map((drink) => (
-                            <DoneDrinkOject drink={drink}/>
+                        {doneDrinks.map((drink, index) => (
+                            <DoneDrinkOject key={`${drink.id}_${index}`} drink={drink}/>
                         ))}
                     </DoneDrinksWrapper>
                 </DndProvider>

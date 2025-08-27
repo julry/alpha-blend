@@ -4,8 +4,8 @@ import { IntroRegistration } from "../components/screens/IntroRegistration";
 import { IntroRules } from "../components/screens/IntroRules";
 import { Lobby1M } from "../components/screens/week1/Lobby1M";
 import { Planner1M } from "../components/screens/week1/Planner1M";
+import { WaitingGameScreen } from "../components/screens/Waiting";
 import { Registration1 } from "../components/screens/Registration1";
-import { Registration2 } from "../components/screens/Registration2";
 import { Start } from "../components/screens/Start";
 import BasketballGame from "../components/shared/games/BasketballGame";
 import { WeekLobby } from "../components/screens/WeekLobby";
@@ -16,7 +16,7 @@ import { SCREENS } from "./screens";
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
     [SCREENS.REG_1]: Registration1,
-    [SCREENS.REG_2]: Registration2,
+    [SCREENS.WAITING]: WaitingGameScreen,
     [SCREENS.LOBBY]: WeekLobby,
     [SCREENS.LOBBY1M]: Lobby1M,
     [SCREENS.START]: Start,

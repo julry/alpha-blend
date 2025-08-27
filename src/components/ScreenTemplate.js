@@ -5,7 +5,7 @@ import { CookieInfo } from './shared/CookieInfo';
 
 const TARGET_WIDTH = 375;
 const TARGET_HEIGHT = 677;
-const MIN_MOCKUP_WIDTH = 450;
+export const MIN_MOCKUP_WIDTH = 450;
 
 const Wrapper = styled.div`
     width: 100%;
@@ -92,7 +92,9 @@ export function ScreenTemplate(props) {
                     <WrapperInner ref={wrapperInnerRef}>
                         <Content $sizeRatio={sizeRatio} id="content">
                             {children}
-                            {isShowCookies && <CookieInfo onClose={handleCloseCookie} />}
+                            {isShowCookies && 
+                                <CookieInfo onClose={handleCloseCookie} />
+                            }
                         </Content>
                     </WrapperInner>
                 </Wrapper>

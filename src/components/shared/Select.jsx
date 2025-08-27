@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import arrow from '../../assets/images/icon-arrow.svg';
+import { MIN_MOCKUP_WIDTH } from "../ScreenTemplate";
 
 const Wrapper = styled.div`
     position: relative;
@@ -31,12 +32,13 @@ const Postfix = styled.div`
 `;
 
 const List = styled(motion.ul)`
-    position: fixed;
+    position: absolute;
     background: white;
-    margin-top: var(--spacing_x1);
     border-radius: var(--border-radius-sm);
-    width: ${({$ratio}) => $ratio * 300}px;
-    top: ${({top}) => top};
+    padding-top: var(--spacing_x1);
+    width: 100%;
+    top: calc(100% - var(--spacing_x1));
+    left: 0;
     transform-origin: top;
     z-index: ${({$zIndex}) => $zIndex ?? 20};
 `;
@@ -47,10 +49,7 @@ const Option = styled(motion.li)`
     text-align: left;
     cursor: pointer;
     list-style-type: none;
-
-    & + & {
-        border-top:  2px solid rgba(38, 61, 141, 0.3);
-    }
+    border-top:  2px solid rgba(38, 61, 141, 0.3);
 `;
 
 export const Select = (props) => {
@@ -62,27 +61,28 @@ export const Select = (props) => {
 
     const handleChoose = (id, name) => {
         props.onChoose?.(id, name);
-        setIsOpen(prev => !prev);
+        // setIsOpen(prev => !prev);
     };
 
-    useEffect(() => {
-        const topPixels = wrapperRef.current.getBoundingClientRect().y;
-        const heightPixels = wrapperRef.current.getBoundingClientRect().height;
+    // useEffect(() => {
+    //     const topPixels = isBig ? props.initialTop : 0;
+    //     const heightPixels = wrapperRef.current.getBoundingClientRect().height;
 
-        const newTop = `calc(${topPixels + heightPixels}px + var(--spacing_x2))`;
+    //     console.log(document.body.clientWidth);
 
-        if (newTop === top) return;
+    //     const newTop =  `calc(${(topPixels + heightPixels) * ratio}px + var(--spacing_x2))`;
 
-        setTop(newTop);
-    }, [props.value, top]);
+    //     if (newTop === top) return;
+
+    //     setTop(newTop);
+    // }, [props.value, top]);
 
     return (
         <>
             <Wrapper ref={wrapperRef} className={props.className} onClick={() => setIsOpen(prev => !prev)} $ratio={ratio}>
                 <span>{value ? value : placeholder}</span>
                 <Postfix $isOpen={isOpen} $ratio={ratio}/>
-            </Wrapper>
-            <AnimatePresence>
+                <AnimatePresence>
                 {
                     isOpen && (
                         <List
@@ -107,6 +107,8 @@ export const Select = (props) => {
                     )
                 }
             </AnimatePresence>
+            </Wrapper>
+            
         </>
     )
 }

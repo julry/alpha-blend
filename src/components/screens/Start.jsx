@@ -3,7 +3,6 @@ import { Button } from "../shared/Button";
 import { useProgress } from "../../contexts/ProgressContext";
 import { Block } from "../shared/Block";
 import { FlexWrapper } from "../shared/ContentWrapper";
-import window from '../../assets/images/window.png';
 import { WeekLobby } from "./WeekLobby";
 import { SCREENS } from "../../constants/screens";
 
@@ -19,9 +18,7 @@ const Content = styled(FlexWrapper)`
 `;
 
 export const Start = () => {
-    const {next, user, currentWeek} = useProgress();
-    
-    const canPlay = currentWeek > 0;
+    const {next, user} = useProgress();
     
     return (
         <Wrapper>
@@ -36,10 +33,10 @@ export const Start = () => {
                         }
                         <br />
                         <br />
-                        {canPlay ? 'Готов играть? Тогда вперёд!' : 'Игра начнется в понедельник, следи за новостями.'}
+                        Готов играть? Тогда вперёд!
                     </p>
                 </Block>
-                {canPlay && <Button onClick={() => next(SCREENS.LOBBY)}>Играть</Button>}
+                <Button onClick={() => next(SCREENS.LOBBY)}>Играть</Button>
             </Content>
         </Wrapper>
     )

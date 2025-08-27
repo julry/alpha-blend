@@ -7,6 +7,7 @@ import { FlexWrapper } from "../shared/ContentWrapper";
 import window from '../../assets/images/window.png';
 
 const Wrapper = styled(FlexWrapper)`
+    padding-top: var(--spacing_x8);
     background: url(${window}) no-repeat center 100% / cover;
 `;
 

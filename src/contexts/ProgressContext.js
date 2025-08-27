@@ -118,7 +118,8 @@ const API_LINK = '';
 
 export function ProgressProvider(props) {
     const { children } = props
-    const [currentScreen, setCurrentScreen] = useState(getUrlParam('screen') || INITIAL_STATE.screen);
+    const [isLoading, setIsLoading] = useState();
+    const [currentScreen, setCurrentScreen] = useState();
     const [points, setPoints] = useState(INITIAL_STATE.points);
     const [weekPoints, setWeekPoints] = useState(INITIAL_STATE.weekPoints);
     const [user, setUser] = useState(INITIAL_STATE.user);
@@ -140,11 +141,31 @@ export function ProgressProvider(props) {
         //     API_LINK,
         //     ''
         // )
-        try {
-            // getDbCurrentWeek();
-        } catch (e) {
-            console.log(e);
+        if (getUrlParam('screen')) {
+            setCurrentScreen(getUrlParam('screen'));
+
+            return;
         }
+
+        setCurrentScreen(INITIAL_STATE.screen);
+
+        // setIsLoading(true);
+        // try {
+        //     // const dbUser = getUser();
+        //     // if (!dbUser.seenStartInfo) {
+        //     //     setCurrentScreen(SCREENS.START);
+        //     // } else {
+        //     //     setCurrentScreen(SCREENS.LOBBY);
+        //     // }
+        //     // getDbCurrentWeek();
+            
+        // } catch (e) {
+        //     setCurrentScreen(INITIAL_STATE.screen);
+
+        //     console.log(e);
+        // } finally {
+        //     setIsLoading(false);
+        // }
     }, []);
 
     const next = (customScreen) => {
@@ -351,7 +372,7 @@ export function ProgressProvider(props) {
         setUserInfo,
         user,
         weekPoints,
-         setWeekPoints,
+        setWeekPoints,
         setPoints,
         passedWeeks,
         setPassedWeeks,
@@ -361,7 +382,8 @@ export function ProgressProvider(props) {
         registrateUser,
         currentWeek,
         readWeekLetter,
-        addDayFinding
+        addDayFinding,
+        isLoading
     }
 
     return (

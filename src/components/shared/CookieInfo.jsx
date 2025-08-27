@@ -17,6 +17,8 @@ const BlockStyled = styled(Block)`
 const ButtonStyled = styled(Button)`
     margin-left: auto;
     width: auto;
+    width: var(--spacing_x10);
+    height: var(--spacing_x6);
     padding-bottom: var(--spacing_x1);
     padding-top: calc(var(--spacing_x1) * 1.5);
     font-size: var(--font_sm);

@@ -147,7 +147,19 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
                         </svg>
                     </IconButton>
                 </Header>
-                <IconButtonStyled onClick={() => setIsAchieveModal(true)} />
+                <IconButtonStyled icon={{ width: 30, height: 30 }} onClick={() => setIsAchieveModal(true)}>
+                    <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_3001_1852)">
+                        <path d="M15 2L17.6325 3.368L20.5631 3.8145L21.8912 6.4745L24 8.5645L23.5173 11.5L24 14.4355L21.8912 16.5255L20.5631 19.1855L17.6325 19.632L15 21L12.3675 19.632L9.43691 19.1855L8.10883 16.5255L6 14.4355L6.48265 11.5L6 8.5645L8.10883 6.4745L9.43691 3.8145L12.3675 3.368L15 2Z" fill="white"/>
+                        <path d="M9 21V29L15 27.098L21 29V21L17.973 21.582L15 23.5335L12.027 21.582L9 21Z" fill="white"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_3001_1852">
+                        <rect width="30" height="30" fill="white"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                </IconButtonStyled>
             </Content>
             <ProfileModal isOpen={isUserModal} onClose={() => setIsUserModal(false)} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />

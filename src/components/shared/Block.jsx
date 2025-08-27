@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     gap: var(--spacing_x2);
     text-align: center;
 
-    background: #DFE4F6;
+    background: #EFF3FF;
     box-shadow: -12px -8px 40.7px -12px rgba(0, 0, 0, 0.35);
     /* box-shadow: -12px -8px 40.7px -12px rgba(0, 0, 0, 0.35), inset 6px 6px 8.6px rgba(255, 255, 255, 0.8), inset -6px -6px 8.6px rgba(255, 255, 255, 0.8); */
     border-radius: var(--border-radius-lg);
