@@ -121,15 +121,21 @@ export const Registration1 = () => {
 
         const res = await getUserInfo(email);
 
-        // if (!res?.isError) {
-        //     setIsAlreadyHas(true);
-        //     setIsSending(false);
+        if (!res?.isError) {
+            setIsAlreadyHas(true);
+            setIsSending(false);
 
-        //     return;
-        // }
+            return;
+        }
 
-        setUserInfo({ name: `${name} ${surname}`, email, university: `${univ.name}`, faculty: fac !== 'Другое' ? fac : '', isVip: !!fac && fac !== 'Другое', });
-        const regRes = await registrateUser({ name, email });
+        const regRes = await registrateUser({ 
+            name: `${name.trim()} ${surname.trim()}`, 
+            email: email.trim(), 
+            university: `${univ.name.trim()}`, 
+            faculty: fac !== 'Другое' ? fac : '', 
+            isTarget: !!fac && fac !== 'Другое'
+        });
+
         setIsSending(false);
 
         if (regRes?.isError) {
@@ -137,7 +143,6 @@ export const Registration1 = () => {
             return;
         }
 
-        console.log(currentWeek);
         if (currentWeek < 1) {
             next(SCREENS.WAITING);
 
@@ -201,7 +206,6 @@ export const Registration1 = () => {
 
         )
     }
-
 
     return (
         <Wrapper>

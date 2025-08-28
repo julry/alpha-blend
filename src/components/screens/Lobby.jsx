@@ -60,7 +60,7 @@ const TabletInfo = styled(Block)`
 `;
 
 export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ...props }) => {
-    const { user, next, currentWeek } = useProgress();
+    const { next, currentWeek, readenLetter, planners, challenges, blenders, lifehacks } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [isAchieveModal, setIsAchieveModal] = useState(false);
@@ -73,13 +73,13 @@ export const Lobby = ({ isLaptopHighlightened, isLaptopLetter, onLaptopClick, ..
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
 
-    const isLetterShown = isLaptopLetter || !user.readenLetter?.[weekName];
-    const isPlanerUndone = user.planners?.[week - 1]?.[day] === undefined;
-    const isChallengeUndone = user.challenges?.[week - 1]?.[day] === undefined;
-    const isBlenderUndone = user.blenders?.[week - 1]?.[day] === undefined;
+    const isLetterShown = isLaptopLetter || !readenLetter?.[weekName];
+    const isPlanerUndone = planners?.[week - 1]?.[day] === undefined;
+    const isChallengeUndone = challenges?.[week - 1]?.[day] === undefined;
+    const isBlenderUndone = blenders?.[week - 1]?.[day] === undefined;
 
     const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
-    const isBulbShown = isAllDone && !user.lifehacks.includes(`week${week}day${day}`);
+    const isBulbShown = isAllDone && lifehacks.includes(`week${week}day${day}`);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown || (!isPlanerUndone && isChallengeUndone);
     const isCup = !isPlanerUndone && isBlenderUndone;

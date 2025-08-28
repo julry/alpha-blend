@@ -72,19 +72,19 @@ export const AchievesModal = ({ onClose, isOpen }) => {
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [stage, setStage] = useState(0);
     const ratio = useSizeRatio();
-    const { user } = useProgress();
+    const { achievements, drinks } = useProgress();
 
     const getHeaderContent = () => {
         switch (stage) {
             case 0:
                 return (
-                    <Amount $ratio={ratio}>{user.achievements.length ?? 0}/{achievements.length}</Amount>
+                    <Amount $ratio={ratio}>{achievements.length ?? 0}/{achievements.length}</Amount>
                 );
             case 1:
                 return;
             case 2:
                 return (
-                    <Amount $ratio={ratio}>{user.drinks.length ?? 0}/12</Amount>
+                    <Amount $ratio={ratio}>{drinks.length ?? 0}/12</Amount>
                 );
             default:
                 return;

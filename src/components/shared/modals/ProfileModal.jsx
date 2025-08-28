@@ -151,7 +151,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     <Subtitle>Почта</Subtitle>
                     <Text>{user.email}</Text>
                 </InfoBlock>
-                {user.isVip && (
+                {user.isTarget && (
                     <InfoBlock>
                         <Subtitle>Вуз и факультет</Subtitle>
                         <Text>{user.university}</Text>
@@ -159,7 +159,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     </InfoBlock>
                 )}
                 <PointsWrapper>
-                    {user.isVip && (
+                    {user.isTarget && (
                         <FlexBlock>
                             <PointsInfo $ratio={ratio}>{weekPoints ?? 0}</PointsInfo>
                             <Subtitle>Баллов{'\n'}за неделю</Subtitle>
