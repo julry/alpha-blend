@@ -5,6 +5,7 @@ import { useProgress } from "../../contexts/ProgressContext";
 import { Block } from "../shared/Block";
 import { FlexWrapper } from "../shared/ContentWrapper";
 import window from '../../assets/images/window.png';
+import { Bold } from "../shared/Spans";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -20,8 +21,10 @@ export const WaitingGameScreen = () => {
         <Wrapper>
             <Block>
                 <p>
-                    Ты успешно зарегистрировался!{'\n\n'}
-                    Скоро старт игры — следи за уведомлениями в TG-боте.
+                    <Bold>Ты успешно зарегистрировался!</Bold>
+                </p>
+                <p>
+                    Скоро старт игры — следи за уведомлениями в <Bold>TG-боте</Bold>.
                 </p>
             </Block>
             {currentWeek > 0 && (<Button onClick={() => stage < 1 ? setStage(prev => prev + 1) : next()}>Далее</Button>)}

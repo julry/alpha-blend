@@ -298,7 +298,12 @@ export const Registration1 = () => {
                                 rel="noreferrer"
                             >
                                 Политикой обработки персональных данных
-                            </Link>, а также с правилами проведения акции.
+                            </Link>, а также с {"\u00A0"}
+                            <Link
+                                href={'https://worklifealfa.fut.ru/agreement.pdf'}
+                                target="_blank"
+                                rel="noreferrer"
+                            >правилами проведения акции</Link>.
                         </span>
                     </RadioButtonLabel>
                     <RadioButtonLabel>

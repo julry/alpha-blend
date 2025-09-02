@@ -153,25 +153,26 @@ export function ProgressProvider(props) {
 
             return;
         }
+        setCurrentScreen(INITIAL_STATE.screen);
 
         setIsLoading(true);
         try {
-            getUserInfo('test@test.ru').then((dbUser) => {
-                if (dbUser?.isError) {
-                    setCurrentScreen(INITIAL_STATE.screen);
+            // getUserInfo('test@test.ru').then((dbUser) => {
+            //     if (dbUser?.isError) {
+            //         setCurrentScreen(INITIAL_STATE.screen);
 
-                    return;
-                }
-                if (!dbUser?.seenStartInfo) {
-                    setCurrentScreen(currentWeek > 0 ? SCREENS.START : SCREENS.WAITING);
+            //         return;
+            //     }
+            //     if (!dbUser?.seenStartInfo) {
+            //         setCurrentScreen(currentWeek > 0 ? SCREENS.START : SCREENS.WAITING);
 
-                    return;
-                } else {
-                    setCurrentScreen(SCREENS.LOBBY);
+            //         return;
+            //     } else {
+            //         setCurrentScreen(SCREENS.LOBBY);
 
-                    return
-                }
-            });
+            //         return
+            //     }
+            // });
             // getDbCurrentWeek();
         } catch (e) {
             setCurrentScreen(INITIAL_STATE.screen);
@@ -213,37 +214,38 @@ export function ProgressProvider(props) {
             setWeekPoints(prev => prev + finishPoints);
         }
 
-        const gameData = user[gameName] ?? INITIAL_ACTIVITY_DATA;
+        // const gameData = user[gameName] ?? INITIAL_ACTIVITY_DATA;
 
-        const result = gameData.map((planner, index) => week - 1 === index ? ({...planner, [day]: finishPoints}) : planner);
+        // const result = gameData.map((planner, index) => week - 1 === index ? ({...planner, [day]: finishPoints}) : planner);
 
-        updateUser({
+        const userResult = {
             points: points + finishPoints, 
             [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
-            [gameName]: result,
-        });
+            [`week${week}GamePoints`]: {
+                ...user[`week${week}GamePoints`],
+                [gameName]: finishPoints,
+            }
+        };
+        setUserInfo(userResult);
+
+        return userResult;
     }
-  
-    const updateGameData = async (changed) => {
-        // const { isTarget, }
-        const data = {
-            ...user,
-        }
-    };
 
     const updateUser = async (changed) => {
-        const newUser = ({...user, ...changed});
-
         setUserInfo(changed);
 
-        const { 
-            challenges, blenders, readenLetter,
-            planners, achievements, findings, drinks, lifehacks,
-            blenderTimes, perfectBlenderTimes,
-             ...otherUser
-        } = newUser;
+        return patchData(changed);
+    }
 
-        const gameData = {
+    const patchData = async ({changedUser, changedData}) => {
+        if (!user.recordId) return;
+        
+         const gameData = {
+            passedWeeks,
+            seenStartInfo: user.seenStartInfo,
+            blenderTimes: user.blenderTimes,
+            perfectBlenderTimes: user.perfectBlenderTimes,
+            planners,
             challenges,
             blenders,
             readenLetter,
@@ -251,27 +253,20 @@ export function ProgressProvider(props) {
             findings,
             drinks,
             lifehacks,
-            passedWeeks,
+            ...changedData
+        };
+
+        const changed = {...changedUser, gameData};
+
+        try {
+            const result = await client.current.patchRecord(user.recordId, changed);
+
+            return result;
+        } catch (e) {
+            console.log(e);
+
+            return { isEror: true };
         }
-
-        const data = {
-            ...otherUser,
-            gameData,
-            points, //общее количество баллов
-            [`week${currentWeek}Points`]: weekPoints,
-        }
-
-        // if (!recordId) return { ...data, isEror: true };
-
-        // try {
-        //     const result = await client.current.updateRecord(recordId, data);
-
-        //     return result;
-        // } catch (e) {
-        //     console.log(e);
-
-        //     return {...data, isEror: true};
-        // }
     }
 
     const registrateUser = async ({  name, email, university, faculty, isTarget}) => {
@@ -303,14 +298,15 @@ export function ProgressProvider(props) {
             points: 0
         }
 
-           try {
-                const record = await client?.current.createRecord(data);
-                setUserInfo({isTarget, name, email, university, faculty, recordId: record.id});
+        return data;
+        //    try {
+        //         const record = await client?.current.createRecord(data);
+        //         setUserInfo({isTarget, name, email, university, faculty, recordId: record.id});
 
-                return record; 
-           } catch (e) {
-                return {isError: true}
-           }
+        //         return record; 
+        //    } catch (e) {
+        //         return {isError: true}
+        //    }
     };
 
     const getUserInfo = async (email) => {
@@ -367,7 +363,8 @@ export function ProgressProvider(props) {
         currentWeek,
         readWeekLetter,
         addDayFinding,
-        isLoading
+        isLoading,
+        patchData
     }
 
     return (

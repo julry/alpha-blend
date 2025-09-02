@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { SizeRatioContextProvider } from '../contexts/SizeRatioContext';
 import { CookieInfo } from './shared/CookieInfo';
 
-const TARGET_WIDTH = 375;
-const TARGET_HEIGHT = 677;
+export const TARGET_WIDTH = 375;
+export const TARGET_HEIGHT = 677;
+
 export const MIN_MOCKUP_WIDTH = 450;
 
 const Wrapper = styled.div`
