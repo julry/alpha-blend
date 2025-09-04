@@ -4,6 +4,7 @@ import { SCREENS, NEXT_SCREENS } from "../constants/screens";
 import { screens } from "../constants/screensComponents";
 import { getUrlParam } from "../utils/getUrlParam";
 import { DAYS } from '../constants/days';
+import WebApp from '@twa-dev/sdk';
 
 const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1756976745&query_id=LOCAL_TEST&hash=86c058b4bb276f3e0f54ce53f1fa2974ce714f12f0149823a32585ec9e42758d')
 
@@ -206,7 +207,6 @@ export function ProgressProvider(props) {
     }
 
     useEffect(() => {
-        console.log(API_LINK);
         client.current = new FTClient(
             API_LINK,
             'campus-alfa'
@@ -217,21 +217,33 @@ export function ProgressProvider(props) {
 
     const loadRecord = () => {
       let webAppInitData = window?.Telegram?.WebApp?.initData;
+      let initData = WebApp.initData;
     
       // Для локалхоста задаём initData вручную
       if (window?.location?.hostname === 'localhost') {
         webAppInitData = MOCK_INIT_DATA;
         console.log('webAppInitData mock', webAppInitData)
       } else {
-        console.log('webAppInitData', webAppInitData)
-      }
+        console.log('webAppInitData', webAppInitData);
+        console.log('initData', initData);
+      } 
     
       if (webAppInitData) {
         return client.current.getTgRecord(webAppInitData);
+      } else if (initData) {
+        return client.current.getTgRecord(initData);
+      } else if (!window?.Telegram) {
+        console.error('Telegram не определен')
+
+        throw new Error('Telegram не определен')
+      } else if (!window?.Telegram?.WebApp) {
+        console.error('Webapp не определен')
+
+        throw new Error('Webapp не определен')
       } else {
         console.error('В WebApp нет данных пользователя')
 
-        throw new Error('В WebApp нет данных пользователя')
+        throw new Error ('В WebApp нет данных пользователя');
       }
     }
 
