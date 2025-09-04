@@ -35,18 +35,18 @@ const INITIALS_LETTERS = {
 };
 
 const INITIAL_USER = {
-    id: '4242342', //saved
-    name: 'test', //saved
-    email: 'test@test.ru', //saved
-    university: 'hehehe', //saved
-    faculty: 'gell', //saved
-    isTarget: true, // saved
-    seenStartInfo: false, // saved после реги до планнера
-    week1Points: 0, //баллы по неделям
+    id: '',
+    name: '',
+    email: '',
+    university: '',
+    faculty: '',
+    isTarget: true,
+    seenStartInfo: false,
+    week1Points: 0,
     week2Points: 0,
     week3Points: 0,
     week4Points: 0,
-    week1EnterPoints: INITIAL_DAY_POINTS_DATA, //баллы по неделям
+    week1EnterPoints: INITIAL_DAY_POINTS_DATA,
     week2EnterPoints: INITIAL_DAY_POINTS_DATA,
     week3EnterPoints: INITIAL_DAY_POINTS_DATA,
     week4EnterPoints: INITIAL_DAY_POINTS_DATA,
@@ -177,6 +177,8 @@ export function ProgressProvider(props) {
     const initProject = async () => {
         setIsLoading(true);
         try {
+            // setCurrentScreen(SCREENS.REG_1);
+            
             const info = await loadRecord();
 
             if (!info) {
@@ -184,8 +186,7 @@ export function ProgressProvider(props) {
             }
 
             setUserBdData(info)
-            
-            
+
             if (getUrlParam('screen')) {
                 setCurrentScreen(getUrlParam('screen'));
 
@@ -214,6 +215,12 @@ export function ProgressProvider(props) {
         );
 
         initProject().catch((e) => console.log(e));
+
+        if (WebApp) {
+            WebApp.ready();
+            WebApp.expand();
+            WebApp.lockOrientation();
+        }
     }, []);
 
     const loadRecord = () => {
@@ -223,10 +230,10 @@ export function ProgressProvider(props) {
       // Для локалхоста задаём initData вручную
       if (window?.location?.hostname === 'localhost') {
         webAppInitData = MOCK_INIT_DATA;
-        console.log('webAppInitData mock', webAppInitData)
+        console.log('webAppInitData mock', webAppInitData);
       } else {
         console.log('webAppInitData', webAppInitData);
-        console.log('initData', initData);
+        console.log('initDataUnsafe', window?.Telegram?.WebApp?.initDataUnsafe);
       } 
     
       if (webAppInitData) {

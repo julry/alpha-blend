@@ -1,5 +1,4 @@
 import {createContext, useCallback, useLayoutEffect, useState} from 'react';
-import useResizeObserver from "use-resize-observer";
 import {getSizeRatio} from "../utils/getSizeRatio";
 
 const INITIAL_STATE = 1;
@@ -21,7 +20,7 @@ export function SizeRatioContextProvider(props) {
         calculateSizeRatio();
     }, [calculateSizeRatio]);
 
-    useResizeObserver({ onResize: calculateSizeRatio, ref: target });
+    // useResizeObserver({ onResize: calculateSizeRatio, ref: target });
 
     return (
         <SizeRatioContext.Provider value={sizeRatio}>
