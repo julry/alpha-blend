@@ -8,6 +8,7 @@ import { CardsField } from "./CardsField";
 import { BlenderObject } from "./BlenderObject";
 import { Modal } from "../../modals/Modal";
 import { Block } from "../../Block";
+import { DndProvider } from "react-dnd-multi-backend";
 
 const ThirdPartModal = styled(CommonModal)`
     & > div {
@@ -101,7 +102,9 @@ export const FirstRulesModal = ({isOpen, modalsFuncs, modalsState}) => {
                 isOpen && part === 3 && !modalsState.isFinishTraining && (
                     <>
                         <CardsFieldStyled shownCards={modalsState.shownCards ?? []} onCardClick={modalsFuncs.handleClickCard} />
-                        <BlenderObjectStyled />
+                        <DndProvider options={{backends: []}}>
+                            <BlenderObjectStyled />
+                        </DndProvider>
                     </>
                     
                 )

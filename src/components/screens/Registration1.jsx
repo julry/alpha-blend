@@ -96,16 +96,16 @@ const Blur = styled.div`
 `;
 
 export const Registration1 = () => {
-    const { next, setUserInfo, getUserInfo, registrateUser, currentWeek } = useProgress();
+    const { next, checkEmailRegistrated, registrateUser, currentWeek } = useProgress();
     const [univ, setUniv] = useState({});
-    const [fac, setFac] = useState('');
+    const [fac, setFac] = useState({});
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [isNetworkError, setIsNetworkError] = useState(false);
-    const [isAgreed, setIsAgreed] = useState('');
-    const [isMailsAgreed, setIsMailsAgreed] = useState('');
+    const [isAgreed, setIsAgreed] = useState(false);
+    const [isMailsAgreed, setIsMailsAgreed] = useState(false);
     const [isCorrect, setIsCorrect] = useState(true);
     const [isNameCorrect, setIsNameCorrect] = useState();
     const [isSurnameCorrect, setIsSurnameCorrect] = useState();
@@ -119,9 +119,9 @@ export const Registration1 = () => {
         if (isSending) return;
         setIsSending(true);
 
-        const res = await getUserInfo(email);
+        const hasEmail = await checkEmailRegistrated(email);
 
-        if (!res?.isError) {
+        if (hasEmail) {
             setIsAlreadyHas(true);
             setIsSending(false);
 
@@ -131,8 +131,11 @@ export const Registration1 = () => {
         const regRes = await registrateUser({ 
             name: `${name.trim()} ${surname.trim()}`, 
             email: email.trim(), 
-            university: `${univ.name.trim()}`, 
-            faculty: fac !== 'Другое' ? fac : '', 
+            university: univ.name.trim(), 
+            universityId: univ.id, 
+            isAddsAgreed: isMailsAgreed,
+            faculty: fac.name !== 'Другое' ? fac.name : '', 
+            facultyId: fac.id !== 'other' ? fac.id : undefined,
             isTarget: !!fac && fac !== 'Другое'
         });
 
@@ -149,10 +152,6 @@ export const Registration1 = () => {
             return;
         }
 
-        //TODO: тут где то надо будет применить логин из тг
-        // const refId = new URLSearchParams(window?.location?.search).get('refId');
-
-        // setUserInfo({ refId, id });
         next(SCREENS.START);
     }
 
@@ -160,7 +159,7 @@ export const Registration1 = () => {
         if (univ?.id === id) return;
 
         setUniv({ id, name });
-        setFac('');
+        setFac({});
     }
 
     const handleBlur = () => {
@@ -194,7 +193,6 @@ export const Registration1 = () => {
                     <path d="M3 10L7.5 14.5L17 5" stroke="#2DE500" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </InfoIconWrapper>
-
         )
 
         return (
@@ -203,7 +201,6 @@ export const Registration1 = () => {
                     <path d="M5 5L15.5 15.5M15.5 5L5 15.5" stroke="#ED3125" strokeWidth="2" strokeLinecap="round" />
                 </svg>
             </InfoIconWrapper>
-
         )
     }
 
@@ -221,9 +218,9 @@ export const Registration1 = () => {
                         initialTop={99}
                     />
                     <SelectStyled
-                        value={fac}
+                        value={fac.name}
                         options={faculties.filter(({ university }) => university === univ.id || university === 'all')}
-                        onChoose={(_, name) => setFac(name)}
+                        onChoose={(id, name) => setFac({name, id})}
                         placeholder="Факультет"
                         zIndex={19}
                         initialTop={169}

@@ -28,13 +28,15 @@ const IndigrientsPart = styled.div`
     top: 0;
     left: 0;
     width: 85%;
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: auto;
-    grid-gap: ${({$ratio}) => $ratio * 2}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* grid-template-rows: repeat(3, 1fr); */
+    /* grid-template-columns: auto; */
+    /* grid-gap: ${({$ratio}) => $ratio * 2}px; */
     padding: var(--spacing_x1) 0;
     padding-top: ${({$ratio}) => $ratio * 8}px;
-    /* background-color: gray; */
 `;
 
 const ButtonPart = styled.div`
@@ -44,19 +46,24 @@ const ButtonPart = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    /* background-color: pink; */
 `;
 
 const PlanCardStyled = styled(PlanCard)`
     position: relative;
     z-index: 5;
-    height: ${({$ratio}) => $ratio * 32}px;
-    width: ${({$ratio}) => $ratio * 32}px;
+    height: ${({$ratio}) => $ratio * 28}px;
+    width: ${({$ratio}) => $ratio * 28}px;
     padding: ${({$ratio}) => $ratio * 1}px;
     justify-self: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
+
+    & img {
+        height: ${({$ratio}) => $ratio * 40}px;
+        width: ${({$ratio}) => $ratio * 40}px;
+    }
 `;
 
 const LiquidWrapper = styled.div`
@@ -70,15 +77,19 @@ const LiquidWrapper = styled.div`
     z-index: 2;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
-    filter: blur(3px);
+    /* filter: blur(1px); */
+    /* clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%); */
     
 `;
 
 const Liquid = styled.div`
-    width: 100%;
-    height: 60%;
-    background: ${({$color}) => $color ?? 'var(--color-red)'};
-    filter: blur(5px);
+    width: 300%;
+    height: 75%;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    /* background: ${({$color}) => $color ?? 'var(--color-red)'}; */
+    background: rgba(148, 190, 235, 0.65);
+    filter: blur(8px);
     animation: shake 1s ease-in-out infinite;
     clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);
 `
@@ -91,29 +102,29 @@ position: absolute;
   overflow: hidden;
 
   &::before {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  bottom: 20%;
-  left: 30%;
-  animation: bubble 1s ease-in infinite;
-  filter: blur(2px);
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 50%;
+    bottom: 20%;
+    left: ${({$left}) => $left - 10}%;
+    animation: bubble 1s ease-in infinite;
+    animation-delay: ${({$left}) => ($left - 20) / 20}s;
 }
 
  &::after {
   content: '';
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.7);
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 1);
   border-radius: 50%;
   bottom: 15%;
-  left: 60%;
-  filter: blur(2px);
+  left: ${({$left}) => $left + 10}%;
   animation: bubble 1.2s ease-in infinite;
+  animation-delay: ${({$left}) => ($left - 20) / 20}s;
 }`
 
 const ErrorSign = styled(motion.div)`
@@ -127,7 +138,7 @@ const ErrorSign = styled(motion.div)`
 
 export const BlenderObject = memo(({cards = [], onDrop, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
     const ratio = useSizeRatio();
-    const [isBlendering, setIsBlendering] = useState(false);
+    const [isBlendering, setIsBlendering] = useState(true);
     const [drink, setDrink] = useState();
     const [timerId, setTimerId] = useState();
     const [isError, setIsError] = useState(false);
@@ -190,8 +201,10 @@ export const BlenderObject = memo(({cards = [], onDrop, isStopped, onCardClick, 
                 </AnimatePresence>
                 {isBlendering && (
                     <LiquidWrapper>
-                        <Liquid $color={drink.color}/>
-                        <Bubbles />
+                        <Liquid />
+                        <Bubbles $left={20}/>
+                        <Bubbles $left={50}/>
+                        <Bubbles $left={80}/>
                     </LiquidWrapper>
                 )} 
             </IndigrientsPart>

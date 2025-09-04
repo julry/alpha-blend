@@ -4,8 +4,9 @@
   "homepage": ".",
   "private": true,
   "dependencies": {
+    "@twa-dev/sdk": "^8.0.2",
     "framer-motion": "^11.3.19",
-    "ft-client": "0.3.0",
+    "ft-client": "0.4.0",
     "lodash": "^4.17.21",
     "react": "18.3.1",
     "react-dnd": "16.0.1",

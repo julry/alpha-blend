@@ -5,28 +5,25 @@ import { screens } from "../constants/screensComponents";
 import { getUrlParam } from "../utils/getUrlParam";
 import { DAYS } from '../constants/days';
 
-const INITIAL_ACTIVITY_DATA = [
-    {
-        [DAYS.Monday]: 'test',
-        [DAYS.Wednesday]: undefined,
-        [DAYS.Friday]: undefined,
-    },
-    {
-        [DAYS.Monday]: undefined,
-        [DAYS.Wednesday]: undefined,
-        [DAYS.Friday]: undefined,
-    },
-    {
-        [DAYS.Monday]: undefined,
-        [DAYS.Wednesday]: undefined,
-        [DAYS.Friday]: undefined,
-    },
-    {
-        [DAYS.Monday]: undefined,
-        [DAYS.Wednesday]: undefined,
-        [DAYS.Friday]: undefined,
-    },
-];
+const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1756976745&query_id=LOCAL_TEST&hash=86c058b4bb276f3e0f54ce53f1fa2974ce714f12f0149823a32585ec9e42758d')
+
+const INITIAL_DAY_ACTIVITY = {
+    completedAt: null,
+    isCompleted: false,
+    points: 0,
+}
+
+const INITIAL_ACTIVITY_DATA = {
+    [DAYS.Monday]: INITIAL_DAY_ACTIVITY,
+    [DAYS.Wednesday]: INITIAL_DAY_ACTIVITY,
+    [DAYS.Friday]: INITIAL_DAY_ACTIVITY,
+};
+
+const INITIAL_DAY_POINTS_DATA = {
+    [DAYS.Monday]: 0,
+    [DAYS.Wednesday]: 0,
+    [DAYS.Friday]: 0,
+}
 
 const INITIALS_LETTERS = {
     week1: false,
@@ -43,12 +40,26 @@ const INITIAL_USER = {
     faculty: 'gell', //saved
     isTarget: true, // saved
     seenStartInfo: false, // saved после реги до планнера
-    blenderTimes: 0, //количество игр в блендер ??
-    perfectBlenderTimes: 0, //количество идеальных комбо ??
     week1Points: 0, //баллы по неделям
     week2Points: 0,
     week3Points: 0,
     week4Points: 0,
+    week1EnterPoints: INITIAL_DAY_POINTS_DATA, //баллы по неделям
+    week2EnterPoints: INITIAL_DAY_POINTS_DATA,
+    week3EnterPoints: INITIAL_DAY_POINTS_DATA,
+    week4EnterPoints: INITIAL_DAY_POINTS_DATA,
+    blender1: INITIAL_ACTIVITY_DATA,
+    blender2: INITIAL_ACTIVITY_DATA,
+    blender3: INITIAL_ACTIVITY_DATA,
+    blender4: INITIAL_ACTIVITY_DATA,
+    planner1: INITIAL_ACTIVITY_DATA,
+    planner2: INITIAL_ACTIVITY_DATA,
+    planner3: INITIAL_ACTIVITY_DATA,
+    planner4: INITIAL_ACTIVITY_DATA,
+    game2048: INITIAL_ACTIVITY_DATA,
+    gameBasket: INITIAL_ACTIVITY_DATA,
+    gamePuzzle: INITIAL_ACTIVITY_DATA,
+    gameMoles: INITIAL_ACTIVITY_DATA,
 };
 
 const getMoscowTime = (date) => {
@@ -56,7 +67,7 @@ const getMoscowTime = (date) => {
     const localOffset = dateNow.getTimezoneOffset();
     const utcPlus3Offset = -180;
     const totalOffset = utcPlus3Offset - localOffset;
-
+    
     return new Date(dateNow.getTime() + totalOffset * 60 * 1000);
 }
 
@@ -100,9 +111,9 @@ const INITIAL_STATE = {
     weekPoints: 0,
     user: INITIAL_USER,
     passedWeeks: [],
-    planners: INITIAL_ACTIVITY_DATA, //баллы в планнере по дням. прошел: undefined -> points
-    challenges: INITIAL_ACTIVITY_DATA, //сердечки в челленджах по дням
-    blenders: INITIAL_ACTIVITY_DATA, //сердечки в блендере по дням
+    planners: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в планнере по дням
+    challenges: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в челленджах по дням
+    blenders: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в блендере по дням
     readenLetter: INITIALS_LETTERS, //прочитанные сообщения по неделям
     achievements: [],
     findings: [], // находки
@@ -112,7 +123,7 @@ const INITIAL_STATE = {
 
 const ProgressContext = createContext(INITIAL_STATE);
 
-const API_LINK = 'https://ft-admin-api.sjuksin.ru/';
+const API_LINK = process.env.REACT_APP_API_URL;
 
 export function ProgressProvider(props) {
     const { children } = props
@@ -131,57 +142,98 @@ export function ProgressProvider(props) {
     const [drinks, setDrinks] = useState(INITIAL_STATE.drinks);
     const [lifehacks, setLifehacks] = useState(INITIAL_STATE.lifehacks);
     const [currentWeek, setCurrentWeek] = useState(CURRENT_WEEK);
+    const [tgError, setTgError] = useState({isError: false, message: ''});
     const screen = screens[currentScreen];
   
     const client = useRef();
+    const recordId = useRef();
 
-    const getDbCurrentWeek = async () => {
-        const { week } = await client.current.loadProjectState();
-        if (week && !isNaN(+week)) {
-            setCurrentWeek(+week);
+    const setUserBdData = (record) => {
+        recordId.current = record.id;
+        const { data = {}} = record;
+
+        setUserInfo(data);
+
+        if (!data.email) return;
+
+        const {
+            planner1, planner2, planner3, planner4, 
+            blender1, blender2, blender3, blender4,
+            game2048, gameBasket, gamePuzzle, gameMoles,
+            achieves, drinks: dataDrinks, findings: dataFindings, lifehacks: dataLifehacks
+        } = record.data;
+
+        setPlanners([planner1, planner2, planner3, planner4]);
+        setBlenders([blender1, blender2, blender3, blender4]);
+        setChallenges([game2048, gameBasket, gamePuzzle, gameMoles]);
+        setAchievements(achieves);
+        setDrinks(dataDrinks);
+        setFindings(dataFindings);
+        setLifehacks(dataLifehacks);
+    }
+
+    const initProject = async () => {
+        setIsLoading(true);
+        try {
+            const info = await loadRecord();
+
+            if (!info) {
+                setTgError({isError: true, message: ''});
+            }
+
+            setUserBdData(info)
+            
+            
+            if (getUrlParam('screen')) {
+                setCurrentScreen(getUrlParam('screen'));
+
+                return;
+            }
+
+            if (!info.data.email) {
+                setCurrentScreen(INITIAL_STATE.screen);
+            } else if (!info.data.seenStartInfo) {
+                setCurrentScreen(CURRENT_WEEK > 0 ? SCREENS.START : SCREENS.WAITING);
+            } else {
+                //TODO: Доработать перед запуском
+                setCurrentScreen(SCREENS.LOBBY);
+            }
+        } catch (e) {
+            setTgError({isError: true, message: e.message});
+        } finally {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
+        console.log(API_LINK);
         client.current = new FTClient(
             API_LINK,
             'campus-alfa'
-        )
+        );
 
-        if (getUrlParam('screen')) {
-            setCurrentScreen(getUrlParam('screen'));
-
-            return;
-        }
-        setCurrentScreen(INITIAL_STATE.screen);
-
-        setIsLoading(true);
-        try {
-            // getUserInfo('test@test.ru').then((dbUser) => {
-            //     if (dbUser?.isError) {
-            //         setCurrentScreen(INITIAL_STATE.screen);
-
-            //         return;
-            //     }
-            //     if (!dbUser?.seenStartInfo) {
-            //         setCurrentScreen(currentWeek > 0 ? SCREENS.START : SCREENS.WAITING);
-
-            //         return;
-            //     } else {
-            //         setCurrentScreen(SCREENS.LOBBY);
-
-            //         return
-            //     }
-            // });
-            // getDbCurrentWeek();
-        } catch (e) {
-            setCurrentScreen(INITIAL_STATE.screen);
-
-            console.log(e);
-        } finally {
-            setIsLoading(false);
-        }
+        initProject().catch((e) => console.log(e));
     }, []);
+
+    const loadRecord = () => {
+      let webAppInitData = window?.Telegram?.WebApp?.initData;
+    
+      // Для локалхоста задаём initData вручную
+      if (window?.location?.hostname === 'localhost') {
+        webAppInitData = MOCK_INIT_DATA;
+        console.log('webAppInitData mock', webAppInitData)
+      } else {
+        console.log('webAppInitData', webAppInitData)
+      }
+    
+      if (webAppInitData) {
+        return client.current.getTgRecord(webAppInitData);
+      } else {
+        console.error('В WebApp нет данных пользователя')
+
+        throw new Error('В WebApp нет данных пользователя')
+      }
+    }
 
     const next = (customScreen) => {
         const nextScreen = customScreen ?? NEXT_SCREENS[currentScreen]
@@ -207,28 +259,32 @@ export function ProgressProvider(props) {
         updateUser(({findings: [...user.findings, id]}))
     }
     
-    const endGame = ({finishPoints, gameName, week, day}) => {
-        setPoints(prev => prev + finishPoints);
+    const endPlanner = ({finishPoints, week, day}) => {
 
-        if (week === currentWeek) {
-            setWeekPoints(prev => prev + finishPoints);
-        }
+    };
+
+    const endGame = ({finishPoints, gameName, week, day}) => {
+        // setPoints(prev => prev + finishPoints);
+
+        // if (week === currentWeek) {
+        //     setWeekPoints(prev => prev + finishPoints);
+        // }
 
         // const gameData = user[gameName] ?? INITIAL_ACTIVITY_DATA;
 
         // const result = gameData.map((planner, index) => week - 1 === index ? ({...planner, [day]: finishPoints}) : planner);
 
-        const userResult = {
-            points: points + finishPoints, 
-            [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
-            [`week${week}GamePoints`]: {
-                ...user[`week${week}GamePoints`],
-                [gameName]: finishPoints,
-            }
-        };
-        setUserInfo(userResult);
+        // const userResult = {
+        //     points: points + finishPoints, 
+        //     [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
+        //     [`week${week}GamePoints`]: {
+        //         ...user[`week${week}GamePoints`],
+        //         [gameName]: finishPoints,
+        //     }
+        // };
+        // setUserInfo(userResult);
 
-        return userResult;
+        // return userResult;
     }
 
     const updateUser = async (changed) => {
@@ -238,30 +294,14 @@ export function ProgressProvider(props) {
     }
 
     const patchData = async ({changedUser, changedData}) => {
-        if (!user.recordId) return;
+        if (!recordId.current) return;
         
-         const gameData = {
-            passedWeeks,
-            seenStartInfo: user.seenStartInfo,
-            blenderTimes: user.blenderTimes,
-            perfectBlenderTimes: user.perfectBlenderTimes,
-            planners,
-            challenges,
-            blenders,
-            readenLetter,
-            achievements,
-            findings,
-            drinks,
-            lifehacks,
-            ...changedData
-        };
-
-        const changed = {...changedUser, gameData};
+        // const changed = {...changedUser, gameData};
 
         try {
-            const result = await client.current.patchRecord(user.recordId, changed);
+            // const result = await client.current.patchRecord(user.recordId, changed);
 
-            return result;
+            // return result;
         } catch (e) {
             console.log(e);
 
@@ -269,80 +309,35 @@ export function ProgressProvider(props) {
         }
     }
 
-    const registrateUser = async ({  name, email, university, faculty, isTarget}) => {
-        const { isTarget: userVip, seenStartInfo, blenderTimes, perfectBlenderTimes, ...userData } = user;
-
-        const gameData = {
-            passedWeeks,
-            seenStartInfo,
-            blenderTimes,
-            perfectBlenderTimes,
-            planners,
-            challenges,
-            blenders,
-            readenLetter,
-            achievements,
-            findings,
-            drinks,
-            lifehacks
-        };
-
+    const registrateUser = async (regData) => {
         const data = {
-            ...userData,
-            name,
-            email,
-            university, 
-            faculty,
-            isTarget,
-            gameData: JSON.stringify(gameData),
-            points: 0
+            ...user,
+            achieves: [],
+            findings: [],
+            drinks: [],
+            lifehacks: [],
+            points: 0,
+            passedWeeks: [],
+            ...regData
         }
 
-        return data;
-        //    try {
-        //         const record = await client?.current.createRecord(data);
-        //         setUserInfo({isTarget, name, email, university, faculty, recordId: record.id});
+        setUser(data)
 
-        //         return record; 
-        //    } catch (e) {
-        //         return {isError: true}
-        //    }
+           try {
+                const record = await client?.current.patchRecord(recordId.current, data);
+
+                return record; 
+           } catch (e) {
+                return {isError: true}
+           }
     };
 
-    const getUserInfo = async (email) => {
-        try {
-            const {data = {}, id } = await client?.current.findRecord('email', email);
-            const {gameData, ...recordData} = data;
+    const checkEmailRegistrated = async (email) =>{
+        const record = await client?.current.findRecord('email', email);
 
-            const { 
-                planners,
-                challenges,
-                blenders,
-                readenLetter,
-                achievements,
-                findings,
-                drinks,
-                lifehacks, 
-                passedWeeks, 
-                ...gameDataParsed
-            } = JSON.parse(gameData);
+        return !!record?.id;
+    };
 
-            setPlanners(planners);
-            setChallenges(challenges);
-            setBlenders(blenders);
-            setReadenLetter(readenLetter);
-            setAchievements(achievements);
-            setFindings(findings);
-            setDrinks(drinks);
-            setLifehacks(lifehacks);
-            setPassedWeeks(passedWeeks);
-
-            setUserInfo({...recordData, ...gameDataParsed, recordId: id});
-        } catch (e) {
-            console.log(e);
-            return {isError: true};
-        }
-    }
 
     const state = {
         screen,
@@ -358,13 +353,14 @@ export function ProgressProvider(props) {
         setPassedWeeks,
         endGame,
         updateUser,
-        getUserInfo,
         registrateUser,
         currentWeek,
         readWeekLetter,
         addDayFinding,
         isLoading,
-        patchData
+        patchData,
+        tgError,
+        checkEmailRegistrated
     }
 
     return (

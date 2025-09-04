@@ -49,9 +49,16 @@ const Dot = styled.div`
 `;
 
 export function ScreenContent() {
-    const { screen, isLoading } = useProgress();
+    const { screen, isLoading, tgError } = useProgress();
     const Screen = useMemo(() => screen, [screen]);
     useImagePreloader(preloadImages);
+
+    if (tgError.isError) return (
+        <div>
+            Ошибка инициализации. {'\n\n'}
+            {tgError.message}
+        </div>
+    )
 
     if (isLoading) return (
         <Loading>

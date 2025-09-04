@@ -14,7 +14,6 @@ import { AnimatePresence } from "framer-motion";
 import { useGame } from "./useGame";
 import { ModalsPart } from "./ModalsPart";
 import { CardsField } from "./CardsField";
-import { useState } from "react";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -111,7 +110,6 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                 <LifeContainer lives={lives}/>
                 <Table $ratio={ratio}/>
                 <BlenderShadow $ratio={ratio}/>
-            
                 <DndProvider options={HTML5toTouch}>
                     <BlenderObject
                         isStopped={isPaused} 

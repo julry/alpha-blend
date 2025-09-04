@@ -224,7 +224,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     const isFirstPause = isPausedTraining || isFirstRulesModals;
 
     return {
-        isPaused: isRules || isSkipping || passedLevel !== undefined || restartModal || isFirstPause,
+        isPaused: true,
+        // isPaused: isRules || isSkipping || passedLevel !== undefined || restartModal || isFirstPause,
         handleEndTimer,
         handleDropDrink,
         handleBlenderStop,

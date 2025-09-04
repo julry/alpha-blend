@@ -1,34 +1,34 @@
 export const universities = [
     {
-        id: 'itmo',
+        id: 'u1',
         name: 'ИТМО Санкт-Петербург',
     },
     {
-        id: 'hse-msk',
+        id: 'u2',
         name: 'НИУ ВШЭ Москва',
     },
     {
-        id: 'hse-spb',
+        id: 'u3',
         name: 'НИУ ВШЭ Санкт-Петербург',
     },
     {
-        id: 'ranepa',
+        id: 'u4',
         name: 'РАНХиГС Москва'
     },
     {
-        id: 'rea',
+        id: 'u5',
         name: 'РЭУ Москва'
     },
     {
-        id: 'spbu',
+        id: 'u6',
         name: 'СПбГУ Санкт-Петербург'
     },
     {
-        id: 'ufu',
+        id: 'u7',
         name: 'УрФУ Екатеринбург'
     },
     {
-        id: 'fa',
+        id: 'u8',
         name: 'ФУ Москва'
     },
     {
@@ -39,48 +39,48 @@ export const universities = [
 
 export const faculties = [
     {
-        id: 'fac-itmo',
-        university: 'itmo',
+        id: 'f1',
+        university: 'u1',
         name: 'Мегафакультет компьютерных технологий и управления',
     },
     {
-        id: 'fac-hse-msk',
-        university: 'hse-msk',
+        id: 'f2',
+        university: 'u2',
         name: 'Высшая школа бизнеса',
     },
     {
-        id: 'fac-hse-msk-2',
-        university: 'hse-msk',
+        id: 'f3',
+        university: 'u2',
         name: 'Московский институт электроники и математики им. А.Н. Тихонова',
     },
     {
-        id: 'fac-hse-spb',
-        university: 'hse-spb',
+        id: 'f4',
+        university: 'u3',
         name: 'Санкт-Петербургская школа физико-математических и компьютерных наук',
     },
     {
-        id: 'fac-ranepa-1',
-        university: 'ranepa',
+        id: 'f5',
+        university: 'u4',
         name: 'Институт управления'
     },
     {
-        id: 'fac-rea',
-        university: 'rea',
+        id: 'f6',
+        university: 'u5',
         name: 'Высшая школа финансов'
     },
     {
-        id: 'fac-spbu',
-        university: 'spbu',
+        id: 'f7',
+        university: 'u6',
         name: 'Институт Высшая школа менеджмента'
     },
     {
-        id: 'fac-ufu',
-        university: 'ufu',
+        id: 'f8',
+        university: 'u7',
         name: 'Институт экономики и управления'
     },
     {
-        id: 'fac-fa-1',
-        university: 'fa',
+        id: 'f9',
+        university: 'u8',
         name: 'Факультет информационных технологий и анализа больших данных'
     },
     {
