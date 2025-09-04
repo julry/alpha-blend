@@ -5,6 +5,7 @@ import { screens } from "../constants/screensComponents";
 import { getUrlParam } from "../utils/getUrlParam";
 import { DAYS } from '../constants/days';
 import WebApp from '@twa-dev/sdk';
+import { uid } from 'uid';
 
 const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1756976745&query_id=LOCAL_TEST&hash=86c058b4bb276f3e0f54ce53f1fa2974ce714f12f0149823a32585ec9e42758d')
 
@@ -330,6 +331,7 @@ export function ProgressProvider(props) {
             lifehacks: [],
             points: 0,
             passedWeeks: [],
+            id: uid(),
             ...regData
         }
 
