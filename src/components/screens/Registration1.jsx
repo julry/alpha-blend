@@ -15,12 +15,20 @@ import { SCREENS } from "../../constants/screens";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x10);
+    overflow-x: hidden;
+    overflow-y: auto;
     background: url(${windowPic}) no-repeat 0 0 / cover;
 `;
 
 const Content = styled(FlexWrapper)`
     z-index: 2;
     padding: 0;
+
+    @media screen and (max-height: 500px) {
+        & button:last-child {
+            margin-top: var(--spacing_x2);
+        }
+    }
 `;
 
 const SelectStyled = styled(Select)`

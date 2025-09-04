@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import styled, { keyframes } from 'styled-components';
 import { preloadImages } from "../constants/screensComponents";
 import { useProgress } from "../contexts/ProgressContext";
@@ -8,6 +8,7 @@ import { FlexWrapper } from "./shared/ContentWrapper";
 const Wrapper = styled.div`
     position: relative;
     width: 100%;
+    min-height: 100%;
     height: 100%;
 `;
 
@@ -40,11 +41,11 @@ const Dot = styled.div`
         }
 
         &:nth-child(2) {
-        animation-delay: calc(1.5s * 0.13);
+            animation-delay: calc(1.5s * 0.13);
         }
 
         &:nth-child(3) {
-        animation-delay: calc(1.5s * 0.26);
+            animation-delay: calc(1.5s * 0.26);
         }
 `;
 

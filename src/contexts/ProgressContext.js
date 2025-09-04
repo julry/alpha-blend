@@ -7,7 +7,7 @@ import { DAYS } from '../constants/days';
 import WebApp from '@twa-dev/sdk';
 import { uid } from 'uid';
 
-const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1756976745&query_id=LOCAL_TEST&hash=86c058b4bb276f3e0f54ce53f1fa2974ce714f12f0149823a32585ec9e42758d')
+const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1757015294&chat_instance=-1096092437260107251&chat_type=sender&hash=c8defd979a3708d6d4d5a41bacd7b3abd927aaacc444cb6bcc0faf38721cde5e&signature=iVntcde4uk4G49S6EJDo-gM9YEv-wZ3OxfNQi2pK0_Dsl_qlCDDFLJRB3qWbDbOe8TS9xlLShp8asqkJC4slCg')
 
 const INITIAL_DAY_ACTIVITY = {
     completedAt: null,
@@ -229,8 +229,7 @@ export function ProgressProvider(props) {
     
       // Для локалхоста задаём initData вручную
       if (window?.location?.hostname === 'localhost') {
-        webAppInitData = MOCK_INIT_DATA;
-        console.log('webAppInitData mock', webAppInitData);
+        return client.current.findRecord('id', 'test-id');
       } else {
         console.log('webAppInitData', webAppInitData);
         console.log('initDataUnsafe', window?.Telegram?.WebApp?.initDataUnsafe);

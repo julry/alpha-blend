@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SizeRatioContextProvider } from '../contexts/SizeRatioContext';
 import { CookieInfo } from './shared/CookieInfo';
+import WebApp from '@twa-dev/sdk';
 
 export const TARGET_WIDTH = 375;
 export const TARGET_HEIGHT = 677;
@@ -73,8 +74,13 @@ export function ScreenTemplate(props) {
     const wrapperRef = useRef();
     const wrapperInnerRef = useRef();
 
-    useEffect(() => {
-        const cookieAgree = localStorage.getItem('cookieAgree') === 'true';
+    useEffect(() => { 
+        let cookieAgree
+        if (WebApp.DeviceStorage) {
+            cookieAgree = WebApp.DeviceStorage.getItem('cookieAgree') === 'true';
+        } else {
+            cookieAgree = localStorage.getItem('cookieAgree') === 'true';
+        }
 
         if (cookieAgree) return;
 
@@ -83,7 +89,12 @@ export function ScreenTemplate(props) {
 
     const handleCloseCookie = () => {
         setIsShowCookies(false);
-        localStorage.setItem('cookieAgree', 'true');
+        if (WebApp.DeviceStorage) {
+            WebApp.DeviceStorage.setItem('cookieAgree', 'true');
+        } else {
+            localStorage.setItem('cookieAgree', 'true');
+        }
+       
     }
 
     return (

@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import arrow from '../../assets/images/icon-arrow.svg';
-import { MIN_MOCKUP_WIDTH } from "../ScreenTemplate";
 
 const Wrapper = styled.div`
     position: relative;
@@ -55,27 +54,12 @@ const Option = styled(motion.li)`
 export const Select = (props) => {
     const wrapperRef = useRef();
     const [isOpen, setIsOpen] = useState(false);
-    const [top, setTop] = useState(0);
     const ratio = useSizeRatio();
     const {options, placeholder, value, zIndex} = props;
 
     const handleChoose = (id, name) => {
         props.onChoose?.(id, name);
-        // setIsOpen(prev => !prev);
     };
-
-    // useEffect(() => {
-    //     const topPixels = isBig ? props.initialTop : 0;
-    //     const heightPixels = wrapperRef.current.getBoundingClientRect().height;
-
-    //     console.log(document.body.clientWidth);
-
-    //     const newTop =  `calc(${(topPixels + heightPixels) * ratio}px + var(--spacing_x2))`;
-
-    //     if (newTop === top) return;
-
-    //     setTop(newTop);
-    // }, [props.value, top]);
 
     return (
         <>
@@ -86,7 +70,6 @@ export const Select = (props) => {
                 {
                     isOpen && (
                         <List
-                            top={top}
                             $ratio={ratio}
                             initial={{ opacity: 0, scaleY: 0.5 }}
                             animate={{ opacity: 1, scaleY: 1 }}
