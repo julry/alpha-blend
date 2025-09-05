@@ -7,9 +7,10 @@ import { Planner1M } from "../components/screens/week1/Planner1M";
 import { WaitingGameScreen } from "../components/screens/Waiting";
 import { Registration1 } from "../components/screens/Registration1";
 import { Start } from "../components/screens/Start";
-import BasketballGame from "../components/shared/games/BasketballGame";
+import BasketballGame from "../components/shared/games/BasketballGame/working-index";
 import { WeekLobby } from "../components/screens/WeekLobby";
 import { Blender1W } from "../components/screens/week1/Blender1W";
+import { DesktopScreen } from "../components/screens/DesktopScreen";
 
 import { SCREENS } from "./screens";
 
@@ -26,6 +27,7 @@ export const screens = {
     [SCREENS.GAME2M]: BasketballGame,
     [SCREENS.BLENDER1M]: Blender1M,
     [SCREENS.BLENDER1W]: Blender1W,
+    [SCREENS.DESKTOP]: DesktopScreen,
     // [SCREENS.FINISH]: Finish,
 };
 

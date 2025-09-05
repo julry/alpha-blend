@@ -7,8 +7,6 @@ import { DAYS } from '../constants/days';
 import WebApp from '@twa-dev/sdk';
 import { uid } from 'uid';
 
-const MOCK_INIT_DATA = encodeURI('user={"id":469460436,"first_name":"Dev","username":"tester"}&auth_date=1757015294&chat_instance=-1096092437260107251&chat_type=sender&hash=c8defd979a3708d6d4d5a41bacd7b3abd927aaacc444cb6bcc0faf38721cde5e&signature=iVntcde4uk4G49S6EJDo-gM9YEv-wZ3OxfNQi2pK0_Dsl_qlCDDFLJRB3qWbDbOe8TS9xlLShp8asqkJC4slCg')
-
 const INITIAL_DAY_ACTIVITY = {
     completedAt: null,
     isCompleted: false,
@@ -113,19 +111,19 @@ const INITIAL_STATE = {
     weekPoints: 0,
     user: INITIAL_USER,
     passedWeeks: [],
-    planners: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в планнере по дням
-    challenges: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в челленджах по дням
-    blenders: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA], //пройденные игры в блендере по дням
-    readenLetter: INITIALS_LETTERS, //прочитанные сообщения по неделям
+    planners: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA],
+    challenges: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA],
+    blenders: [INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA,  INITIAL_ACTIVITY_DATA],
     achievements: [],
-    findings: [], // находки
-    drinks: [], //напитка
-    lifehacks: [], // лайфхаки
+    findings: [],
+    drinks: [],
+    lifehacks: [],
 }
 
 const ProgressContext = createContext(INITIAL_STATE);
 
 const API_LINK = process.env.REACT_APP_API_URL;
+const DEV_ID = process.env.REACT_APP_DEV_ID;
 
 export function ProgressProvider(props) {
     const { children } = props
@@ -149,9 +147,10 @@ export function ProgressProvider(props) {
   
     const client = useRef();
     const recordId = useRef();
+    const isDesktop = useRef(false);
 
     const setUserBdData = (record) => {
-        recordId.current = record.id;
+        recordId.current = record?.id;
         const { data = {}} = record;
 
         setUserInfo(data);
@@ -177,15 +176,19 @@ export function ProgressProvider(props) {
     const initProject = async () => {
         setIsLoading(true);
         try {
-            // setCurrentScreen(SCREENS.REG_1);
-            
             const info = await loadRecord();
+
+            if (isDesktop.current) {
+                setCurrentScreen(SCREENS.DESKTOP);
+
+                return;
+            }
 
             if (!info) {
                 setTgError({isError: true, message: ''});
             }
 
-            setUserBdData(info)
+            setUserBdData(info);
 
             if (getUrlParam('screen')) {
                 setCurrentScreen(getUrlParam('screen'));
@@ -224,16 +227,22 @@ export function ProgressProvider(props) {
     }, []);
 
     const loadRecord = () => {
-      let webAppInitData = window?.Telegram?.WebApp?.initData;
+        const webApp = window?.Telegram?.WebApp;
+      let webAppInitData = webApp?.initData;
       let initData = WebApp.initData;
     
       // Для локалхоста задаём initData вручную
-      if (window?.location?.hostname === 'localhost') {
-        return client.current.findRecord('id', 'test-id');
+      if (window?.location?.hostname === 'localhost' || !!getUrlParam('screen')) {
+        return client.current.findRecord('id', DEV_ID);
       } else {
         console.log('webAppInitData', webAppInitData);
-        console.log('initDataUnsafe', window?.Telegram?.WebApp?.initDataUnsafe);
       } 
+
+      if (WebApp?.platform === 'tdesktop' || WebApp?.platform === 'web' || webApp?.platform === 'tdesktop' || webApp?.platform === 'web') {
+            isDesktop.current = true;
+
+            return;
+      }
     
       if (webAppInitData) {
         return client.current.getTgRecord(webAppInitData);
