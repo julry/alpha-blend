@@ -38,7 +38,7 @@ const INITIAL_USER = {
     email: '',
     university: '',
     faculty: '',
-    isTarget: true,
+    isTargeted: true,
     seenStartInfo: false,
     week1Points: 0,
     week2Points: 0,
@@ -238,7 +238,10 @@ export function ProgressProvider(props) {
         console.log('webAppInitData', webAppInitData);
       } 
 
-      if (WebApp?.platform === 'tdesktop' || WebApp?.platform === 'web' || webApp?.platform === 'tdesktop' || webApp?.platform === 'web') {
+      if (
+        WebApp?.platform?.toLowerCase()?.includes('web') || WebApp?.platform?.toLowerCase()?.includes('desktop')
+        || webApp?.platform?.toLowerCase()?.includes('web') || webApp?.platform?.toLowerCase()?.includes('desktop')
+    ) {
             isDesktop.current = true;
 
             return;

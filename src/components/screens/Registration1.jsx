@@ -144,7 +144,7 @@ export const Registration1 = () => {
             isAddsAgreed: isMailsAgreed,
             faculty: fac.name !== 'Другое' ? fac.name : '', 
             facultyId: fac.id !== 'other' ? fac.id : undefined,
-            isTarget: !!fac && fac !== 'Другое'
+            isTargeted: !!fac && fac !== 'Другое'
         });
 
         setIsSending(false);

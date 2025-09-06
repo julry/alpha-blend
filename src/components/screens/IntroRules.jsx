@@ -49,7 +49,7 @@ export const IntroRules = () => {
             </p>
         )
 
-        if (part === 2 && user.isTarget) {
+        if (part === 2 && user.isTargeted) {
             return (
                 <p>
                     Здесь можно не только играть, но и выигрывать призы!
