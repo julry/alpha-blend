@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "./static/css/main.05d8abde.css",
-    "main.js": "./static/js/main.8e43925d.js",
+    "main.js": "./static/js/main.a802dd0c.js",
     "static/media/building.png": "./static/media/building.b82d3343adb3c8e3e1ca.png",
     "static/media/backLobby.png": "./static/media/backLobby.367e361e2249aecc4fbc.png",
     "static/media/desk_bg.png": "./static/media/desk_bg.7ff396a47b05b0910aba.png",
-    "static/media/lobbyBg.png": "./static/media/lobbyBg.50c087411f8c66d21fda.png",
+    "static/media/lobbyBg.png": "./static/media/lobbyBg.d3fa28db854fb10a8813.png",
     "static/media/window.png": "./static/media/window.bd6d1dcde53b1e12967b.png",
     "static/media/StyreneALC-Medium.otf": "./static/media/StyreneALC-Medium.07c0c89af510b7fd7705.otf",
     "static/media/StyreneALC-Light.otf": "./static/media/StyreneALC-Light.ced82e84d14d91c72009.otf",
@@ -33,10 +33,10 @@
     "static/media/close.svg": "./static/media/close.279ce0683c583e5f89ee54f83350f0d3.svg",
     "static/media/icon-arrow.svg": "./static/media/icon-arrow.cddb74fc2c0689651d4aacf2502a730c.svg",
     "main.05d8abde.css.map": "./static/css/main.05d8abde.css.map",
-    "main.8e43925d.js.map": "./static/js/main.8e43925d.js.map"
+    "main.a802dd0c.js.map": "./static/js/main.a802dd0c.js.map"
   },
   "entrypoints": [
     "static/css/main.05d8abde.css",
-    "static/js/main.8e43925d.js"
+    "static/js/main.a802dd0c.js"
   ]
 }

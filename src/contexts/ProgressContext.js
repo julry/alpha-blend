@@ -184,11 +184,11 @@ export function ProgressProvider(props) {
                 return;
             }
 
-            if (!info) {
-                setTgError({isError: true, message: ''});
-            }
+            // if (!info) {
+            //     setTgError({isError: true, message: ''});
+            // }
 
-            setUserBdData(info);
+            // setUserBdData(info);
 
             if (getUrlParam('screen')) {
                 setCurrentScreen(getUrlParam('screen'));
