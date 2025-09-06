@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.05d8abde.css",
-    "main.js": "./static/js/main.722f134c.js",
+    "main.js": "./static/js/main.8e43925d.js",
     "static/media/building.png": "./static/media/building.b82d3343adb3c8e3e1ca.png",
     "static/media/backLobby.png": "./static/media/backLobby.367e361e2249aecc4fbc.png",
     "static/media/desk_bg.png": "./static/media/desk_bg.7ff396a47b05b0910aba.png",
@@ -18,26 +18,25 @@
     "static/media/blender.png": "./static/media/blender.d26f4f7c1ad4b352ed2e.png",
     "static/media/ball.png": "./static/media/ball.dd839ff288c275ab1442.png",
     "static/media/hoop.png": "./static/media/hoop.91ffa1eb793812988b37.png",
-    "static/media/drink7_opened.png": "./static/media/drink7_opened.6ace49e96af613351ee9.png",
-    "static/media/drink10_opened.png": "./static/media/drink10_opened.e41a411fc83d46235f96.png",
-    "static/media/drink5_opened.png": "./static/media/drink5_opened.9afdbc933bbf4a017c27.png",
-    "static/media/drink1_opened.png": "./static/media/drink1_opened.bbb11d15f89aac5065a9.png",
-    "static/media/drink9_opened.png": "./static/media/drink9_opened.57270bd371e2b0c23fd2.png",
-    "static/media/drink2_opened.png": "./static/media/drink2_opened.b636f468b826ed77829a.png",
-    "static/media/drink6_opened.png": "./static/media/drink6_opened.428d63ffcf93337498c7.png",
-    "static/media/drink3_opened.png": "./static/media/drink3_opened.a8cab19da8e3e09a9f9c.png",
+    "static/media/drink10_opened.png": "./static/media/drink10_opened.e31cb51198c7b3019589.png",
+    "static/media/drink9_opened.png": "./static/media/drink9_opened.d235dc996ff3983845f9.png",
+    "static/media/drink6_opened.png": "./static/media/drink6_opened.265e5728c026f98dc584.png",
+    "static/media/drink1_opened.png": "./static/media/drink1_opened.4749f11d630d16ea7dbc.png",
+    "static/media/drink3_opened.png": "./static/media/drink3_opened.122c1513f2032c0d350b.png",
     "static/media/drink8_opened.png": "./static/media/drink8_opened.72041fb34699a83b6f3f.png",
-    "static/media/drink11_opened.png": "./static/media/drink11_opened.9decf5dc9a4abc332336.png",
-    "static/media/drink4_opened.png": "./static/media/drink4_opened.036ff513dfd30d761095.png",
-    "static/media/drink0_opened.png": "./static/media/drink0_opened.d54f041c25b5ac316cdb.png",
+    "static/media/drink4_opened.png": "./static/media/drink4_opened.ed085fd240d13e1154d6.png",
+    "static/media/drink0_opened.png": "./static/media/drink0_opened.952beab4681792278c8f.png",
+    "static/media/drink5_opened.png": "./static/media/drink5_opened.b5460632014f4228aa27.png",
+    "static/media/drink7_opened.png": "./static/media/drink7_opened.0c705743d3c4f92f9c35.png",
+    "static/media/drink2_opened.png": "./static/media/drink2_opened.4b88d062923825b61511.png",
     "index.html": "./index.html",
     "static/media/close.svg": "./static/media/close.279ce0683c583e5f89ee54f83350f0d3.svg",
     "static/media/icon-arrow.svg": "./static/media/icon-arrow.cddb74fc2c0689651d4aacf2502a730c.svg",
     "main.05d8abde.css.map": "./static/css/main.05d8abde.css.map",
-    "main.722f134c.js.map": "./static/js/main.722f134c.js.map"
+    "main.8e43925d.js.map": "./static/js/main.8e43925d.js.map"
   },
   "entrypoints": [
     "static/css/main.05d8abde.css",
-    "static/js/main.722f134c.js"
+    "static/js/main.8e43925d.js"
   ]
 }

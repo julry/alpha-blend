@@ -4,6 +4,9 @@ import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
 import { Title } from "../Title";
+import { Bold } from "../Spans";
+import { useProgress } from "../../../contexts/ProgressContext";
+import { Li } from "../Li";
 
 const Content = styled(Block)`
     position: absolute;
@@ -15,16 +18,13 @@ const Content = styled(Block)`
 `;
 
 const TitleStyled = styled(Title)`
-    margin-bottom: var(--spacing_x3);
+    margin-bottom: var(--spacing_x2);
+    margin-top: var(--spacing_x2);
 `;
 
 const Text = styled.p`
-    font-size: var(--font_sm);
+    font-size: var(--font_xs);
     font-weight: 300;
-`;
-
-const Bold = styled.span`
-    font-weight: 500;
 `;
 
 const ProgressWrapper = styled.div`
@@ -48,6 +48,24 @@ const ProgressCircle = styled.div`
     }
 `;
 
+const BackButton = styled.button`
+    position: absolute;
+    top: var(--spacing_x3);
+    left: var(--spacing_x3);
+    margin-right: auto;
+
+    & svg {
+        width: ${({$ratio}) => $ratio * 18}px;
+        height: ${({$ratio}) => $ratio * 12}px;
+    }
+`;
+
+const PointsWrapper = styled.div`
+    overflow: auto;
+    max-height: ${({$ratio}) => $ratio * 450}px;
+    text-align: left;
+`;
+
 const ArrowButton = styled.button`
     outline: none;
     border: none;
@@ -66,8 +84,29 @@ const ArrowButtonRight = styled(ArrowButton)`
     justify-content: flex-end;
 `;
 
+const UlStyled = styled.ul`
+    text-align: left;
+    margin: var(--spacing_x2) 0;
+
+    li {
+        font-size: var(--font_xs);
+        margin-left: var(--spacing_x4);
+    }
+`;
+
+const PointsSubtitle = styled.p`
+    text-align: center;
+    font-weight: 500;
+    font-size: var(--font_xs);
+`;
+
+const BrStyled = styled.div`
+    height: var(--spacing_x3);
+`;
+
 export const InfoModal = ({ isOpen, initialPart, onClose }) => {
     const ratio = useSizeRatio();
+    const {user} = useProgress();
     const [part, setPart] = useState(initialPart ?? 0);
     const amount = 5;
     const progress = Array.from({ length: amount }, (_, i) => i);
@@ -89,13 +128,13 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                             Общая{ '\n' }информация
                         </TitleStyled>
                         <Text>
-                            В течение <Bold>четырёх недель</Bold> тебя ждут игры, задания, полезные лайфхаки и идеи для перезагрузки. От бодрящих рецептов до ежедневных мини-челленджей — всё, чтобы прокачать work-life баланс.
+                            В течение <Bold>четырёх недель</Bold> тебя ждут игры, задания, полезные лайфхаки и идеи для перезагрузки. От бодрящих рецептов до ежедневных мини-челленджей — всё, чтобы прокачать баланс работы и жизни.
                             <br />
                             <br />
-                            Выполняй активности, зарабатывай баллы и повышай шанс <Bold>выиграть крутые призы!</Bold>
+                            Выполняй активности и зарабатывай баллы, чтобы принять участие <Bold>в розыгрыше крутых призов!</Bold>
                             <br />
                             <br />
-                            Новые задания выходят по <Bold>понедельникам, средам и пятницам</Bold> — проходи их в день выхода и получай больше баллов.
+                            Новые задания выходят по <Bold>понедельникам, средам и пятницам</Bold> — проходи их в день выхода и получай больше баллов.
                         </Text>
                     </>
                 )
@@ -105,12 +144,66 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                         <TitleStyled>
                             Баллы
                         </TitleStyled>
-                        <Text>
-                            <Bold>Зарабатывай баллы</Bold> разными способами: выполняй задания, проходи игры, приглашай друзей.
-                            <br />
-                            <br />
-                            Чем их больше — тем <Bold>выше твои шансы на приз!</Bold>
-                        </Text>
+                        {
+                           user.isTargeted ? (
+                                <PointsWrapper $ratio={ratio}>
+                                    <Text><Bold>Играя, ты зарабатываешь баллы</Bold> для участия в розыгрышах.{'\n'}Всего за игру мы проведём 5 розыгрышей — по одному в конце каждой недели и финальный розыгрыш супер-приза в конце. </Text>
+                                    <BrStyled/>
+                                    <PointsSubtitle>Еженедельный розыгрыш</PointsSubtitle>
+                                    <BrStyled/>
+                                    <Text>Минимальное количество для участия — 450 баллов. Считаются только баллы, заработанные в рамках текущей недели. Баллы дублируются в счётчик общих баллов.</Text>
+                                    <BrStyled />
+                                    <Text><Bold>Среди призов:</Bold> плёночный фотоаппарат Kodak, сертификаты Ozon, Литрес, VK Музыка и многое другое.</Text>
+                                    <BrStyled />
+                                    <Text>Баллы можно получить за игры «Планнер», «Блендер», «Челлендж недели».</Text>
+                                    <BrStyled />
+                                    <PointsSubtitle>Розыгрыш супер-приза</PointsSubtitle>
+                                    <BrStyled />
+                                    <Text><Bold>Главный приз в игре</Bold> — Apple iPhone 16 Pro Max. Для участия в розыгрыше супер-приза нужны шансы.</Text>
+                                    <BrStyled />
+                                    <Text> В конце игры заработанные за всё время баллы конвертируются в шансы:</Text>
+                                    <BrStyled />
+                                    <Text>от 2800 до 3000 баллов — 1 шанс</Text>
+                                    <Text>от 3000 до 3250 баллов — 2 шанса</Text>
+                                    <Text>от 3250 до 3500 баллов — 3 шанса</Text>
+                                    <BrStyled />
+                                    <PointsSubtitle>Также шансы даются за действия:</PointsSubtitle>
+                                    <UlStyled>
+                                        <Li>+2 шанса за открытие 12 коллекционных напитков</Li>
+                                        <Li>+3 шанса за 10 достижений</Li>
+                                        <Li>+1 шанс за каждого приглашённого друга со своего факультета по реферальной ссылке</Li>
+                                        <Li>+1 шанс за подписку на ТГ-канал FutureToday</Li>
+                                    </UlStyled>
+                                    <Text>Чем больше шансов, тем выше вероятность выигрыша. Результаты розыгрышей придут в ТГ-боте.</Text>
+                                </PointsWrapper>
+                            ) : (
+                                <>
+                                    <Text> <Bold>Играя, ты зарабатываешь баллы</Bold> для участия в розыгрыше. Минимальное количество для участия — 2800 баллов.</Text>
+                                    <BrStyled/>
+                                    <Text><Bold>Среди призов:</Bold> мерч от Альфа-Банка, подарочные сертификаты Ozon и Литрес, настольные игры, мерч и другие призы.</Text>
+                                    <BrStyled />
+                                    <Text><Bold>Как получить баллы:</Bold></Text>
+                                    <UlStyled>
+                                        <Li>
+                                        Проходить игры «Планнер», «Блендер», «Челлендж недели»
+                                        </Li>
+                                        <Li>
+                                        +100 баллов за 12 собранных коллекционных напитков
+                                        </Li>
+                                        <Li>
+                                        +100 баллов за каждого друга, приглашённого по реферальной ссылке (максимум 10 друзей)
+                                        </Li>
+                                        <Li>
+                                        +50 баллов за подписку на ТГ-канал FutureToday
+                                        </Li>
+                                        <Li>
+                                        +5 баллов за каждое достижение
+                                        </Li>
+                                    </UlStyled>
+                                    <Text>Розыгрыш проводится в конце 4-й недели. Результаты придут в ТГ-боте.</Text>
+                                </>
+                            )
+                        }
                     </>
                 );
             case 2:
@@ -120,10 +213,10 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                             Планнер
                         </TitleStyled>
                         <Text>
-                            <Bold>Распредели 15 карточек</Bold> с делами по утру, дню и вечеру — в каждый блок можно положить до 3. Не забудь про <Bold>челлендж недели</Bold> — он даёт дополнительные баллы!
+                            <Bold>Распредели 12 карточек</Bold> с делами по утру, дню и вечеру — в каждый блок можно положить до 3. Не забудь про <Bold>челлендж недели</Bold> — зафиксировать результат можно только с ней!
                             <br />
                             <br />
-                            После размещения карточки закрепятся. Баллы начисляются <Bold>за каждую карточку</Bold> и <Bold>за полностью собранный день</Bold>. После планирования переходи к другим играм.
+                            Баллы начисляются <Bold>за полностью собранный день</Bold>. После планирования открывается доступ к другим играм.
                         </Text>
                     </>
                 );
@@ -134,7 +227,7 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                             Челлендж недели
                         </TitleStyled>
                         <Text>
-                            Каждую неделю появляется челлендж недели — особая игра, связанная с темой этих дней. Следи за обновлениями — каждую неделю формат челленджа будет меняться!
+                            <Bold>В игре 4 недели.</Bold> Каждая из них посвящена отдельной теме — мы раскрываем баланс работы и жизни и показываем разные стороны работы в Альфа-Банке. Вместе с новой темой появляется новая мини-игра.
                         </Text>
                     </>
                 )
@@ -145,15 +238,17 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                             Блендер
                         </TitleStyled>
                         <Text>
-                            В игре три раунда. Тебе нужно быстро готовить напитки для гостей, собирая нужные ингредиенты в блендер.
-                            <br />
-                            <br />
-                            Напитки отображаются в пузырьках над гостями — внутри указаны ингредиенты и таймер ожидания. Чем быстрее соберёшь и подашь напиток, тем больше баллов получишь.
-                            <br />
-                            <br />
-                            Ошибся — убери лишний ингредиент и замени его. После трёх раундов игра закончится.
+                            <Bold>К тебе приходят гости, и каждому нужен свой напиток.</Bold> Состав напитка и время ожидания показаны в баблах над их головами. У тебя всего 15 секунд на каждого гостя, а сам напиток готовится 2 секунды. В игре всего 1 раунд.
                         </Text>
-                    </>
+                        <br />
+                        <Text>
+                            <Bold>За правильный заказ ты получаешь баллы.</Bold> Если напиток не подошёл одному гостю, его можно оставить на столе и отдать другому. На столе может быть не больше 3 напитков.
+                        </Text>
+                        <br />
+                        <Text>
+                            Ошибка в рецепте сбрасывает ингредиенты, а если время ожидания вышло — гость уходит и ты не получишь баллы. <Bold>У тебя есть три попытки пройти игру,</Bold> после чего она заканчивается.
+                        </Text>
+                    </> 
                 )
             default: break;
         }
@@ -161,8 +256,8 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
 
     return (
         <Modal isDisabledAnimation isOpen={isOpen}>
-            <Content hasCloseIcon onClose={onClose}>
-                <div style={{height: '100%'}}>
+            <Content>
+                <div>
                     <ArrowButton onClick={ handlePrev }>
                         <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14 1.5L6 9.5L14 17.5" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -170,6 +265,11 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                     </ArrowButton>
                 </div>
                 <div>
+                    <BackButton $ratio={ratio} onClick={onClose}>
+                        <svg viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 11L3 6M3 6L8 1M3 6L15 6" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </BackButton>
                     { getContent() }
                     <ProgressWrapper $ratio={ ratio }>
                         { progress.map((p) => (

@@ -16,13 +16,18 @@ const Content = styled(Block)`
 `;
 
 const Subtitle = styled.h4`
-    font-size: var(--font_sm);
-    font-weight: 300;
+    font-size: var(--font_md);
+    font-weight: 500;
+    margin-bottom: var(--spacing_x1);
 `;
 
 const Text = styled.p`
-    font-size: var(--font_md);
-    font-weight: 500;
+    font-size: var(--font_sm);
+    line-height: 100%;
+
+    & + & {
+        margin-top: var(--spacing_x1);
+    }
 `;
 
 const InfoBlock = styled.div`
@@ -35,14 +40,13 @@ const FlexBlock = styled.div`
 `;
 
 const PointsWrapper = styled(FlexBlock)`
-    margin: var(--spacing_x2) 0;
+    margin: var(--spacing_x1) 0;
     justify-content: space-between;
     gap: var(--spacing_x7);
 `;
 
 const PointsInfo = styled.p`
     font-weight: 700;
-    color: var(--color-red);
     font-size: ${({$ratio}) => $ratio * 30}px;
     margin-right: var(--spacing_x1);
 `;
@@ -61,19 +65,6 @@ const ProfileWrapper = styled.div`
         width: ${({$ratio}) => $ratio * 20}px;
         height: ${({$ratio}) => $ratio * 20}px;
     }
-`;
-
-const RefSign = styled.div`
-    text-align: center;
-    background: var(--color-white);
-    color: rgba(38, 61, 141, 0.3);
-    font-size: var(--font_sm);
-    border-radius: 50%;
-    margin-left: var(--spacing_x2);
-    cursor: pointer;
-    padding-top: ${({$ratio}) => $ratio * 1}px;
-    width: ${({$ratio}) => $ratio * 18}px;
-    height: ${({$ratio}) => $ratio * 18}px;
 `;
 
 const InfoModalBlock = styled(Block)`
@@ -98,6 +89,10 @@ const RefBlock = styled.div`
         width: var(--spacing_x4);
         height: var(--spacing_x4);
     }
+
+    & > p:first-child {
+        font-weight: 500;
+    }
 `;
 
 const CopyButton = styled.button`
@@ -113,7 +108,12 @@ const CopyButton = styled.button`
 const SmallText = styled.p`
     font-weight: 300;
     margin-right: var(--spacing_x1);
-    font-size: var(--font_xs);
+    font-size: var(--font_xxs);
+`;
+
+
+const RefDesc = styled.div`
+    margin-bottom: var(--spacing_x1);
 `;
 
 export const ProfileModal = ({isOpen, ...props}) => {
@@ -139,9 +139,11 @@ export const ProfileModal = ({isOpen, ...props}) => {
             <Content onClose={props.onClose} hasCloseIcon>
                 <FlexBlock>
                     <ProfileWrapper $ratio={ratio}>
-                        <PersonIcon />
+                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.5 11.3333C12.8012 11.3333 14.6666 9.46785 14.6666 7.16667C14.6666 4.86548 12.8012 3 10.5 3C8.19879 3 6.33331 4.86548 6.33331 7.16667C6.33331 9.46785 8.19879 11.3333 10.5 11.3333ZM10.5 11.3333C12.2681 11.3333 13.9638 12.0357 15.214 13.286C16.4643 14.5362 17.1666 16.2319 17.1666 18M10.5 11.3333C8.73187 11.3333 7.03618 12.0357 5.78593 13.286C4.53569 14.5362 3.83331 16.2319 3.83331 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </ProfileWrapper>
-                    <Text>ID {user.id}</Text>
+                    <Subtitle>ID {user.id}</Subtitle>
                 </FlexBlock>
                 <InfoBlock>
                     <Subtitle>Имя Фамилия</Subtitle>
@@ -151,31 +153,31 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     <Subtitle>Почта</Subtitle>
                     <Text>{user.email}</Text>
                 </InfoBlock>
-                {user.isTarget && (
+                {user.isTargeted && (
                     <InfoBlock>
                         <Subtitle>Вуз и факультет</Subtitle>
                         <Text>{user.university}</Text>
-                        {user.faculty && (<Text>{user.university}</Text>)}
+                        {user.faculty && (<Text>{user.faculty}</Text>)}
                     </InfoBlock>
                 )}
                 <PointsWrapper>
-                    {user.isTarget && (
+                    {user.isTargeted && (
                         <FlexBlock>
                             <PointsInfo $ratio={ratio}>{weekPoints ?? 0}</PointsInfo>
-                            <Subtitle>Баллов{'\n'}за неделю</Subtitle>
+                            <Text>Баллы{'\n'}за неделю</Text>
                         </FlexBlock>
                     )}
                     <FlexBlock>
                         <PointsInfo $ratio={ratio}>{points ?? 0}</PointsInfo>
-                        <Subtitle>Баллов{'\n'}за все время</Subtitle>
+                        <Text>Баллы{'\n'}за все время</Text>
                     </FlexBlock>
                 </PointsWrapper>
-                <FlexBlock>
+                <RefDesc>
                     <Subtitle>Реферальная ссылка</Subtitle>
-                    <RefSign $ratio={ratio} onClick={() => setIsRefInfoModal(true)}>?</RefSign>
-                </FlexBlock>
+                    <SmallText>Скопируй и отправляй друзьям,{'\n'}чтобы получить дополнительные баллы!</SmallText>
+                </RefDesc>
                 <RefBlock $ratio={ratio}>
-                    <p>ref_{user.id}</p>
+                    <p>ref_link_{user.id}</p>
                     {
                         isSuccessCopy ? 
                         <FlexBlock>
@@ -199,7 +201,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                 <Modal isDarken>
                     <InfoModalBlock onClose={() => setIsRefInfoModal(false)} hasCloseIcon>
                         <p>
-                            Скопируй реферальную ссылку и отправляй друзьям, чтобы получить дополнительные баллы!
+                            Скопируй реферальную ссылку и отправляй друзьям,{'\n'}чтобы получить дополнительные баллы!
                         </p>
                     </InfoModalBlock>
                 </Modal>

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useSizeRatio } from "../../../../../hooks/useSizeRatio";
 import { Title } from "../../../Title";
 import { drinks } from "../../../../../constants/drinks";
+import { MIN_MOCKUP_WIDTH } from "../../../../ScreenTemplate";
 
 const TitleStyled = styled(Title)`
     width: 100%;
@@ -15,7 +16,6 @@ const TitleStyled = styled(Title)`
     }
 
     &:last-of-type {
-        margin-bottom: var(--spacing_x2);
         padding-right: var(--spacing_x3);
     }
 `;
@@ -23,14 +23,18 @@ const TitleStyled = styled(Title)`
 const GridWrapper = styled.div`
     width: 100%;
     display: grid;
+    margin-top: calc(0px - var(--spacing_x3));
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    height: ${({ $ratio }) => $ratio * 475}px;
     justify-items: center;
     align-items: center;
 
-     @media screen and (max-height: 670px) {
-        height: ${({ $ratio }) => $ratio * 385}px;
+    @media screen and (max-height: 590px) {
+        overflow-y: auto;
+    }
+
+    @media screen and (min-height: 800px) and (max-width: ${MIN_MOCKUP_WIDTH}px) {
+        margin-top: var(--spacing_x3);
     }
 `;
 
@@ -40,11 +44,18 @@ const DrinkWrapper = styled.div`
     align-items: flex-end;
     justify-content: center;
     width: ${({ $ratio }) => $ratio * 100}px;
-    height: ${({ $ratio }) => $ratio * 117}px;
+    height: ${({ $ratio }) => $ratio * 115}px;
 
-    @media screen and (max-height: 670px) {
-        height: ${({ $ratio }) => $ratio * 95}px;
+    /* @media screen and (max-height: 670px) {
+        height: ${({ $ratio }) => $ratio * 108}px;
     }
+
+    @media screen and (max-height: 630px) {
+        height: ${({ $ratio }) => $ratio * 96}px;
+    }
+    @media screen and (max-height: 590px) {
+        height: ${({ $ratio }) => $ratio * 86}px;
+    } */
 `;
 
 const DrinkInfo = styled.div`
@@ -56,7 +67,6 @@ const DrinkInfo = styled.div`
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15);
-    /* box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.15), inset 1px 1px 4.3px rgba(255, 255, 255, 0.15); */
     border-radius: 100px;
     font-size: var(--font_xs);
     z-index: 5;
@@ -72,17 +82,12 @@ const DrinkInfo = styled.div`
 const DrinkPicture = styled.img`
     position: absolute;
     --size: ${({$size, $ratio}) => $size * $ratio}px;
-    bottom: ${({$bottom, $ratio}) => (30 - $bottom) * $ratio}px;
+    bottom: ${({$bottom, $ratio}) => $bottom * $ratio}px;
     width: var(--size);
     height: var(--size);
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-
-    @media screen and (max-height: 670px) {
-        width: calc(0.8 * var(--size));
-        height: calc(0.8 * var(--size));
-    }
 `;
 
 export const DrinksPart = ({openedDrinks = []}) => {

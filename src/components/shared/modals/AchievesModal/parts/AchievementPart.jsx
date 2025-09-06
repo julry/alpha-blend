@@ -1,12 +1,12 @@
 import styled from "styled-components"
 import { Title } from "../../../Title"
 import { ContentBlock } from "./ContentBlock";
-import { Achievement } from "./Achievement";
+import { Achievement } from "../../../Achievement";
 import { achievements } from "../../../../../constants/achievements";
 import { useSizeRatio } from "../../../../../hooks/useSizeRatio";
 
 const TitleStyled = styled(Title)`
-    margin: var(--spacing_x6) 0;
+    margin: var(--spacing_x4) 0;
     font-size: ${({ $ratio }) => $ratio * 33}px;
 `;
 

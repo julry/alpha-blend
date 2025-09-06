@@ -3,7 +3,11 @@ import {FlexWrapper} from '../shared/ContentWrapper';
 import bg from '../../assets/images/backLobby.png';
 import building from '../../assets/images/building.png';
 import { useSizeRatio } from "../../hooks/useSizeRatio";
-import { useProgress } from "../../contexts/ProgressContext";
+import { CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext";
+import { useState } from "react";
+import { Modal } from "../shared/modals/Modal";
+import { CommonModal } from "../shared/modals/CommonModal";
+import { Bold } from "../shared/Spans";
 
 const Wrapper = styled(FlexWrapper)`
     background: url(${bg}) center 100% no-repeat;
@@ -70,28 +74,37 @@ const LockStyled = styled.svg`
 `;
 
 export const WeekLobby = ({isHideUnavailable}) => {
-    const { currentWeek,  passedWeeks = [] } = useProgress();
+    const { passedWeeks = [], user } = useProgress();
+    const [isShownInfo, setIsShownInfo] = useState(!user?.seenStartInfo);
+    const [isClosedInfo, setIsClosedInfo] = useState(false);
+
     const ratio = useSizeRatio();
 
     const getIsFloorActive = (index) => {
-        if (index > currentWeek) return;
+        if (index > CURRENT_WEEK) return;
 
-         const isCurrentWeekPassed = passedWeeks.includes(currentWeek);
+         const isCURRENT_WEEKPassed = passedWeeks.includes(CURRENT_WEEK);
 
-        return isCurrentWeekPassed ? index === currentWeek : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
+        return isCURRENT_WEEKPassed ? index === CURRENT_WEEK : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
     };
 
     const getIsFloorUnavailable = (index) => {
-        const isCurrentWeekPassed = passedWeeks.includes(currentWeek);
+        const isCURRENT_WEEKPassed = passedWeeks.includes(CURRENT_WEEK);
         
-        return isCurrentWeekPassed ? index > currentWeek : (index > ((passedWeeks[passedWeeks.length - 1] ?? 0) + 1));
+        return isCURRENT_WEEKPassed ? index > CURRENT_WEEK : (index > ((passedWeeks[passedWeeks.length - 1] ?? 0) + 1));
     }
+
+    const handleFloorClick = (index) => {
+        if (getIsFloorUnavailable(index)) {
+            setIsClosedInfo(true);
+        }
+    };
 
     return (
         <Wrapper>
             <BuildingWrapper $ratio={ratio}>
                 {[4, 3, 2, 1].map((index) => (
-                    <Floor $number={index} $ratio={ratio} $isActive={getIsFloorActive(index)}>
+                    <Floor key={index} $number={index} $ratio={ratio} $isActive={getIsFloorActive(index)} onClick={() => handleFloorClick(index)}>
                         {getIsFloorUnavailable(index) && !isHideUnavailable && (
                             <>
                                 <UnavailableBlock />
@@ -103,6 +116,18 @@ export const WeekLobby = ({isHideUnavailable}) => {
                     </Floor>
                 ))}
             </BuildingWrapper>
+            <CommonModal isOpen={isShownInfo} isDarken btnText="Понятно" onClose={() => setIsShownInfo(false)}>
+                <p><Bold>Это главное меню.</Bold></p>
+                <p>   
+                    Здесь собраны все <Bold>4 недели игры:</Bold> какие-то уже открыты, а остальные появятся на своей неделе.
+                </p>
+            </CommonModal>
+            <CommonModal isOpen={isClosedInfo} isDarken btnText="Понятно" onClose={() => setIsClosedInfo(false)}>
+                <p><Bold>Эта неделя пока закрыта.</Bold></p>
+                <p>   
+                    Она откроется в своё время — <Bold>загляни позже!</Bold>
+                </p>
+            </CommonModal>
         </Wrapper>
     )
 };

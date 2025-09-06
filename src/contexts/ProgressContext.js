@@ -101,7 +101,7 @@ const getCurrentDay = () => {
     }
 }
 
-export const CURRENT_WEEK = getCurrentWeek();
+export const CURRENT_WEEK = 1;
 
 export const CURRENT_DAY = getCurrentDay();
 
@@ -157,20 +157,20 @@ export function ProgressProvider(props) {
 
         if (!data.email) return;
 
-        const {
-            planner1, planner2, planner3, planner4, 
-            blender1, blender2, blender3, blender4,
-            game2048, gameBasket, gamePuzzle, gameMoles,
-            achieves, drinks: dataDrinks, findings: dataFindings, lifehacks: dataLifehacks
-        } = record.data;
+        // const {
+        //     planner1, planner2, planner3, planner4, 
+        //     blender1, blender2, blender3, blender4,
+        //     game2048, gameBasket, gamePuzzle, gameMoles,
+        //     achieves, drinks: dataDrinks, findings: dataFindings, lifehacks: dataLifehacks
+        // } = record.data;
 
-        setPlanners([planner1, planner2, planner3, planner4]);
-        setBlenders([blender1, blender2, blender3, blender4]);
-        setChallenges([game2048, gameBasket, gamePuzzle, gameMoles]);
-        setAchievements(achieves);
-        setDrinks(dataDrinks);
-        setFindings(dataFindings);
-        setLifehacks(dataLifehacks);
+        // setPlanners([planner1, planner2, planner3, planner4]);
+        // setBlenders([blender1, blender2, blender3, blender4]);
+        // setChallenges([game2048, gameBasket, gamePuzzle, gameMoles]);
+        // setAchievements(achieves);
+        // setDrinks(dataDrinks);
+        // setFindings(dataFindings);
+        // setLifehacks(dataLifehacks);
     }
 
     const initProject = async () => {
@@ -386,7 +386,7 @@ export function ProgressProvider(props) {
         endGame,
         updateUser,
         registrateUser,
-        currentWeek,
+        // currentWeek,
         readWeekLetter,
         addDayFinding,
         isLoading,

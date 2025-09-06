@@ -17,6 +17,7 @@ const BlockStyled = styled(Block)`
     position: absolute;
     top: calc(50% - var(--spacing_x8));
     max-height: calc(100% - var(--spacing_x8) - var(--spacing_x10));
+    min-height: calc(100% - var(--spacing_x8) - var(--spacing_x10));
     overflow-y: auto;
     left: 50%;
     transform: translate(-50%, -50%);

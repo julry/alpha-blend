@@ -19,7 +19,6 @@ const TitleStyled = styled(Title)`
     margin-bottom: var(--spacing_x3);
 `;
 
-
 export const RulesModal = ({ onClose, isOpen }) => {
     const [openedPart, setOpenedPart] = useState();
 
@@ -33,11 +32,7 @@ export const RulesModal = ({ onClose, isOpen }) => {
                 <Button onClick={() => setOpenedPart(3)}>Челлендж недели</Button>
                 <Button onClick={() => setOpenedPart(4)}>Блендер</Button>
             </Content>
-            {
-                openedPart !== undefined && (
-                    <InfoModal initialPart={openedPart} onClose={() => setOpenedPart()}/>
-                )
-            }
+            <InfoModal isOpen={openedPart !== undefined} initialPart={openedPart} onClose={() => setOpenedPart()}/>
         </Modal>
     )
 }
