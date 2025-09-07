@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Block } from "./Block";
 import avatar from '../../assets/images/collegue.png';
+import { Bold } from "./Spans";
 
 const BlockStyled = styled(Block)`
     align-items: flex-start;
@@ -23,7 +24,6 @@ const Avatar = styled.div`
 `;
 
 const SubTitle = styled.p`
-    font-weight: 300;
     font-size: var(--font_sm);
 `;
 
@@ -33,7 +33,7 @@ export const CollegueMessage = (props) => (
             <Avatar />
             <div>
                 <SubTitle>От кого:</SubTitle>
-                <p>Коллега</p>
+                <p><Bold>Коллега</Bold></p>
             </div>
         </InfoBlock>
         {props.children}

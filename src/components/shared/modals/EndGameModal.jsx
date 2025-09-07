@@ -3,6 +3,7 @@ import { Modal } from "./Modal";
 import { Block } from "../Block";
 import { Button } from "../Button";
 import { Title } from "../Title";
+import { Bold, RedText } from "../Spans";
 
 const ModalStyled = styled(Modal)`
     display: flex;
@@ -28,7 +29,7 @@ const ButtonWrapper= styled.div`
 `;
 
 
-export const EndGameModal = ({ title, children, isOpen, onClose, onRetry }) => {
+export const EndGameModal = ({ title, children, isOpen, onClose, points }) => {
     return (
         <ModalStyled isDarken isOpen={isOpen}>
             <BlockStyled>
@@ -36,11 +37,10 @@ export const EndGameModal = ({ title, children, isOpen, onClose, onRetry }) => {
                    {title ?? 'Время вышло!'}
                 </Title>
                 {children}
-                <p>У тебя ещё остались попытки.</p>
+                <p><Bold>Игра закончилась.</Bold>{'\n'}Ты заработал <RedText><Bold>{points}</Bold></RedText> <Bold>баллов</Bold>.</p>
             </BlockStyled>
             <ButtonWrapper>
-                <Button onClick={onRetry}>Ещё раз</Button>
-                <Button type="secondary" onClick={onClose}>В комнату</Button>
+                <Button onClick={onClose}>Далее</Button>
             </ButtonWrapper>
         </ModalStyled>
     );

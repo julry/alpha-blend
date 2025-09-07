@@ -23,7 +23,7 @@ export const LetterModal = ({ isOpen, onClose, checkedWeek, isDarken}) => {
 
     return (
         <CommonModal isOpen={isOpen} isDarken={isDarken} isCollegue onClose={handleClick} btnText={isLast ? 'Погнали!' : 'Далее'}>
-            <p>{text}</p>
+            <p>{typeof text === 'function' ? text() : text}</p>
         </CommonModal>
     )
 }

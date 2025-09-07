@@ -3,6 +3,7 @@ import { Modal } from "./Modal";
 import { Block } from "../Block";
 import { Button } from "../Button";
 import { Title } from "../Title";
+import { Bold } from "../Spans";
 
 const ModalStyled = styled(Modal)`
     display: flex;
@@ -32,14 +33,11 @@ export const SkipModal = ({ isOpen, onClose, onExit }) => {
     return (
         <ModalStyled isDarken isOpen={isOpen}>
             <BlockStyled>
-                <Title>
-                    Уходишь?
-                </Title>
-                <p>Если ты сейчас выйдешь, ты потеряешь весь прогресс</p>
+                <p><Bold>Ты точно хочешь выйти?</Bold></p>
             </BlockStyled>
             <ButtonWrapper>
-                <Button onClick={onClose}>Остаться</Button>
-                <Button type="secondary" onClick={onExit}>В комнату</Button>
+                <Button onClick={onClose}>Продолжить</Button>
+                <Button type="secondary" onClick={onExit}>Выйти</Button>
             </ButtonWrapper>
         </ModalStyled>
     );

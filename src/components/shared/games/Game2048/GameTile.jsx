@@ -4,14 +4,14 @@ import { CONTAINER_SIZE, TILE_COUNT_PER_DIMENSION, MERGE_ANIMATION_DURATION, MOV
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 
 const VALUE_TO_BACKGROUND = {
-    2: '#9DF2F5',
-    4: '#9EDFFF',
-    8: '#C7BFFF',
-    16: '#DFBFFF',
-    32: '#BFF0A8',
-    64: '#D6F09A',
-    128: '#FFCAC7',
-    256: '#FFCF99',
+    2: '#FDECEA',
+    4: '#FACBC6',
+    8: '#F6AAA1',
+    16: '#F38879',
+    32: '#F06757',
+    64: '#ED4A3A',
+    128: '#EF3A2D',
+    256: '#EF3124',
 }
 
 const Tile = styled.div`
@@ -24,7 +24,7 @@ const Tile = styled.div`
     height: ${({$sizeRatio}) => `calc(${(CONTAINER_SIZE - 20 - 10 * (TILE_COUNT_PER_DIMENSION - 1)) / TILE_COUNT_PER_DIMENSION}px * ${$sizeRatio})`};
     border-radius: ${({$sizeRatio}) => `calc(10px * ${$sizeRatio})`};
     background: ${({value}) => VALUE_TO_BACKGROUND[value]};
-    color: #000000;
+    color: #6C0A0A;
     font-size: ${({$sizeRatio}) => `calc(32px * ${$sizeRatio})`};
     font-weight: 700;
     transition-property: $left, top, transform, box-shadow;

@@ -10,8 +10,7 @@ export const DELETE_ANIMATION_DURATION = MOVE_ANIMATION_DURATION + MERGE_ANIMATI
 
 export const FINISH_SCORE = 256;
 
-export const MAX_TIME = 1 * 60 + 30;
-// export const MAX_TIME = 5;
+export const MAX_TIME = 0.5 * 60;
 
 export const ACTIONS = {
     CLEAN_UP: 'CLEAN_UP',

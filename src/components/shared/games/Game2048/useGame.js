@@ -5,7 +5,6 @@ import flattenDeep from "lodash/flattenDeep";
 import { uid } from "uid";
 import { ACTIONS, TILE_COUNT_PER_DIMENSION, MOVE_ANIMATION_DURATION } from "./constants";
 import { FINISH_SCORE } from "./constants";
-import { DELETE_ANIMATION_DURATION } from "./constants";
 
 function createBoard() {
     const board = [];
@@ -33,29 +32,29 @@ function gameReducer(
         case ACTIONS.RESTART: {
             return {...initialState, score: state.score};
         }
-        case ACTIONS.DELETE_TILE: {
-            const flattenBoard = flattenDeep(state.board);
-            const newTiles = flattenBoard.reduce(
-                (result, tileId) => {
-                    if (isNil(tileId) || tileId === action.tile?.id) {
-                        return result;
-                    }
+        // case ACTIONS.DELETE_TILE: {
+        //     const flattenBoard = flattenDeep(state.board);
+        //     const newTiles = flattenBoard.reduce(
+        //         (result, tileId) => {
+        //             if (isNil(tileId) || tileId === action.tile?.id) {
+        //                 return result;
+        //             }
 
-                    return {
-                        ...result,
-                        [tileId]: state.tiles[tileId],
-                    };
-                },
-                {},
-            );
+        //             return {
+        //                 ...result,
+        //                 [tileId]: state.tiles[tileId],
+        //             };
+        //         },
+        //         {},
+        //     );
 
-            return {
-                ...state,
-                tiles: newTiles,
-                tilesByIds: Object.keys(newTiles),
-                hasChanged: false,
-            };
-        }
+        //     return {
+        //         ...state,
+        //         tiles: newTiles,
+        //         tilesByIds: Object.keys(newTiles),
+        //         hasChanged: false,
+        //     };
+        // }
         case ACTIONS.CLEAN_UP: {
             const flattenBoard = flattenDeep(state.board);
             const newTiles = flattenBoard.reduce(
@@ -113,8 +112,8 @@ function gameReducer(
                     const currentTile = state.tiles[tileId];
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
-                        if (previousTile?.value === currentTile.value) {
-                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
+                        if (previousTile?.value === currentTile.value && currentTile.value !== FINISH_SCORE) {
+                            score += 10
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -166,8 +165,8 @@ function gameReducer(
                     const currentTile = state.tiles[tileId];
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
-                        if (previousTile?.value === currentTile.value) {
-                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
+                        if (previousTile?.value === currentTile.value && currentTile.value !== FINISH_SCORE) {
+                            score += 10
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -217,8 +216,8 @@ function gameReducer(
                     const currentTile = state.tiles[tileId];
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
-                        if (previousTile?.value === currentTile.value) {
-                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
+                        if (previousTile?.value === currentTile.value && currentTile.value !== FINISH_SCORE) {
+                            score += 10
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -268,8 +267,8 @@ function gameReducer(
                     const currentTile = state.tiles[tileId];
 
                     if (!isNil(tileId) && !isNil(currentTile)) {
-                        if (previousTile?.value === currentTile.value) {
-                            score += currentTile.value === (FINISH_SCORE / 2) ? 15 : 5;
+                        if (previousTile?.value === currentTile.value && currentTile.value !== FINISH_SCORE) {
+                            score += 10
                             newTiles[previousTile.id] = {
                                 ...previousTile,
                                 value: previousTile.value * 2,
@@ -418,12 +417,6 @@ export function useGame(onWin, onLose) {
             onLose?.({isFromGame: true})
         }
     }, [gameState, onWin, onLose]);
-
-    useEffect(() => {
-        const finishTile =  getTiles().find(tile => tile?.value === FINISH_SCORE);
-        if (!finishTile) return;
-        setTimeout(() => dispatch({type: ACTIONS.DELETE_TILE, tile: finishTile}), DELETE_ANIMATION_DURATION);
-    }, [gameState.hasChanged])
 
     return result
 }

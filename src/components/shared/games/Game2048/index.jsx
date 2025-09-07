@@ -14,16 +14,16 @@ import { FlexWrapper } from "../../ContentWrapper";
 import { RulesModal } from "./RulesModal";
 import { CommonModal } from "../../modals/CommonModal";
 import { EndGameModal } from "../../modals/EndGameModal";
-import { LifeContainer } from "../parts/LifesContainer";
 import { SkipModal } from "../../modals/SkipModal";
 import { uid } from "uid";
 import { weekInfo } from "../../../../constants/weeksInfo";
+import { Bold } from "../../Spans";
 
 const WrapperInner = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: ${({$ratio}) => `calc(26px * ${$ratio})`};
+    margin: auto;
     padding: ${({$ratio}) => `0 calc(16px * ${$ratio}) calc(50px * ${$ratio})`};
 `
 
@@ -32,44 +32,38 @@ const Amount = styled.p`
     font-weight: 400;
 `;
 
-const LifeContainerStyled = styled(LifeContainer)`
-    margin: var(--spacing_x8) 0;
-`;
-
 const TRIES_AMOUNT = 3;
 
 export function Game2048({isFirst, lobbyScreen, day}) {
-    const {next, endGame } = useProgress()
+    const {next, endGame, setChallenges, challenges, patchData } = useProgress();
     const ratio = useSizeRatio();
     const [tries, setTries] = useState(TRIES_AMOUNT);
     const [isRulesModal, setIsRulesModal] = useState();
     const [isFirstMessage, setIsFirstMessage] = useState(isFirst);
     const [isSkipping, setIsSkipping] = useState(false);
     const [isEndModal, setIsEndModal] = useState({shown: false, title: ''});
-    const [isFinishModal, setIsFinishModal] = useState(false);
+    const [isCollegueModal, setIsCollegueModal] = useState(false);
+
     const isGameActive = useMemo(
-        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isFinishModal),
-        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isFinishModal],
+        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal),
+        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal],
     );
     const handleResultRef = useCallbackRef(handleResult);
     const timerRef = useRef(uid());
 
     const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 1).challengeCollegueMessage[day], [day]);
 
-    const {startGame, restartGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, TRIES_AMOUNT);
-
-    const handleRetry = () => {
-        setIsEndModal({shown: false});
-        timerRef.current = uid();
-        restartGame();
-    }
+    const {startGame, getTiles, moveTiles, score} = useGame(handleResultRef, handleResultRef, TRIES_AMOUNT);
 
     function handleResult({isFromGame}) {
         setIsEndModal({shown: true, title: isFromGame ? 'Закончились клетки!' : undefined});
         setTries(prev => prev - 1);
         //TODO: мб нужно будет перенести
         if (tries === 1) {
-            endGame({finishPoints: score, gameName: 'challenges', week: 1, day})
+            const changedUser = endGame({finishPoints: score, gameName: 'challenge', week: 1, day});
+            setChallenges(prev => prev.map((challenge, index) => index === 0 ? ({...challenge, [day]: score}): challenge));
+            const changedData = {challenges: challenges.map((challenge, index) => index === 0 ? ({...challenge, [day]: score}): challenge)}
+            patchData({changedUser, changedData})
         }
     }
 
@@ -77,10 +71,10 @@ export function Game2048({isFirst, lobbyScreen, day}) {
         startGame();
     }, []);
 
-    const handleCloseCollegue = () => {
+    const handleCloseEndModal = () => {
         setIsEndModal({shown: false});
-        setIsFinishModal(true);
-    };
+        setIsCollegueModal(true);
+    }
 
     return (
         <>
@@ -90,11 +84,9 @@ export function Game2048({isFirst, lobbyScreen, day}) {
                         initialTime={MAX_TIME} 
                         isStart={isGameActive} 
                         onFinish={() => handleResult({isFromGame: false})} 
-                        key={timerRef.current}
                     />
                     <Amount $ratio={ratio}>{score}</Amount>
                 </BackHeader>
-                <LifeContainerStyled lives={tries}/>
                 <GameController
                     active={isGameActive}
                     onMoveUp={() => moveTiles(ACTIONS.MOVE_UP)}
@@ -112,18 +104,17 @@ export function Game2048({isFirst, lobbyScreen, day}) {
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)}/>
             <CommonModal isOpen={isFirstMessage} btnText="Играть" onClose={() => setIsFirstMessage(false)}>
                 <p>
-                    Это игра в стиле «2048», нужно соединять одинаковые числа.{'\n\n'}
-                    За каждое соединение ты получаешь баллы, чем больше число — тем больше очков. Всё просто — удачи и вперёд в игру!
+                    <Bold>Соединяй плитки с одинаковыми числами и зарабатывай очки!</Bold>
+                </p>
+                <p>
+                    За каждое соединение{'\n'}ты получаешь баллы.{'\n'}<Bold>Твоя цель —</Bold> набрать как можно больше за ограниченное время!
                 </p>
             </CommonModal>
-            <CommonModal isOpen={isEndModal?.shown && tries === 0} isCollegue onClose={handleCloseCollegue}>
-                <p>{collegueMessage}</p>
+            <CommonModal isOpen={isCollegueModal} isCollegue onClose={() => next(lobbyScreen)} btnText="В комнату">
+                <p>{typeof collegueMessage === 'function' ? collegueMessage() : collegueMessage}</p>
             </CommonModal>
-            <CommonModal isOpen={isFinishModal} onClose={() => next(lobbyScreen)} btnText="В комнату">
-                <p>Сегодня с челленджем — всё.</p>
-            </CommonModal>
-            <SkipModal opened={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)}/>
-            <EndGameModal isOpen={isEndModal?.shown && tries > 0} onRetry={handleRetry} onClose={() => next(lobbyScreen)} title={isEndModal?.title}/>
+            <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)}/>
+            <EndGameModal isOpen={isEndModal?.shown} onClose={handleCloseEndModal} title={isEndModal?.title} points={score}/>
         </>
     )
 }
