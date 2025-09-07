@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { useProgress } from "../../../contexts/ProgressContext";
+import { CURRENT_WEEK, useProgress } from "../../../contexts/ProgressContext";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
-import { PersonIcon } from "../svg/PersonIcon";
 import { useState } from "react";
 
 const Content = styled(Block)`
@@ -120,7 +119,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
     const [isRefInfoModal, setIsRefInfoModal] = useState(false);
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
-    const { user, currentWeek, weekPoints, points } = useProgress();
+    const { user, weekPoints, totalPoints } = useProgress();
 
     const handleCopy = () => {
         const link = new URL(window.location.origin);
@@ -163,12 +162,12 @@ export const ProfileModal = ({isOpen, ...props}) => {
                 <PointsWrapper>
                     {user.isTargeted && (
                         <FlexBlock>
-                            <PointsInfo $ratio={ratio}>{weekPoints ?? 0}</PointsInfo>
+                            <PointsInfo $ratio={ratio}>{user[`week${CURRENT_WEEK}Points`] ?? 0}</PointsInfo>
                             <Text>Баллы{'\n'}за неделю</Text>
                         </FlexBlock>
                     )}
                     <FlexBlock>
-                        <PointsInfo $ratio={ratio}>{points ?? 0}</PointsInfo>
+                        <PointsInfo $ratio={ratio}>{totalPoints ?? 0}</PointsInfo>
                         <Text>Баллы{'\n'}за все время</Text>
                     </FlexBlock>
                 </PointsWrapper>

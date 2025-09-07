@@ -15,7 +15,6 @@ import { RulesModal } from "./RulesModal";
 import { CommonModal } from "../../modals/CommonModal";
 import { EndGameModal } from "../../modals/EndGameModal";
 import { SkipModal } from "../../modals/SkipModal";
-import { uid } from "uid";
 import { weekInfo } from "../../../../constants/weeksInfo";
 import { Bold } from "../../Spans";
 
@@ -35,9 +34,8 @@ const Amount = styled.p`
 const TRIES_AMOUNT = 3;
 
 export function Game2048({isFirst, lobbyScreen, day}) {
-    const {next, endGame, setChallenges, challenges, patchData } = useProgress();
+    const {next, endGame } = useProgress();
     const ratio = useSizeRatio();
-    const [tries, setTries] = useState(TRIES_AMOUNT);
     const [isRulesModal, setIsRulesModal] = useState();
     const [isFirstMessage, setIsFirstMessage] = useState(isFirst);
     const [isSkipping, setIsSkipping] = useState(false);
@@ -49,7 +47,6 @@ export function Game2048({isFirst, lobbyScreen, day}) {
         [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal],
     );
     const handleResultRef = useCallbackRef(handleResult);
-    const timerRef = useRef(uid());
 
     const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 1).challengeCollegueMessage[day], [day]);
 
@@ -57,14 +54,6 @@ export function Game2048({isFirst, lobbyScreen, day}) {
 
     function handleResult({isFromGame}) {
         setIsEndModal({shown: true, title: isFromGame ? 'Закончились клетки!' : undefined});
-        setTries(prev => prev - 1);
-        //TODO: мб нужно будет перенести
-        if (tries === 1) {
-            const changedUser = endGame({finishPoints: score, gameName: 'challenge', week: 1, day});
-            setChallenges(prev => prev.map((challenge, index) => index === 0 ? ({...challenge, [day]: score}): challenge));
-            const changedData = {challenges: challenges.map((challenge, index) => index === 0 ? ({...challenge, [day]: score}): challenge)}
-            patchData({changedUser, changedData})
-        }
     }
 
     useEffect(() => {
@@ -76,6 +65,12 @@ export function Game2048({isFirst, lobbyScreen, day}) {
         setIsCollegueModal(true);
     }
 
+    useEffect(() => {
+        if (isEndModal.shown) {
+            endGame({finishPoints: score, gameName: 'game2048', week: 1, day})
+        }
+    }, [isEndModal, score]);
+    
     return (
         <>
             <FlexWrapper>

@@ -60,6 +60,7 @@ const INITIAL_USER = {
     gameBasket: INITIAL_ACTIVITY_DATA,
     gamePuzzle: INITIAL_ACTIVITY_DATA,
     gameMoles: INITIAL_ACTIVITY_DATA,
+    readenLetters: INITIALS_LETTERS
 };
 
 const getMoscowTime = (date) => {
@@ -130,18 +131,17 @@ export function ProgressProvider(props) {
     const [isLoading, setIsLoading] = useState();
     const [currentScreen, setCurrentScreen] = useState();
     const [points, setPoints] = useState(INITIAL_STATE.points);
+    const [totalPoints, setTotalPoints] = useState(INITIAL_STATE.points);
     const [weekPoints, setWeekPoints] = useState(INITIAL_STATE.weekPoints);
     const [user, setUser] = useState(INITIAL_STATE.user);
     const [passedWeeks, setPassedWeeks] = useState(INITIAL_STATE.passedWeeks);
-    const [planners, setPlanners] = useState(INITIAL_STATE.planners);
-    const [challenges, setChallenges] = useState(INITIAL_STATE.challenges);
-    const [blenders, setBlenders] = useState(INITIAL_STATE.blenders);
-    const [readenLetter, setReadenLetter] = useState(INITIAL_STATE.readenLetter);
-    const [achievements, setAchievements] = useState(INITIAL_STATE.achievements);
-    const [findings, setFindings] = useState(INITIAL_STATE.findings);
-    const [drinks, setDrinks] = useState(INITIAL_STATE.drinks);
-    const [lifehacks, setLifehacks] = useState(INITIAL_STATE.lifehacks);
-    const [currentWeek, setCurrentWeek] = useState(CURRENT_WEEK);
+    // const [planners, setPlanners] = useState(INITIAL_STATE.planners);
+    // const [challenges, setChallenges] = useState(INITIAL_STATE.challenges);
+    // const [blenders, setBlenders] = useState(INITIAL_STATE.blenders);
+    // const [achievements, setAchievements] = useState(INITIAL_STATE.achievements);
+    // const [findings, setFindings] = useState(INITIAL_STATE.findings);
+    // const [drinks, setDrinks] = useState(INITIAL_STATE.drinks);
+    // const [lifehacks, setLifehacks] = useState(INITIAL_STATE.lifehacks);
     const [tgError, setTgError] = useState({isError: false, message: ''});
     const screen = screens[currentScreen];
   
@@ -151,9 +151,12 @@ export function ProgressProvider(props) {
 
     const setUserBdData = (record) => {
         recordId.current = record?.id;
-        const { data = {}} = record;
+        const { data = {}, scriptData = {}} = record;
 
         setUserInfo(data);
+        setTotalPoints(scriptData?.pointsTotal ?? data.points);
+        setPoints(data.points);
+        setWeekPoints(data[`week${CURRENT_WEEK}Points`]);
 
         if (!data.email) return;
 
@@ -228,42 +231,41 @@ export function ProgressProvider(props) {
 
     const loadRecord = () => {
         const webApp = window?.Telegram?.WebApp;
-      let webAppInitData = webApp?.initData;
-      let initData = WebApp.initData;
+        let webAppInitData = webApp?.initData;
+        let initData = WebApp.initData;
+        
+        if (window?.location?.hostname === 'localhost' || !!getUrlParam('screen')) {
+            return client.current.findRecord('id', DEV_ID);
+        } else {
+            console.log('webAppInitData', webAppInitData);
+        } 
+
+        if (
+            WebApp?.platform?.toLowerCase()?.includes('web') || WebApp?.platform?.toLowerCase()?.includes('desktop')
+            || webApp?.platform?.toLowerCase()?.includes('web') || webApp?.platform?.toLowerCase()?.includes('desktop')
+        ) {
+                isDesktop.current = true;
+
+                return;
+        }
     
-      // Для локалхоста задаём initData вручную
-      if (window?.location?.hostname === 'localhost' || !!getUrlParam('screen')) {
-        return client.current.findRecord('id', DEV_ID);
-      } else {
-        console.log('webAppInitData', webAppInitData);
-      } 
+        if (webAppInitData) {
+            return client.current.getTgRecord(webAppInitData);
+        } else if (initData) {
+            return client.current.getTgRecord(initData);
+        } else if (!window?.Telegram) {
+            console.error('Telegram не определен')
 
-      if (
-        WebApp?.platform?.toLowerCase()?.includes('web') || WebApp?.platform?.toLowerCase()?.includes('desktop')
-        || webApp?.platform?.toLowerCase()?.includes('web') || webApp?.platform?.toLowerCase()?.includes('desktop')
-    ) {
-            isDesktop.current = true;
+            throw new Error('Telegram не определен')
+        } else if (!window?.Telegram?.WebApp) {
+            console.error('Webapp не определен')
 
-            return;
-      }
-    
-      if (webAppInitData) {
-        return client.current.getTgRecord(webAppInitData);
-      } else if (initData) {
-        return client.current.getTgRecord(initData);
-      } else if (!window?.Telegram) {
-        console.error('Telegram не определен')
+            throw new Error('Webapp не определен')
+        } else {
+            console.error('В WebApp нет данных пользователя')
 
-        throw new Error('Telegram не определен')
-      } else if (!window?.Telegram?.WebApp) {
-        console.error('Webapp не определен')
-
-        throw new Error('Webapp не определен')
-      } else {
-        console.error('В WebApp нет данных пользователя')
-
-        throw new Error ('В WebApp нет данных пользователя');
-      }
+            throw new Error ('В WebApp нет данных пользователя');
+        }
     }
 
     const next = (customScreen) => {
@@ -281,41 +283,36 @@ export function ProgressProvider(props) {
     }
 
     const readWeekLetter = (week) => {
-        setReadenLetter(prev => ({...prev,[`week${week}`]: true}));
-
-        updateUser()
+        updateUser(({readenLetters: {...user.readenLetters, [`week${week}`]: true}})).catch(() => {});
     }
 
     const addDayFinding = (id) => {
-        updateUser(({findings: [...user.findings, id]}))
+        updateUser(({findings: [...user.findings, id]})).catch(() => {});
     }
     
-    const endPlanner = ({finishPoints, week, day}) => {
+    const endGame = async ({finishPoints, gameName, week, day}) => {
+        if (user[gameName][day].isCompleted) return;
+        
+        if (week === CURRENT_WEEK) {
+            setWeekPoints(prev => prev + finishPoints);
+        }
 
-    };
+        const endTimeMsc = getMoscowTime();
 
-    const endGame = ({finishPoints, gameName, week, day}) => {
-        // setPoints(prev => prev + finishPoints);
+        await updateUser(
+            {
+                [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
+                [gameName]: { ...user[gameName], [day]: {
+                    isCompleted: true,
+                    completedAt: endTimeMsc.toDateString() + ' ' + endTimeMsc.toTimeString(),
+                    points: finishPoints
+                }},
+                points: (user.points ?? 0) + finishPoints
+            }
+        );
 
-        // if (week === currentWeek) {
-        //     setWeekPoints(prev => prev + finishPoints);
-        // }
-
-        // const gameData = user[gameName] ?? INITIAL_ACTIVITY_DATA;
-
-        // const result = gameData.map((planner, index) => week - 1 === index ? ({...planner, [day]: finishPoints}) : planner);
-
-        // const userResult = {
-        //     points: points + finishPoints, 
-        //     [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
-        //     [`week${week}GamePoints`]: {
-        //         ...user[`week${week}GamePoints`],
-        //         [gameName]: finishPoints,
-        //     }
-        // };
-        // setUserInfo(userResult);
-
-        // return userResult;
+        const data = await loadRecord();
+        setTotalPoints(data?.scriptData.totalPoints);
     }
 
     const updateUser = async (changed) => {
@@ -324,15 +321,13 @@ export function ProgressProvider(props) {
         return patchData(changed);
     }
 
-    const patchData = async ({changedUser, changedData}) => {
+    const patchData = async (changed) => {
         if (!recordId.current) return;
         
-        // const changed = {...changedUser, gameData};
-
         try {
-            // const result = await client.current.patchRecord(user.recordId, changed);
+            const result = await client.current.patchRecord(recordId.current, changed);
 
-            // return result;
+            return result;
         } catch (e) {
             console.log(e);
 
@@ -340,7 +335,7 @@ export function ProgressProvider(props) {
         }
     }
 
-    const registrateUser = async (regData) => {
+    const registrateUser = async () => {
         const data = {
             ...user,
             achieves: [],
@@ -350,18 +345,17 @@ export function ProgressProvider(props) {
             points: 0,
             passedWeeks: [],
             id: uid(),
-            ...regData
         }
 
         setUser(data)
 
-           try {
-                const record = await client?.current.patchRecord(recordId.current, data);
+        try {
+            const record = await client?.current.patchRecord(recordId.current, data);
 
-                return record; 
-           } catch (e) {
-                return {isError: true}
-           }
+            return record; 
+        } catch (e) {
+            return {isError: true}
+        }
     };
 
     const checkEmailRegistrated = async (email) =>{
@@ -386,7 +380,7 @@ export function ProgressProvider(props) {
         endGame,
         updateUser,
         registrateUser,
-        // currentWeek,
+        totalPoints,
         readWeekLetter,
         addDayFinding,
         isLoading,

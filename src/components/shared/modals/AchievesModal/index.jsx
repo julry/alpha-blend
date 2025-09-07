@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { FlexWrapper } from "../../ContentWrapper";
 import { useState } from "react";
-import { IconButton } from "../../Button";
 import { RulesModal } from "../RulesModal";
 import { AchievementPart } from "./parts/AchievementPart";
 import { FindingPart } from "./parts/FindingPart";
@@ -23,13 +22,6 @@ const ContentWrapper = styled(FlexWrapper)`
     flex-grow: 1;
     max-height: calc(100% - ${({$ratio}) => $ratio * 96}px);
     min-height: calc(100% - ${({$ratio}) => $ratio * 96}px);
-`;
-
-const Header = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
 `;
 
 const ButtonsWrapper = styled.div`

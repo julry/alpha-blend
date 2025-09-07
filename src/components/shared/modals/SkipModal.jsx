@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Modal } from "./Modal";
 import { Block } from "../Block";
 import { Button } from "../Button";
-import { Title } from "../Title";
 import { Bold } from "../Spans";
 
 const ModalStyled = styled(Modal)`

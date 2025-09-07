@@ -12,7 +12,6 @@ const InfoBlock = styled.div`
     display: flex;
     align-items: center;
     gap: var(--spacing_x2);
-    margin-bottom: var(--spacing_x2);
 `;
 
 const Avatar = styled.div`
