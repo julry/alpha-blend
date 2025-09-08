@@ -1,8 +1,7 @@
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { PlanCard } from "./PlanCard";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { memo, useState } from "react";
-import './test.css';
 import { useTimer } from "../../../../hooks/useTimer";
 import { BLENDER_TIME } from "./constants";
 import { uid } from "uid";
@@ -10,6 +9,16 @@ import { drinks } from "../../../../constants/drinks";
 import blender from './assets/blender.png';
 import { AnimatePresence, motion } from "framer-motion";
 import { useDrop } from "react-dnd";
+
+const shake = keyframes`
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(2.5deg); }
+  75% { transform: rotate(-2.5deg); }
+`
+const bubble = keyframes`
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+`;
 
 const Wrapper = styled.div`
     position: absolute;
@@ -24,17 +33,14 @@ const Wrapper = styled.div`
 const IndigrientsPart = styled.div`
     position: absolute;
     z-index: 6;
-    height: ${({$ratio}) => $ratio * 114}px;
+    height: ${({$ratio}) => $ratio * 108}px;
     top: 0;
     left: 0;
     width: 85%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    /* grid-template-rows: repeat(3, 1fr); */
-    /* grid-template-columns: auto; */
-    /* grid-gap: ${({$ratio}) => $ratio * 2}px; */
     padding: var(--spacing_x1) 0;
     padding-top: ${({$ratio}) => $ratio * 8}px;
 `;
@@ -77,9 +83,6 @@ const LiquidWrapper = styled.div`
     z-index: 2;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
-    /* filter: blur(1px); */
-    /* clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%); */
-    
 `;
 
 const Liquid = styled.div`
@@ -87,10 +90,9 @@ const Liquid = styled.div`
     height: 75%;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
-    /* background: ${({$color}) => $color ?? 'var(--color-red)'}; */
     background: rgba(148, 190, 235, 0.65);
     filter: blur(8px);
-    animation: shake 1s ease-in-out infinite;
+    animation: ${shake} 1s ease-in-out infinite;
     clip-path: polygon(0 0, 100% 0, 93% 100%, 7% 100%);
 `
 
@@ -110,8 +112,8 @@ position: absolute;
     border-radius: 50%;
     bottom: 20%;
     left: ${({$left}) => $left - 10}%;
-    animation: bubble 1s ease-in infinite;
-    animation-delay: ${({$left}) => ($left - 20) / 20}s;
+    animation: ${bubble} 1s ease-in infinite;
+    animation-delay: ${({$left}) => $left / 400}s;
 }
 
  &::after {
@@ -121,10 +123,10 @@ position: absolute;
   height: 3px;
   background: rgba(255, 255, 255, 1);
   border-radius: 50%;
-  bottom: 15%;
-  left: ${({$left}) => $left + 10}%;
-  animation: bubble 1.2s ease-in infinite;
-  animation-delay: ${({$left}) => ($left - 20) / 20}s;
+  bottom: ${({$left}) => $left - 5 * Math.random()}%;
+  left: ${({$left}) => $left + 10 * Math.random()}%;
+  animation: ${bubble}  1.2s ease-in infinite;
+  animation-delay: ${({$left}) => $left / 600}s;
 }`
 
 const ErrorSign = styled(motion.div)`
@@ -136,9 +138,9 @@ const ErrorSign = styled(motion.div)`
     width: ${({$ratio}) => $ratio * 50}px;
 `;
 
-export const BlenderObject = memo(({cards = [], onDrop, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
+export const BlenderObject = memo(({cards = [], onDrop, buttonChildren, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
     const ratio = useSizeRatio();
-    const [isBlendering, setIsBlendering] = useState(true);
+    const [isBlendering, setIsBlendering] = useState(false);
     const [drink, setDrink] = useState();
     const [timerId, setTimerId] = useState();
     const [isError, setIsError] = useState(false);
@@ -208,7 +210,9 @@ export const BlenderObject = memo(({cards = [], onDrop, isStopped, onCardClick, 
                     </LiquidWrapper>
                 )} 
             </IndigrientsPart>
-            <ButtonPart onClick={handleBlenderClick} />
+            <ButtonPart onClick={handleBlenderClick}>
+                {typeof buttonChildren === 'function' ? buttonChildren() : buttonChildren}
+            </ButtonPart>
         </Wrapper>
     )
 });

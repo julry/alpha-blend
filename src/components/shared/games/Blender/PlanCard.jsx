@@ -20,7 +20,7 @@ const Icon = styled.img`
     flex-shrink: 0;
 `;
 
-export const PlanCard = ({ className, card, onClick }) => {
+export const PlanCard = ({ className, card, children, onClick }) => {
     const ratio = useSizeRatio();
     const shownCard = card?.img ? card : ingridients.find((ing) => ing.id === card?.id);
 
@@ -37,6 +37,7 @@ export const PlanCard = ({ className, card, onClick }) => {
                 alt={id} 
                 $ratio={ratio}
             />
+            {children}
         </Wrapper>
     )
 };

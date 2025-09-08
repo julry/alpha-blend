@@ -11,7 +11,6 @@ const Wrapper = styled(motion.div)`
     padding: ${({ $ratio }) => $ratio * 4}px;
     padding-right: ${({ $ratio }) => $ratio * 12}px;
     border-radius: var(--border-radius-sm);
-    border: 1px solid red;
 `;
 
 const TimeLine = styled(motion.div)`

@@ -13,10 +13,6 @@ const Wrapper = styled(FlexWrapper)`
 `;
 
 export const WaitingGameScreen = () => {
-    const { currentWeek } = useProgress();
-    const [stage, setStage] = useState(0);
-    const {next} = useProgress();
-
     return (
         <Wrapper>
             <Block>
@@ -27,7 +23,6 @@ export const WaitingGameScreen = () => {
                     Скоро старт игры — следи за уведомлениями в <Bold>TG-боте</Bold>.
                 </p>
             </Block>
-            {currentWeek > 0 && (<Button onClick={() => stage < 1 ? setStage(prev => prev + 1) : next()}>Далее</Button>)}
         </Wrapper>
     )
 };

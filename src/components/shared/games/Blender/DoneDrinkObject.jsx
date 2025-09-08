@@ -21,7 +21,7 @@ const StyledPreview = styled(Wrapper)`
   z-index: 1000;
 `;
 
-export const DoneDrinkOject = ({ drink }) => {
+export const DoneDrinkOject = ({ drink, className }) => {
     const ratio = useSizeRatio()
     const [{isDragging}, drag] = useDrag({
         type: 'DRINK',
@@ -55,7 +55,7 @@ export const DoneDrinkOject = ({ drink }) => {
     }
 
     return (
-        <Wrapper $size={ratio * drink.size} ref={drag}>
+        <Wrapper className={className} $size={ratio * drink.size} ref={drag}>
             <Image src={drink.openedPic} alt={drink.title} />
         </Wrapper>
     )

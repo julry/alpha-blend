@@ -17,15 +17,30 @@ export const ingridients = [
         isBased: true,
         img: banana,
     },
+     {
+        id: 'pineapple',
+        isBased: true,
+        img: ananas,
+    },
+    {
+        id: 'mint',
+        isBased: true,
+        img: mint,
+    },
+    {
+        id: 'strawberry',
+        isBased: true,
+        img: strawberry,
+    },
     {
         id: 'orange',
         isBased: true,
         img: orange,
     },
     {
-        id: 'mint',
+        id: 'lemon',
         isBased: true,
-        img: mint,
+        img: lemon,
     },
      {
         id: 'apple',
@@ -33,19 +48,14 @@ export const ingridients = [
         img: apple,
     },
     {
+        id: 'matcha',
+        isBased: false,
+        img: matcha,
+    },
+    {
         id: 'ice',
         isBased: true,
         img: ice,
-    },
-    {
-        id: 'coconut',
-        isBased: true,
-        img: coconut,
-    },
-     {
-        id: 'strawberry',
-        isBased: true,
-        img: strawberry,
     },
     {
         id: 'blackberry',
@@ -53,23 +63,13 @@ export const ingridients = [
         img: blackberry,
     },
     {
-        id: 'pineapple',
+        id: 'coconut',
         isBased: true,
-        img: ananas,
-    },
-    {
-        id: 'lemon',
-        isBased: true,
-        img: lemon,
+        img: coconut,
     },
     {
         id: 'pear',
         isBased: false,
         img: pear,
-    },
-    {
-        id: 'matcha',
-        isBased: false,
-        img: matcha,
     },
 ]

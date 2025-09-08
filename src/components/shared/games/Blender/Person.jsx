@@ -44,27 +44,7 @@ const PointsStyled = styled(Points)`
     transform: translateX(-50%);
 `;
 
-const DropHead = styled.div`
-    position: absolute;
-    border: 1px solid red;
-    left: ${({ $headLeft, $ratio }) => $headLeft * $ratio}px;
-    top: ${({ $headTop, $ratio }) => $headTop * $ratio}px;
-    width: ${({ $headWidth, $ratio }) => $headWidth * $ratio}px;
-    height: ${({ $headHeight, $ratio }) => $headHeight * $ratio}px;
-    z-index: 10;
-`;
-
-const DropBody = styled.div`
-    position: absolute;
-    border: 1px solid red;
-    left: ${({ $bodyLeft, $ratio }) => $bodyLeft * $ratio}px;
-    top: ${({ $bodyTop, $ratio }) => $bodyTop * $ratio}px;
-    width: ${({ $bodyWidth, $ratio }) => $bodyWidth * $ratio}px;
-    height: ${({ $bodyHeight, $ratio }) => $bodyHeight * $ratio}px;
-    z-index: 10;
-`;
-
-export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, isFinished, queueAmount, friendId, personId, drink, onEndTimer, onGetDrink, points, position = 'center' }) => {
+export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, isFinished, queueAmount, friendId, personId, drink, onEndTimer, onGetDrink, points, hideInfo, position = 'center' }) => {
     const ratio = useSizeRatio();
     const controls = useAnimation();
     const controlsInfo = useAnimation();
@@ -84,7 +64,7 @@ export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, is
     const handleDrop = (item) => {
         if (isFinishedPerson.current) return;
 
-        if (drink !== item.id || ingridients.length !== item.ingridientsAmount) {
+        if (!hideInfo && (drink !== item.id || ingridients.length !== item.ingridientsAmount)) {
             controlsInfo.start({
                 rotate: [-10, 10, 0], transition: {
                     repeat: 3,
@@ -107,14 +87,6 @@ export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, is
         drop: handleDrop,
     }), []);
 
-    const [, dropHead] = useDrop(() => ({
-        accept: 'DRINK',
-        collect: monitor => ({
-            hovered: monitor.canDrop() && monitor.isOver(),
-        }),
-        drop: handleDrop,
-    }), []);
-
     const timeColor = useMemo(() => {
         if (time < personTime / 3) {
             return 'var(--color-red)';
@@ -123,7 +95,7 @@ export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, is
             return '#D7E02A'
         }
 
-        return '#30E301'
+        return '#30E301';
     }, [time]);
 
     useEffect(() => {
@@ -147,15 +119,15 @@ export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, is
             height={person.height} 
             $position={position}
             initial={{
-                opacity: 0,
-                height: 0,
+                opacity: hideInfo ? 1 : 0,
+                height: hideInfo ? ratio * person.height + 'px' : 0,
             }}
-            animate={{ opacity: 1, height: ratio * person.height + 'px' }}
-            exit={{ opacity: 0, height: 0 }}
+            animate={hideInfo ? {} : { opacity: 1, height: ratio * person.height + 'px' }}
+            exit={hideInfo ? {} : { opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
         >
             <Image src={person.pic} alt="friend" />
-            {!isFinished && (
+            {!isFinished && !hideInfo && (
                 <Info ingridients={ingridients} controls={controls} controlsInfo={controlsInfo}/>
             )}
             <PointsStyled $ratio={ratio} isShown={points > 0} shownPoints={points} />

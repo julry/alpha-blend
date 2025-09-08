@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useProgress } from "../../../../contexts/ProgressContext";
 import { getPersonsArray } from "./utils";
-import { LEVEL_TO_PEOPLE_AMOUNT, LEVEL_TO_PROBABILITY } from "./constants";
+import { LEVEL_TO_PEOPLE_AMOUNT, LEVEL_TO_INGREDIENTS_PROBABILITY, LEVEL_TO_PEOPLE_PROBABILITY } from "./constants";
 import { ingridients } from "../../../../constants/ingridients";
 import { uid } from "uid";
+import { drinks } from "../../../../constants/drinks";
 
 const POSITIONS = ['center', 'right', 'left'];
 
-export const useGame = ({lobbyScreen, isNeverPlayed}) => {
+export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
     const { next } = useProgress();
     const [isRules, setIsRules] = useState(false);
     const [isFirstRules, setIsFirstRules] = useState(isNeverPlayed);
-    const [level, setLevel] = useState(+(!isNeverPlayed));
+    const [isFirstRules2, setIsFirstRules2] = useState(isNeverPlayed2);
     const [points, setPoints] = useState(0);
     const [blenderCards, setBlenderCards] = useState([]);
     const [comingFriends, setComingFriends] = useState([]);
@@ -23,25 +24,34 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     const [queue, setQueue] = useState(1);
     const [doneDrinks, setDoneDrinks] = useState([]);
     const [maxQueue, setMaxQueue] = useState(1);
-    const [passedLevel, setPassedLevel] = useState();
     const [lives, setLives] = useState(3);
     const [restartModal, setRestartModal] = useState(false);
-    const [isTraining, setIsTraining] = useState(false);
-    const [isFinishTraining, setIsFinishTraining] = useState(false);
     const [blenderDrop, setBlenderDrop] = useState(false);
+    const [peopleAmount, setPeopleAmount] = useState(0);
 
     const correctAmount = useRef(0);
     const shownAmount = useRef(0);
 
-    const shownCards = level > 1 ? ingridients : ingridients.filter(({isBased}) => isBased);
+    const shownCards = week > 2 ? ingridients : ingridients.filter(({isBased}) => isBased);
 
     const handleBack = () => {
         next(lobbyScreen);
     };
 
     const getFriends = () => {
-        const checkLevel = level > 0 ? level : 1;
-        const {friends, maxQueue} = getPersonsArray({isBased: level < 3, peopleAmount: LEVEL_TO_PEOPLE_AMOUNT[checkLevel], maxSize: checkLevel, ingridientsProbability: LEVEL_TO_PROBABILITY[checkLevel]});
+        if ((isFirstRules || isFirstRules2)) {
+            const friend = {
+                queue: 1,
+                drink: drinks[0].id,
+                person: 'girl0',
+                ingridients: ['mint', 'orange'],
+            };
+            setMaxQueue(1);
+            setComingFriends([friend]);
+            
+            return friend;
+        } 
+        const {friends, maxQueue} = getPersonsArray({isBased: week < 3, peopleAmount: LEVEL_TO_PEOPLE_AMOUNT[week], maxSize: LEVEL_TO_PEOPLE_PROBABILITY[week], ingridientsProbability: LEVEL_TO_INGREDIENTS_PROBABILITY[week]});
         setMaxQueue(maxQueue);
         setComingFriends(friends);
 
@@ -49,10 +59,10 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     }
 
     useEffect(() => {
-        if (isFirstRules && level === 0) return;
+        if ((isFirstRules || isFirstRules2)) return;
         
         getFriends();
-    }, [level]);
+    }, []);
 
     useEffect(() => {
         const shown = comingFriends.filter((friend) => friend.queue === queue);
@@ -63,15 +73,11 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     }, [queue, comingFriends])
 
 
-    const handleNext = () => {
-        setLevel(prev => prev + 1);
-        setQueue(1);
-        setPassedLevel();
-    }
-
     const handleChangePerson = () => {
         if (maxQueue === queue) {
-            setPassedLevel(level);
+            //finishGame
+            console.log('points', points);
+            // setIsFinishModal();
             return;
         }
 
@@ -79,10 +85,6 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     }
 
     const handleResetBlender = () => setBlenderCards([]);
-    // useEffect(() => {
-    //     //TODO: сделать пойнты
-    //     setIsCollegue(true)
-    // }, [commonAmount]);
 
     const handleShowFinding = () => {
         setIsFinishModal(true);
@@ -90,17 +92,12 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
     };
 
     const handleShowFinish = () => {
-        setPassedLevel();
         setDoneDrinks([]);
         setBlenderCards([]);
         setIsFinishModal(true);
     };
 
     const handleClickCard = (card) => {
-        if (isFirstRules && !isTraining) return;
-        if (isFirstRules && isTraining) {
-            setIsFirstRules(false);
-        }
         if (blenderCards.length > 2 || blenderCards.find((({id}) => card.id === id))) return;
 
         setBlenderCards(prev => [...prev, card]);
@@ -112,22 +109,24 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
 
     const handleRestart = () => {
         setRestartModal(false);
-        setLevel(1);
         setQueue(1);
         setDoneDrinks([]);
         setPoints(0);
     }
 
     const handleBlenderStop = (drink) => {
-        if (doneDrinks.length > 1) {
-            if (lives === 1) {
-                // endGame,
-            }
-            setLives(prev => prev - 1); 
-            setRestartModal(true);
-        } else {
+        console.log('shownFriends', shownFriends);
+        console.log('drink', drink);
+        // if (doneDrinks.length > 1) {
+        //     // добавить проверку на подходящие напитки для остальных
+        //     // if (lives === 1) {
+        //     //     // endGame,
+        //     // }
+        //     // setLives(prev => prev - 1); 
+        //     // setRestartModal(true);
+        // } else {
             setDoneDrinks(prev => [...prev, drink]);
-        }
+        // }
 
         setBlenderCards([]);
     }
@@ -138,25 +137,16 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         
         setTimeout(() => {
             setShownFriends(prev => prev.filter((friend) => friend.id !== personId));
+            setPeopleAmount(prev =>prev + 1);
             shownAmount.current -= 1;
-            if (shownAmount.current === 0 && !isTraining) {
+            if (shownAmount.current === 0) {
                 handleChangePerson();
             }
         }, timer ?? 500);
     }
 
-    const handleTrainingDrop = ({doneDrink, personId}) => {
-        let tryPoints = 10;
-
-        setDoneDrinks(prev => prev.filter(drink => drink.id !== doneDrink.id));
-        setShownFriends(prev => prev.map((friend) => friend.id === personId ? ({...friend, isFinished: true, points: tryPoints}) : friend));
-
-        setTimeout(() => {
-            setShownFriends([]);
-            setIsTraining(false);
-            setIsFirstRules(true);
-            setIsFinishTraining(true);
-        }, 400)
+    const handleFinishTraining = () => {
+        setShownFriends([]);
     };
 
     const handleDropDrink = ({doneDrink, personId, isFinished}) => {
@@ -199,11 +189,11 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         setIsRules,
         setIsFirstRules,
         setIsSkipping,
-        handleNext,
         handleEndGame,
         getFriends,
-        setIsTraining,
         handleClickCard,
+        setIsFirstRules2,
+        handleFinishTraining
     };
 
     const modalsState = {
@@ -215,23 +205,22 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         isFinding,
         restartModal,
         shownCards,
-        isFinishTraining,
+        isFirstRules2
     }
 
-    const isPausedTraining = (isTraining && blenderCards < 1);
-    const isFirstRulesModals = (isFirstRules && !isTraining);
+    // const isPausedTraining = (isTraining && blenderCards < 1);
+    // const isFirstRulesModals = (isFirstRules && !isTraining);
 
-    const isFirstPause = isPausedTraining || isFirstRulesModals;
+    // const isFirstPause = isPausedTraining || isFirstRulesModals;
 
     return {
         isPaused: true,
-        // isPaused: isRules || isSkipping || passedLevel !== undefined || restartModal || isFirstPause,
+        // isPaused: isRules || isSkipping || restartModal || isFirstRules,
         handleEndTimer,
         handleDropDrink,
         handleBlenderStop,
         handleClickBlenderCard,
         handleClickCard,
-        handleTrainingDrop,
         points,
         shownFriends,
         blenderCards,
@@ -242,9 +231,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed}) => {
         doneDrinks,
         handleBack,
         handleResetBlender,
-        passedLevel,
-        isTraining,
         blenderDrop, 
         setBlenderDrop,
+        peopleAmount,
     }
 }

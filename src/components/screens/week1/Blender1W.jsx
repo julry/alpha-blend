@@ -16,6 +16,8 @@ export const Blender1W = () => {
             collegueMessage={collegueMessage} 
             levelMessages={levelMessages} 
             drinkInfo={drinkInfo}
+            isNeverPlayed2
+            week={1}
         />
     )
 }

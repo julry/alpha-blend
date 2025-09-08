@@ -24,6 +24,15 @@ const IconButtonStyled = styled(IconButton)`
     user-select: none;
 `;
 
+const CommonModalStyled = styled(CommonModal)`
+    background: 'rgba(36, 38, 50, 0.4)';
+    backdrop-filter: blur(3px);
+
+    @supports not (backdrop-filter: blur(3px)) {
+        background: 'rgba(36, 38, 50, 0.7)';
+    }
+`
+
 export const IntroRules = () => {
     const [part, setPart] = useState(0);
     const { user, next, updateUser } = useProgress();
@@ -92,13 +101,13 @@ export const IntroRules = () => {
     return (
         <>
             <Lobby hideTips isLaptop={part === 4} isLaptopLetter={part === 4} onLaptopClick={handleNext} plannerScreen={SCREENS.PLANNER1M}/>
-            <CommonModal
+            <CommonModalStyled
                 isOpen={part < 4}
                 isDisabledAnimation={part !== 0}
                 onClose={handleNext}
             >
                 {getText()}
-            </CommonModal>
+            </CommonModalStyled>
             {part === 4 && (
                 <ButtonStyled onClick={handleNext}>
                     Далее

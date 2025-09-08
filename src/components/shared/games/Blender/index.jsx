@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import bgBlender from '../../../../assets/images/blenderBg.png';
+import table from '../../../../assets/images/table.png';
 import { MouseTransition, TouchTransition, DndProvider } from 'react-dnd-multi-backend';
 import { FlexWrapper } from "../../ContentWrapper";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
@@ -14,15 +16,23 @@ import { AnimatePresence } from "framer-motion";
 import { useGame } from "./useGame";
 import { ModalsPart } from "./ModalsPart";
 import { CardsField } from "./CardsField";
+import { MIN_MOCKUP_WIDTH } from "../../../ScreenTemplate";
+import { LEVEL_TO_PEOPLE_AMOUNT } from "./constants";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
     height: 100%;
+    background: url(${bgBlender}) no-repeat 0 100% /cover;
+
+    @media screen and (min-width: 350px) and (max-width: ${MIN_MOCKUP_WIDTH}px){
+        background-position-y: 78%;
+    }
 `
 
 const Amount = styled.p`
     font-size: ${({ $ratio }) => $ratio * 23}px;
     font-weight: 400;
+    color: white;
 `;
 
 const Table = styled.div`
@@ -32,7 +42,7 @@ const Table = styled.div`
     z-index: 7;
     width: 100%;
     height: ${({ $ratio }) => $ratio * 172}px;
-    background: gray no-repeat center center / cover;
+    background: url(${table}) no-repeat center center / cover;
 `;
 
 const BlenderShadow = styled.div`
@@ -57,7 +67,7 @@ const DoneDrinksWrapper = styled.div `
     z-index: 12;
 `;
 
-export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbyScreen, levelMessages }) => {
+export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, lobbyScreen, isNeverPlayed2 }) => {
     const ratio = useSizeRatio();
     const {
         isPaused,
@@ -75,13 +85,11 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
         modalsState,
         lives,
         doneDrinks,
-        passedLevel,
         handleBack,
-        handleTrainingDrop,
-        isTraining,
         blenderDrop,
         setBlenderDrop,
-    } = useGame({isNeverPlayed, lobbyScreen});
+        peopleAmount
+    } = useGame({isNeverPlayed, lobbyScreen, isNeverPlayed2, week});
 
 
      const HTML5toTouch = {
@@ -100,11 +108,11 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
         ],
     };
 
-
     return (
         <>
             <Wrapper>
                 <BackHeader onBack={() => modalFuncs.setIsSkipping(true)} onInfoClick={() => modalFuncs.setIsRules(true)}>
+                    <Amount $ratio={ratio}>{peopleAmount}/{LEVEL_TO_PEOPLE_AMOUNT[week]}</Amount>
                     <Amount $ratio={ratio}>{points}</Amount>
                 </BackHeader>
                 <LifeContainer lives={lives}/>
@@ -122,14 +130,14 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                     <AnimatePresence>
                         {shownFriends.map((friend) => (
                             <Person 
-                                key={`person_${friend.id}_${friend.drink}_${isTraining}`}
+                                key={`person_${friend.id}_${friend.drink}`}
                                 ingridients={friend.ingridients} 
                                 queueAmount={friend.queueAmount}
                                 personId={friend.person} 
                                 friendId={friend.id} 
                                 drink={friend.drink}
                                 position={friend.position}
-                                onGetDrink={isTraining ? handleTrainingDrop : handleDropDrink}
+                                onGetDrink={handleDropDrink}
                                 onEndTimer={handleEndTimer}
                                 isStopped={isPaused}
                                 isFinished={friend.isFinished}
@@ -153,10 +161,8 @@ export const BlenderGame = ({ isNeverPlayed, collegueMessage, drinkInfo, lobbySc
                 modalsFunc={modalFuncs}
                 modalsState={modalsState} 
                 onGoLobby={handleBack}
-                passedLevel={passedLevel}
                 drinkInfo={drinkInfo} 
                 collegueMessage={collegueMessage} 
-                levelMessages={levelMessages}
             />
         </>
 

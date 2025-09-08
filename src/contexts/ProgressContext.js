@@ -102,7 +102,7 @@ const getCurrentDay = () => {
     }
 }
 
-export const CURRENT_WEEK = 1;
+export const CURRENT_WEEK = getCurrentWeek();
 
 export const CURRENT_DAY = getCurrentDay();
 
@@ -233,7 +233,7 @@ export function ProgressProvider(props) {
         const webApp = window?.Telegram?.WebApp;
         let webAppInitData = webApp?.initData;
         let initData = WebApp.initData;
-        
+
         if (window?.location?.hostname === 'localhost' || !!getUrlParam('screen')) {
             return client.current.findRecord('id', DEV_ID);
         } else {
@@ -292,7 +292,7 @@ export function ProgressProvider(props) {
     
     const endGame = async ({finishPoints, gameName, week, day}) => {
         if (user[gameName][day].isCompleted) return;
-        
+
         if (week === CURRENT_WEEK) {
             setWeekPoints(prev => prev + finishPoints);
         }
@@ -331,11 +331,11 @@ export function ProgressProvider(props) {
         } catch (e) {
             console.log(e);
 
-            return { isEror: true };
+            return { isError: true };
         }
     }
 
-    const registrateUser = async () => {
+    const registrateUser = async (args) => {
         const data = {
             ...user,
             achieves: [],
@@ -345,9 +345,10 @@ export function ProgressProvider(props) {
             points: 0,
             passedWeeks: [],
             id: uid(),
+            ...args,
         }
 
-        setUser(data)
+        setUser(data);
 
         try {
             const record = await client?.current.patchRecord(recordId.current, data);

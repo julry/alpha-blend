@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-// import { uid } from "uid";
-import { useProgress } from "../../contexts/ProgressContext";
+import { CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext";
 import { faculties, universities } from "../../constants/universities";
 import windowPic from '../../assets/images/window.png';
 import { Button } from "../shared/Button";
@@ -104,7 +103,7 @@ const Blur = styled.div`
 `;
 
 export const Registration1 = () => {
-    const { next, checkEmailRegistrated, registrateUser, currentWeek } = useProgress();
+    const { next, checkEmailRegistrated, registrateUser } = useProgress();
     const [univ, setUniv] = useState({});
     const [fac, setFac] = useState({});
     const [name, setName] = useState('');
@@ -143,8 +142,8 @@ export const Registration1 = () => {
             universityId: univ.id, 
             isAddsAgreed: isMailsAgreed,
             faculty: fac.name !== 'Другое' ? fac.name : '', 
-            facultyId: fac.id !== 'other' ? fac.id : undefined,
-            isTargeted: !!fac && fac !== 'Другое'
+            facultyId: fac.name !== 'Другое' ? fac.id : undefined,
+            isTargeted: fac.id !== undefined && fac.name !== 'Другое'
         });
 
         setIsSending(false);
@@ -154,7 +153,7 @@ export const Registration1 = () => {
             return;
         }
 
-        if (currentWeek < 1) {
+        if (CURRENT_WEEK < 1) {
             next(SCREENS.WAITING);
 
             return;

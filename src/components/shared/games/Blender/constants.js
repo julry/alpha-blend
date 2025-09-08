@@ -18,77 +18,87 @@ export const MAX_TIME = 1 * 60 + 30;
 
 export const BLENDER_TIME = 2;
 export const QUEUE_TO_PERSON_TIME = {
-    1: 10,
-    2: 18,
-    3: 25,
+    1: 15,
+    2: 15,
+    3: 16,
 }
 
-//TODO: доделать 
 export const persons = [
     {
         id: 'girl0',
         pic: girl0,
-        width: 195,
-        height: 292,
-        bottom: 75,
-        headLeft: 30,
-        headTop: 0,
-        headWidth: 97,
-        headHeight: 89,
-        bodyLeft: 30,
-        bodyTop: 89,
-        bodyWidth: 106,
-        bodyHeight: 89,
+        width: 132,
+        height: 285,
+        bottom: 82,
     },
     {
         id: 'girl1',
         pic: girl1,
-        width: 186,
-        height: 279,
-        bottom: 78,
-        headLeft: 30,
-        headTop: 0,
-        headWidth: 97,
-        headHeight: 89,
-        bodyLeft: 30,
-        bodyTop: 89,
-        bodyWidth: 106,
-        bodyHeight: 89,
+        width: 154,
+        height: 290,
+        bottom: 59,
     },
     {
         id: 'man0',
         pic: man0,
-        width: 174,
-        height: 260,
-        bottom: 133,
-         headLeft: 30,
-        headTop: 0,
-        headWidth: 97,
-        headHeight: 89,
-        bodyLeft: 30,
-        bodyTop: 89,
-        bodyWidth: 106,
-        bodyHeight: 89,
+        width: 172,
+        height: 280,
+        bottom: 109,
     },
 ]
 
 export const LEVEL_TO_PEOPLE_AMOUNT = {
-    1: 6,
+    1: 8,
     2: 10,
-    3: 14,
+    3: 12,
+    4: 15,
 }
 
-export const LEVEL_TO_PROBABILITY = {
+export const LEVEL_TO_SIZE_PROBABILITY = {
+    1: 2,
+    2: 3,
+    3: 3,
+    4: 3,
+}
+
+export const LEVEL_TO_PEOPLE_PROBABILITY = {
+    1: {
+        p1: 0.6,
+        p2: 0.4,
+        p3: 0
+    },
+    2: {
+        p1: 0,
+        p2: 0.7,
+        p3: 0.3
+    },
+    3: {
+        p1: 0,
+        p2: 0.3,
+        p3: 0.7
+    },
+    4: {
+        p1: 0,
+        p2: 0,
+        p3: 1,
+    }
+}
+
+export const LEVEL_TO_INGREDIENTS_PROBABILITY = {
     1: {
         p1: 1,
         p2: 0
     },
     2: {
-        p1: 0.8,
-        p2: 0.2
+        p1: 1,
+        p2: 0
     },
     3: {
-        p1: 0.4,
-        p2: 0.6
+        p1: 0.5,
+        p2: 0.5
+    },
+    4: {
+        p1: 0,
+        p2: 1,
     }
 }

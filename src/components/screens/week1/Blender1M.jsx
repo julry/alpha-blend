@@ -17,6 +17,7 @@ export const Blender1M = () => {
             levelMessages={levelMessages} 
             drinkInfo={drinkInfo}
             isNeverPlayed
+            week={1}
         />
     )
 }
