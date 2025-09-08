@@ -67,7 +67,7 @@ const DoneDrinksWrapper = styled.div `
     z-index: 12;
 `;
 
-export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, lobbyScreen, isNeverPlayed2 }) => {
+export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, lobbyScreen, isNeverPlayed2, isDelayed=true }) => {
     const ratio = useSizeRatio();
     const {
         isPaused,
@@ -89,7 +89,7 @@ export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, l
         blenderDrop,
         setBlenderDrop,
         peopleAmount
-    } = useGame({isNeverPlayed, lobbyScreen, isNeverPlayed2, week});
+    } = useGame({isNeverPlayed, lobbyScreen, isNeverPlayed2, week, isDelayed});
 
 
      const HTML5toTouch = {

@@ -1,13 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useGame } from './useGame copy2';
+import { useGame } from './useGame';
 
-const BasketballGame = () => {
-  const [currentScore, setCurrentScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
-  const [showCurrentBest, setShowCurrentBest] = useState(false);
-
-  // Функция для предзагрузки изображений
-  const {gameContainerRef} = useGame();
+const WorkBasketballGame = () => {
+  const {gameContainerRef, showCurrentBest, currentScore} = useGame();
 
   return (
     <div style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
@@ -65,4 +59,4 @@ const BasketballGame = () => {
   );
 };
 
-export default BasketballGame;
+export default WorkBasketballGame;

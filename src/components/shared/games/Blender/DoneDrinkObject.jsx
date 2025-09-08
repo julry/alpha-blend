@@ -22,7 +22,8 @@ const StyledPreview = styled(Wrapper)`
 `;
 
 export const DoneDrinkOject = ({ drink, className }) => {
-    const ratio = useSizeRatio()
+    const ratio = useSizeRatio();
+    //TODO: отдаются оба, тянется последний
     const [{isDragging}, drag] = useDrag({
         type: 'DRINK',
         item: () => {

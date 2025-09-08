@@ -130,7 +130,7 @@ export const FirstRulesModal = ({ isOpen, modalsFuncs, modalsState }) => {
     }
 
     const handleStartGame = () => {
-        // modalsFuncs.setIsFirstRules2(false);
+        // modalsFuncs.setIsFirstRules(false);
         // modalsFuncs.handleRestart();
     }
 

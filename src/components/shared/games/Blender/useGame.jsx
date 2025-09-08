@@ -8,7 +8,7 @@ import { drinks } from "../../../../constants/drinks";
 
 const POSITIONS = ['center', 'right', 'left'];
 
-export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
+export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week, isDelayed}) => {
     const { next } = useProgress();
     const [isRules, setIsRules] = useState(false);
     const [isFirstRules, setIsFirstRules] = useState(isNeverPlayed);
@@ -28,6 +28,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
     const [restartModal, setRestartModal] = useState(false);
     const [blenderDrop, setBlenderDrop] = useState(false);
     const [peopleAmount, setPeopleAmount] = useState(0);
+    const [isEndModal, setIsEndModal] = useState({isShown: false});
 
     const correctAmount = useRef(0);
     const shownAmount = useRef(0);
@@ -62,22 +63,26 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
         if ((isFirstRules || isFirstRules2)) return;
         
         getFriends();
-    }, []);
+    }, [lives]);
 
     useEffect(() => {
         const shown = comingFriends.filter((friend) => friend.queue === queue);
         const friends = shown.map((friend, index) => ({...friend, id: `${friend.person}_${uid()}`, position: POSITIONS[index], queueAmount: shown.length}));
-        setShownFriends(friends);
+        if (queue > 1 && isDelayed) {
+            for (let i = 0; i < friends.length; i++) {
+                setTimeout(() => {
+                    setShownFriends(prev => [...prev, friends[i]]);
+                }, (i + 1) * 1500);
+            }
+        } else {
+            setShownFriends(friends);
+        }
 
         shownAmount.current = friends.length;
-    }, [queue, comingFriends])
-
+    }, [queue, comingFriends, isDelayed])
 
     const handleChangePerson = () => {
         if (maxQueue === queue) {
-            //finishGame
-            console.log('points', points);
-            // setIsFinishModal();
             return;
         }
 
@@ -98,6 +103,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
     };
 
     const handleClickCard = (card) => {
+        //TODO: можно докидывать напитки пока крутится
         if (blenderCards.length > 2 || blenderCards.find((({id}) => card.id === id))) return;
 
         setBlenderCards(prev => [...prev, card]);
@@ -112,22 +118,22 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
         setQueue(1);
         setDoneDrinks([]);
         setPoints(0);
+        setPeopleAmount(0);
     }
 
     const handleBlenderStop = (drink) => {
-        console.log('shownFriends', shownFriends);
-        console.log('drink', drink);
-        // if (doneDrinks.length > 1) {
-        //     // добавить проверку на подходящие напитки для остальных
-        //     // if (lives === 1) {
-        //     //     // endGame,
-        //     // }
-        //     // setLives(prev => prev - 1); 
-        //     // setRestartModal(true);
-        // } else {
-            setDoneDrinks(prev => [...prev, drink]);
-        // }
-
+        if (doneDrinks.length > 2) return;
+        if (!shownFriends.some((pers) => pers.drink === drink.id) && doneDrinks.length === 2) {
+            //TODO: сохранить на сервер количество сердечек
+            //TODO: продумать ситуацию, когда поменялись люди, а 3 дринка осталось
+            setLives(prev => prev - 1);
+            if (lives < 2) {
+                setIsEndModal({shown: true, isWin: false})
+            }
+            setRestartModal(true);
+        }
+        
+        setDoneDrinks(prev => [...prev, drink]);
         setBlenderCards([]);
     }
 
@@ -137,7 +143,11 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
         
         setTimeout(() => {
             setShownFriends(prev => prev.filter((friend) => friend.id !== personId));
-            setPeopleAmount(prev =>prev + 1);
+            setPeopleAmount(prev => prev + 1);
+
+            if (peopleAmount + 1 >= LEVEL_TO_PEOPLE_AMOUNT[week]) {
+                setIsEndModal({shown: true, isWin: true});
+            }
             shownAmount.current -= 1;
             if (shownAmount.current === 0) {
                 handleChangePerson();
@@ -205,7 +215,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
         isFinding,
         restartModal,
         shownCards,
-        isFirstRules2
+        isFirstRules2,
+        isEndModal
     }
 
     // const isPausedTraining = (isTraining && blenderCards < 1);
@@ -214,8 +225,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed, isNeverPlayed2, week}) => {
     // const isFirstPause = isPausedTraining || isFirstRulesModals;
 
     return {
-        isPaused: true,
-        // isPaused: isRules || isSkipping || restartModal || isFirstRules,
+        // isPaused: true,
+        isPaused: isRules || isSkipping || restartModal || isFirstRules,
         handleEndTimer,
         handleDropDrink,
         handleBlenderStop,

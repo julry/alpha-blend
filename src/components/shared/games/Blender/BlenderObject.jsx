@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const IndigrientsPart = styled.div`
     position: absolute;
     z-index: 6;
-    height: ${({$ratio}) => $ratio * 106}px;
+    height: ${({$ratio}) => $ratio * 108}px;
     top: 0;
     left: 0;
     width: 85%;
@@ -43,6 +43,7 @@ const IndigrientsPart = styled.div`
     align-items: center;
     padding: var(--spacing_x1) 0;
     padding-top: ${({$ratio}) => $ratio * 8}px;
+    padding-bottom: ${({$ratio}) => $ratio * 8}px;
 `;
 
 const ButtonPart = styled.div`

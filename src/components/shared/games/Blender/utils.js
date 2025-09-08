@@ -27,22 +27,19 @@ export function generateIngridientsAmount(probabilities = { p1: 0.8, p2: 0.2 }) 
 }
 
 export function generatePeopleAmount(probabilities = { p1: 0.5, p2: 0.3, p3: 0.2 }) {
-  const sum = probabilities.p1 + probabilities.p2 + probabilities.p3;
-  const normalized = {
-    p1: probabilities.p1 / sum,
-    p2: probabilities.p2 / sum,
-    p3: probabilities.p3 / sum,
-  };
-
   const rand = Math.random();
+  let cumulativeProbability = 0;
+  const options = [1, 2, 3];
+  const probabilitiesArr = Object.values(probabilities);
     
-    if (rand < normalized.p1) {
-        return 1;
-    } else if (rand < normalized.p2) {
-        return 2;
-    } else if (rand < normalized.p3) {
-        return 3;
+  for (let i = 0; i < options.length; i++) {
+        cumulativeProbability += probabilitiesArr[i];
+        if (rand < cumulativeProbability) {
+            return options[i];
+        }
     }
+
+    return options[options.length - 1];
 }
 
 // Генерация номеров очереди с группировкой
@@ -51,7 +48,7 @@ function generateQueueGroups(totalPeople, maxSize) {
     let remaining = totalPeople;
 
     while (remaining > 0) {
-        let groupSize = maxSize && remaining !== totalPeople ? Math.min(generatePeopleAmount(maxSize), remaining) : 1;
+        let groupSize = remaining !== totalPeople ? Math.min(generatePeopleAmount(maxSize), remaining) : 1;
         if (groupSize > 1 && groups[groups.length - 1] === groupSize) {
             groupSize = groupSize - 1;
         }

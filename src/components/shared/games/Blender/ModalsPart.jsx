@@ -22,13 +22,16 @@ export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, drinkInfo, colle
                 </p>
                 <p><Bold>Вернёмся назад?</Bold></p>
             </CommonModal>
-            <EndGameModal isOpen={modalsState.restartModal} title="Ты проиграл" onClose={modalsFunc.handleEndGame} onRetry={modalsFunc.handleRestart}>
-                <p>Не допускай скопления 3 напитков на столе.</p>
+            <EndGameModal isOpen={modalsState.isEndModal.shown} isWin={modalsState.isEndModal.isWin} onClose={modalsFunc.handleEndGame}>
             </EndGameModal>
             <DrinkModal isOpen={modalsState.isFinding} drink={drinkInfo} onClose={modalsFunc.handleCloseDrink}/>
             <RulesModal isOpen={modalsState.isRules} onClose={() => modalsFunc.setIsRules(false)} />
             <FirstRulesModal isOpen={modalsState.isFirstRules} modalsFuncs={modalsFunc} modalsState={modalsState}/>
             <FirstRulesModal2 isOpen={modalsState.isFirstRules2} modalsFuncs={modalsFunc} modalsState={modalsState}/>
+            <CommonModal isOpen={modalsState.restartModal} onClose={() => modalsFunc.handleRestart()} btnText={'Продолжить'}>
+                <p>У тебя оказалось слишком много лишних напитков!</p>
+                <p>Попытки ещё остались.</p>
+            </CommonModal>
         </>
     )
 }
