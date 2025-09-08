@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const IndigrientsPart = styled.div`
     position: absolute;
     z-index: 6;
-    height: ${({$ratio}) => $ratio * 108}px;
+    height: ${({$ratio}) => $ratio * 106}px;
     top: 0;
     left: 0;
     width: 85%;
