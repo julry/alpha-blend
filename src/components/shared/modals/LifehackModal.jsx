@@ -35,16 +35,10 @@ const TitleWrapper = styled.div`
 
 const TextWrapper = styled.div`
     margin-top: var(--spacing_x1);
-
-    & p {
-        font-weight: 300;
-    }
 `;
     
 export const LifehackModal = ({ isOpen, onClose, children, lifehack}) => {
     const handleClick = () => {
-            //TODO: запись на сервер
-            // addDayFinding(id ?? finding.id);
         onClose?.();
     };
 
@@ -54,7 +48,7 @@ export const LifehackModal = ({ isOpen, onClose, children, lifehack}) => {
         <BlockStyled>
             <TitleWrapper>ЛАЙФХАК</TitleWrapper>
             <TextWrapper>
-                <p>{lifehack?.text}</p>
+                {typeof lifehack === 'function' ? lifehack() : (<p>{lifehack}</p>)}
                 {children}
             </TextWrapper>
         </BlockStyled>

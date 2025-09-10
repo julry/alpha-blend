@@ -5,9 +5,9 @@ import { CommonModal } from "../../modals/CommonModal";
 import { RulesModal } from "./RulesModal";
 import { FirstRulesModal } from "./FirstRulesModal";
 import { Bold } from "../../Spans";
+import { StartGameModal } from "../../modals/StartGameModal";
 
 export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, drinkInfo, collegueMessage}) => {
-    console.log(modalsState.isSkipping);
     return (
         <>
             <CommonModal isOpen={modalsState?.isCollegueModal} isCollegue btnText="Далее" onClose={modalsFunc.closeCollegueModal}>
@@ -35,6 +35,7 @@ export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, drinkInfo, colle
                 <p>На столе остались только напитки, которые <Bold>никому не подходят!</Bold></p>
                 <p>Попытки ещё остались.</p>
             </CommonModal>
+            <StartGameModal isOpen={modalsState.isStartGameModal} onClose={() => modalsFunc.setIsStartGameModal(false)} />
         </>
     )
 }

@@ -4,14 +4,14 @@ import { SCREENS } from "../../../constants/screens";
 import { weekInfo } from "../../../constants/weeksInfo";
 import { BlenderGame } from "../../shared/games/Blender";
 
-export const Blender1W = () => {
+export const Blender1F = () => {
     const weekData = weekInfo.find((info) => info.week === 1);
     const collegueMessage = weekData.blenderCollegueMessage?.[DAYS.Friday];
     const drinkInfo = drinks.find(drink => drink.id === 5);
 
     return (
         <BlenderGame 
-            lobbyScreen={SCREENS.LOBBY1M} 
+            lobbyScreen={SCREENS.LOBBY1} 
             collegueMessage={collegueMessage} 
             drinkInfo={drinkInfo}
             week={1}

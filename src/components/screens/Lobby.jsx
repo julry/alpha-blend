@@ -14,10 +14,10 @@ import { LifehackModal } from "../shared/modals/LifehackModal";
 import { CommonModal } from "../shared/modals/CommonModal";
 import { SCREENS } from "../../constants/screens";
 import { NewAchieveModal } from "../shared/modals/NewAchieveModal";
-import { DAYS, DAY_ARR } from "../../constants/days";
-import { screens } from "../../constants/screensComponents";
 import { AnimatePresence } from "framer-motion";
 import { LobbyMenu } from "../shared/LobbyMenu";
+import { DAY_ARR } from "../../constants/days";
+import { FinishContinuesModal } from "./FinishContinuesModal";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -67,13 +67,18 @@ const TabletInfo = styled(Block)`
 `;
 
 export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLaptopClick, ...props }) => {
-    const { next, user, day, newAchieve, setNewAchieve, isJustEntered } = useProgress();
+    const { 
+        next, user, day, newAchieve, setNewAchieve, 
+        isJustEntered, setIsJustEntered, readLifehack, 
+        readWeekLetter, updateTotalPoints
+     } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [isAchieveModal, setIsAchieveModal] = useState(false);
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
-    const [isFinishShown, setIsFinishShown] = useState(false);
+    const [finishModal, setFinishModal] = useState({shown: false});
+
     const [menuType, setMenuType] = useState();
 
     const week = props.week ?? CURRENT_WEEK;
@@ -86,8 +91,8 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day].isCompleted;
     const isBlenderUndone = !user?.[`blender${week}`]?.[day].isCompleted;
 
-    const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
-    const isBulbShown = isAllDone && !user?.lifehacks.includes(`week${week}day${day}`);
+    // const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
+    const isBulbShown = !isChallengeUndone && !user?.lifehacks.includes(`week${week}day${day}`);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown;
     const isCup = !isPlanerUndone && isBlenderUndone;
@@ -95,12 +100,12 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isGame = !isPlanerUndone && isChallengeUndone;
 
     const plannerMessage = weekMessages?.plannersMessage?.[day];
+    let endMessage = weekMessages?.dayEndMessages?.[day];
+    endMessage = endMessage ?? (user.isTargeted ? weekMessages?.weekEndMessageVip : weekMessages.weekEndMessage);
 
     useEffect(() => {
-        if (!isAllDone || isBulbShown) return;
-
-        setIsFinishShown(true);
-    }, [isAllDone, isBulbShown]);
+        updateTotalPoints().catch(() => {});
+    }, []);
 
     const handleClickItem = (item) => {
         switch (item) {
@@ -113,50 +118,55 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                     return;
                 }
 
+                setIsJustEntered(false);
+
                 if (isLetterShown) {
                     setIsLetterModal(true);
-
+                    readWeekLetter(week);
                     return;
                 }
 
                 if (isBulbShown) {
                     setIsFindingModal(true);
-
+                    readLifehack(week, day);
                     return;
                 }
 
-                // Челлендж недели
-                // next(screens[`GAME${week}${day.charAt(0).toUpperCase()}`]);
                 break;
             case 'planner':
+                if (!isPlanner) return;
+                setIsJustEntered(false);
+
                 setMenuType('planner');
 
-                if (!isPlanner) return;
-
-
-                //open planner menu
-                // Планнер-игра
-                // next(screens[`Planner${week}${day.charAt(0).toUpperCase()}`]);
                 break;
             case 'blender':
+                if (!isCup) return;
+                setIsJustEntered(false);
+
                 setMenuType('blender');
 
-                if (!isCup) return;
-
-                //open blender menu
-                // Блендер-игра
-                // next(props.blenderScreen);
                 break;
             case 'game': {
+                if (!isGame) return;
+                setIsJustEntered(false);
+
                 setMenuType('game');
 
-                if (!isGame) return;
-                //open challenge menu
                 break;
             }
             default:
                 break;
         };
+    };
+
+    const handleCloseFinding = () => {
+        setIsFindingModal(false);
+        const isPrevWeek = week < CURRENT_WEEK;
+        const isPrevDay = !isPrevWeek && (DAY_ARR.indexOf(day) < DAY_ARR.indexOf(CURRENT_DAY));
+        const hasMoreToPass =  isPrevWeek || isPrevDay;
+
+        setFinishModal({shown: true, hasMoreToPass});
     };
 
     return (
@@ -196,7 +206,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
             
             <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} checkedWeek={week}/>
-            <LifehackModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} lifehack={weekMessages?.lifehacks?.[day]}/>
+            <LifehackModal isOpen={isFindingModal} onClose={handleCloseFinding} lifehack={weekMessages?.lifehacks?.[day]}/>
             
             <NewAchieveModal isOpen={newAchieve.length > 0} achieveId={newAchieve[0]} onClose={() => {setNewAchieve(prev => prev.slice(1))}}/>
             {isPlanner && isJustEntered && !hideTips && (
@@ -204,10 +214,12 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                     <p>{typeof plannerMessage === 'function' ? plannerMessage() : plannerMessage}</p>
                 </TabletInfo>
             )}
-
-            <CommonModal isOpen={isFinishShown} onClose={() => setIsFinishShown(false)} btnText="Понятно">
-                {props.endMessage}
-            </CommonModal>
+            <FinishContinuesModal 
+                isOpen={finishModal.shown} 
+                onClose={() => setFinishModal({shown: false})} 
+                hasMore={finishModal.hasMoreToPass} 
+                endMessage={endMessage}
+            />
 
             <AnimatePresence>
                 {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
@@ -216,6 +228,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 onClick={handleClickItem}
                 isLaptopLetter={isLetterShown}
                 isLaptop={isLaptop}
+                isGame={isGame}
                 isPlanner={isPlanner}
                 isLaptopBulb={isBulbShown}
                 isCup={isCup}

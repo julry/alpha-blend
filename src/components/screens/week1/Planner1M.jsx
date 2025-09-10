@@ -46,7 +46,7 @@ export const Planner1M = () => {
             <PlannerGame 
                 cards={planCardsWeek1_Monday} 
                 isNeverPlayed
-                lobbyScreen={SCREENS.LOBBY1M}
+                lobbyScreen={SCREENS.LOBBY1}
                 week={1}
                 day={DAYS.Monday}
                 onCloseRules={handleCloseRules}

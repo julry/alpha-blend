@@ -17,6 +17,7 @@ import { EndGameModal } from "../../modals/EndGameModal";
 import { SkipModal } from "../../modals/SkipModal";
 import { weekInfo } from "../../../../constants/weeksInfo";
 import { Bold } from "../../Spans";
+import { StartGameModal } from "../../modals/StartGameModal";
 
 const WrapperInner = styled.div`
     display: flex;
@@ -41,10 +42,11 @@ export function Game2048({isFirst, lobbyScreen, day}) {
     const [isSkipping, setIsSkipping] = useState(false);
     const [isEndModal, setIsEndModal] = useState({shown: false, title: ''});
     const [isCollegueModal, setIsCollegueModal] = useState(false);
+    const [isStartModal, setIsStartModal] = useState(!isFirst);
 
     const isGameActive = useMemo(
-        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal),
-        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal],
+        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal || isStartModal),
+        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal, isStartModal],
     );
     const handleResultRef = useCallbackRef(handleResult);
 
@@ -106,10 +108,11 @@ export function Game2048({isFirst, lobbyScreen, day}) {
                 </p>
             </CommonModal>
             <CommonModal isOpen={isCollegueModal} isCollegue onClose={() => next(lobbyScreen)} btnText="В комнату">
-                <p>{typeof collegueMessage === 'function' ? collegueMessage() : collegueMessage}</p>
+                {typeof collegueMessage === 'function' ? collegueMessage() : <p>{collegueMessage}</p>}
             </CommonModal>
             <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)}/>
             <EndGameModal isOpen={isEndModal?.shown} onClose={handleCloseEndModal} title={isEndModal?.title} points={score}/>
+            <StartGameModal isOpen={isStartModal} onClose={() => setIsStartModal(false)} />
         </>
     )
 }

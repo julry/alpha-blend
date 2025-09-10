@@ -1,6 +1,6 @@
-import girl0 from './assets/girl0.png';
-import girl1 from './assets/girl1.png';
-import man0 from './assets/man0.png';
+import girl0 from '../../../../assets/images/blender/girl0.png';
+import girl1 from '../../../../assets/images/blender/girl1.png';
+import man0 from '../../../../assets/images/blender/man0.png';
 
 export const CONTAINER_SIZE = 330;
 

@@ -6,7 +6,7 @@ import { useTimer } from "../../../../hooks/useTimer";
 import { BLENDER_TIME } from "./constants";
 import { uid } from "uid";
 import { drinks } from "../../../../constants/drinks";
-import blender from './assets/blender.png';
+import blender from '../../../../assets/images/blender/blender.png';
 import { AnimatePresence, motion } from "framer-motion";
 import { useDrop } from "react-dnd";
 

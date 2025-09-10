@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.c05bdd51.css",
-    "main.js": "./static/js/main.6e238a3c.js",
+    "main.js": "./static/js/main.e5b0b74e.js",
     "static/media/building.png": "./static/media/building.b82d3343adb3c8e3e1ca.png",
     "static/media/backLobby.png": "./static/media/backLobby.367e361e2249aecc4fbc.png",
     "static/media/girl1.png": "./static/media/girl1.9673cb3adda39fd105b5.png",
@@ -27,18 +27,23 @@
     "static/media/drink3_opened.png": "./static/media/drink3_opened.122c1513f2032c0d350b.png",
     "static/media/drink8_opened.png": "./static/media/drink8_opened.72041fb34699a83b6f3f.png",
     "static/media/drink4_opened.png": "./static/media/drink4_opened.ed085fd240d13e1154d6.png",
+    "static/media/spa.png": "./static/media/spa.642e61e5dfc5c5a6cb9d.png",
     "static/media/drink0_opened.png": "./static/media/drink0_opened.952beab4681792278c8f.png",
     "static/media/drink5_opened.png": "./static/media/drink5_opened.b5460632014f4228aa27.png",
     "static/media/drink7_opened.png": "./static/media/drink7_opened.0c705743d3c4f92f9c35.png",
+    "static/media/dairy.png": "./static/media/dairy.4fb74aac16cf2cdae14d.png",
     "static/media/drink2_opened.png": "./static/media/drink2_opened.4b88d062923825b61511.png",
+    "static/media/meditation.png": "./static/media/meditation.c037e5531e9d572ffca4.png",
+    "static/media/relax.png": "./static/media/relax.0fc4916bbf9c85a1aa09.png",
+    "static/media/running.png": "./static/media/running.0d225cf1e13acbfd38d0.png",
     "index.html": "./index.html",
     "static/media/close.svg": "./static/media/close.4ea9fe3d5f7cc895f97cf983f89bd7f1.svg",
     "static/media/icon-arrow.svg": "./static/media/icon-arrow.cddb74fc2c0689651d4aacf2502a730c.svg",
     "main.c05bdd51.css.map": "./static/css/main.c05bdd51.css.map",
-    "main.6e238a3c.js.map": "./static/js/main.6e238a3c.js.map"
+    "main.e5b0b74e.js.map": "./static/js/main.e5b0b74e.js.map"
   },
   "entrypoints": [
     "static/css/main.c05bdd51.css",
-    "static/js/main.6e238a3c.js"
+    "static/js/main.e5b0b74e.js"
   ]
 }

@@ -3,5 +3,5 @@ import { SCREENS } from "../../../constants/screens";
 import { Game2048 } from "../../shared/games/Game2048"
 
 export const Game2048W = () => {    
-    return <Game2048 lobbyScreen={SCREENS.LOBBY1M} day={DAYS.Wednesday}/>
+    return <Game2048 lobbyScreen={SCREENS.LOBBY1} day={DAYS.Wednesday}/>
 }

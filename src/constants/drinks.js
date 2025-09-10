@@ -23,6 +23,7 @@ import drink8_opened from '../assets/images/opened/drink8_opened.png';
 import drink9_opened from '../assets/images/opened/drink9_opened.png';
 import drink10_opened from '../assets/images/opened/drink10_opened.png';
 import drink11_opened from '../assets/images/opened/drink11_opened.png';
+
 export const drinks = [
     {
         id: 0,

@@ -11,7 +11,7 @@ export const Blender1W = () => {
 
     return (
         <BlenderGame 
-            lobbyScreen={SCREENS.LOBBY1M} 
+            lobbyScreen={SCREENS.LOBBY1} 
             collegueMessage={collegueMessage} 
             drinkInfo={drinkInfo}
             week={1}

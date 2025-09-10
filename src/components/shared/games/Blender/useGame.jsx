@@ -31,6 +31,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     const [isCollegueModal, setIsCollegueModal] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [isDisabledCardClick, setIsDisabledCardClick] = useState(false);
+    const [isStartGameModal, setIsStartGameModal] = useState(!isNeverPlayed);
 
     const correctAmount = useRef(0);
     const shownAmount = useRef(0);
@@ -70,10 +71,10 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     }
 
     useEffect(() => {
-        if (isFirstRules) return;
+        if (isFirstRules || isStartGameModal) return;
         
         getFriends();
-    }, []);
+    }, [isStartGameModal]);
 
     useEffect(() => {
         const shown = comingFriends.filter((friend) => friend.queue === queue);
@@ -136,7 +137,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         setPeopleAmount(0);
     };
 
-    const handleStartGame = () => {
+    const handleStartGameModal = () => {
         setIsFirstRules(false);
         setTimeout(replay);
     };
@@ -198,7 +199,6 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
             setPeopleAmount(prev => prev + 1);
 
             if (peopleAmount + 1 >= LEVEL_TO_PEOPLE_AMOUNT[week]) {
-                console.log('elllellelelele');
                 finishGame({isWin: true, finishPoints: newPoints});
 
                 return;
@@ -263,10 +263,11 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         getFriends,
         handleClickCard,
         handleFinishTraining,
-        handleStartGame,
+        handleStartGameModal,
         getEducationFriend,
         closeEndModal,
         closeCollegueModal,
+        setIsStartGameModal
     };
 
     const modalsState = {
@@ -280,10 +281,11 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         shownCards,
         isEndModal,
         isCollegueModal,
+        isStartGameModal,
     }
 
     return {
-        isPaused: isRules || isSkipping || restartModal || isFirstRules || isFinished,
+        isPaused: isRules || isSkipping || restartModal || isFirstRules || isFinished || isStartGameModal,
         handleEndTimer,
         handleDropDrink,
         handleBlenderStop,

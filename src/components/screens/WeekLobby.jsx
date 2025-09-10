@@ -5,9 +5,9 @@ import building from '../../assets/images/building.png';
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import { CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext";
 import { useState } from "react";
-import { Modal } from "../shared/modals/Modal";
 import { CommonModal } from "../shared/modals/CommonModal";
 import { Bold } from "../shared/Spans";
+import { SCREENS } from "../../constants/screens";
 
 const Wrapper = styled(FlexWrapper)`
     background: url(${bg}) center 100% no-repeat;
@@ -60,9 +60,8 @@ const LockStyled = styled.svg`
 `;
 
 export const WeekLobby = ({isHideUnavailable}) => {
-    const { passedWeeks = [], user } = useProgress();
-    //TODO: переделать условие на показ (пермеенную в прогресс + проверка первого планнера)
-    const [isShownInfo, setIsShownInfo] = useState(!user?.seenStartInfo);
+    const { passedWeeks = [], isShowWeekLobbyInfo, setIsShowWeekLobbyInfo, next } = useProgress();
+    const [isShownInfo, setIsShownInfo] = useState(isShowWeekLobbyInfo);
     const [isClosedInfo, setIsClosedInfo] = useState(false);
 
     const ratio = useSizeRatio();
@@ -85,10 +84,13 @@ export const WeekLobby = ({isHideUnavailable}) => {
         if (getIsFloorUnavailable(index)) {
             setIsClosedInfo(true);
         }
+
+        next(SCREENS[`LOBBY${index}`]);
     };
 
     const handleCloseInfo = () => {
-        setIsShownInfo(false)
+        setIsShowWeekLobbyInfo(false);
+        setIsShownInfo(false);
     }
 
     return (

@@ -43,7 +43,7 @@ export const FindingPart = () => {
                 Находки
             </TitleStyled>
             <ContentBlockStyled>
-                {(user.findings ?? []).map((id) => (
+                {(Array.from(new Set (user.findings ?? []))).map((id) => (
                     id === openedFinding ? (
                         <FindingBlock>
                             <FindingTitle>

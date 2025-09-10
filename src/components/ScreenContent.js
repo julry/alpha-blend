@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import styled, { keyframes } from 'styled-components';
-import { preloadImages } from "../constants/screensComponents";
 import { useProgress } from "../contexts/ProgressContext";
-import { useImagePreloader } from "../hooks/useImagePreloader";
 import { FlexWrapper } from "./shared/ContentWrapper";
 
 const Wrapper = styled.div`
@@ -52,7 +50,6 @@ const Dot = styled.div`
 export function ScreenContent() {
     const { screen, isLoading, tgError } = useProgress();
     const Screen = useMemo(() => screen, [screen]);
-    // useImagePreloader(preloadImages);
 
     if (tgError.isError) return (
         <div>

@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { useProgress } from "../../contexts/ProgressContext"
 import { Block } from "./Block";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Bold } from "./Spans";
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import { DAYS } from "../../constants/days";
 import { WEEK_TO_CHALLENGE_NAME } from "../../constants/weeksInfo";
+import { GAME_SCREENS_WEEK1, GAME_SCREENS_WEEK2, GAME_SCREENS_WEEK3, GAME_SCREENS_WEEK4 } from "../../constants/screens";
+import { useState } from "react";
 
 const Wrapper = styled(motion.div)`
     position: absolute;
@@ -28,6 +30,13 @@ const IconsWrapper = styled.div`
     display: flex;
     gap: var(--spacing_x2);
     align-items: center;
+`;
+
+const InfoWrapper = styled(motion.div)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;
 
 const IconButton = styled.button`
@@ -58,33 +67,55 @@ const TYPE_TO_SVG = {
             </svg>
 };
 
+const WEEK_TO_GAME_SCREENS = {
+    1: GAME_SCREENS_WEEK1,
+    2: GAME_SCREENS_WEEK2,
+    3: GAME_SCREENS_WEEK3,
+    4: GAME_SCREENS_WEEK4,
+}
+
+const TYPE_TO_GAME_NAME = {
+    game: 'Челлендж недели',
+    planner: 'Планнер',
+    blender: 'Блендер'
+}
+
+const DAY_TO_NAME = {
+    [DAYS.Friday]: 'пятницу',
+    [DAYS.Wednesday]: 'среду',
+}
+
 export const LobbyMenu = ({week, type, onClose}) => {
     const ratio = useSizeRatio();
-    const {user, day} = useProgress();
+    const [isInitial, setIsInitial] = useState(true);
+    const [isAlreadyDone, setIsAlreadyDone] = useState(false);
+    const [isClosed, setIsClosed] = useState(false);
+    const {user, next, day: progressDay} = useProgress();
     const gameName = type === 'game' ? `game${WEEK_TO_CHALLENGE_NAME[week]}` : `${type}${week}`;
 
     const icon = TYPE_TO_SVG[type];
 
-    const getIsCompleted = (day) => user[gameName][day].isCompleted;
+    const getIsCompleted = (day) => user[gameName][day]?.isCompleted;
     const getIsCurrent = (day, prevDay) => !getIsCompleted(day) && (day === DAYS.Monday || getIsCompleted(prevDay));
-    const getIsFuture = (day, prevDay) => !getIsCompleted(day) && !getIsCompleted(prevDay);
-
-    const handleWrapperClick = (e) => {
-        e.stopPropagation();
-        onClose();
-    };
 
     const handleClick = (day, prevDay) => {
         if (getIsCurrent(day, prevDay)) {
-            console.log('open');
-            //open game
+            next(WEEK_TO_GAME_SCREENS[week][type][day]);
+
+            return;
         }
 
         if (getIsCompleted(day)) {
-            // modal already
+            setIsInitial(false);
+            setIsClosed();
+            setIsAlreadyDone(true);
+
+            return;
         }
 
-        //modal later
+        setIsInitial(false);
+        setIsAlreadyDone(false);
+        setIsClosed(day);
     };
 
     return (
@@ -103,7 +134,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
                     
                     <IconButton 
                         $ratio={ratio} 
-                        onClick={() => handleClick(DAYS.Wednesday)}
+                        onClick={() => handleClick(DAYS.Wednesday, DAYS.Monday)}
                         $isCompleted={getIsCompleted(DAYS.Wednesday)}
                         $isCurrent={getIsCurrent(DAYS.Wednesday, DAYS.Monday)}
                     >
@@ -112,7 +143,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
 
                     <IconButton 
                         $ratio={ratio} 
-                        onClick={() => handleClick(DAYS.Monday)}
+                        onClick={() => handleClick(DAYS.Friday, DAYS.Wednesday)}
                         $isCompleted={getIsCompleted(DAYS.Friday)}
                         $isCurrent={getIsCurrent(DAYS.Friday, DAYS.Wednesday)}
                     >
@@ -120,6 +151,36 @@ export const LobbyMenu = ({week, type, onClose}) => {
                     </IconButton>
                 </IconsWrapper>
             </Block>
+            <AnimatePresence>
+                {isInitial && (
+                    <InfoWrapper initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                        <Block onClose={() => setIsInitial(false)} hasCloseIcon>
+                            <p>Здесь находятся <Bold>три уровня игры «{TYPE_TO_GAME_NAME[type]}».</Bold></p>
+                            <p>Новые уровни появляются{'\n'}<Bold>в понедельник, среду и пятницу.</Bold></p>
+                        </Block>
+                    </InfoWrapper>
+                )}
+                {
+                    isAlreadyDone && (
+                       <InfoWrapper initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                            <Block>
+                                <p><Bold>Ты уже прошёл эту игру.</Bold></p>
+                                <p>Новые игры появляются{'\n'}<Bold>по понедельникам, средам и пятницам.</Bold></p>
+                            </Block>
+                        </InfoWrapper> 
+                    )
+                }
+                {
+                    isClosed && (
+                       <InfoWrapper initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                            <Block>
+                                <p><Bold>Пока закрыто —</Bold> эти игры откроются в {DAY_TO_NAME[isClosed]}.</p>
+                                <p>Новые игры появляются{'\n'}<Bold>по понедельникам, средам и пятницам.</Bold></p>
+                            </Block>
+                        </InfoWrapper> 
+                    )
+                }
+            </AnimatePresence>
         </Wrapper>
     )
 }

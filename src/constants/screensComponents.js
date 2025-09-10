@@ -1,16 +1,18 @@
-import { Blender1M } from "../components/screens/week1/Blender1M";
-import { Game2048M } from "../components/screens/week1/Game2048M";
+
 import { IntroRegistration } from "../components/screens/IntroRegistration";
 import { IntroRules } from "../components/screens/IntroRules";
-import { Lobby1M } from "../components/screens/week1/Lobby1M";
-import { Planner1M } from "../components/screens/week1/Planner1M";
 import { WaitingGameScreen } from "../components/screens/Waiting";
-import { Registration1 } from "../components/screens/Registration1";
-import { Start } from "../components/screens/Start";
-import BasketballGame from "../components/shared/games/BasketballGame/working-index";
 import { WeekLobby } from "../components/screens/WeekLobby";
-import { Blender1W } from "../components/screens/week1/Blender1W";
+import { Start } from "../components/screens/Start";
+import { Registration1 } from "../components/screens/Registration1";
 import { DesktopScreen } from "../components/screens/DesktopScreen";
+
+import { 
+    Blender1F, Blender1M, Blender1W, Game2048F, Game2048M, 
+    Game2048W, Planner1F, Planner1M, Planner1W, Lobby1 
+} from '../components/screens/week1';
+
+import BasketballGame from "../components/shared/games/BasketballGame/working-index";
 
 import { SCREENS } from "./screens";
 
@@ -18,17 +20,22 @@ export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
     [SCREENS.REG_1]: Registration1,
     [SCREENS.WAITING]: WaitingGameScreen,
-    [SCREENS.LOBBY]: WeekLobby,
-    [SCREENS.LOBBY1M]: Lobby1M,
-    [SCREENS.START]: Start,
     [SCREENS.INTRO_RULES]: IntroRules,
+    [SCREENS.DESKTOP]: DesktopScreen,
+    [SCREENS.START]: Start,
+    [SCREENS.LOBBY]: WeekLobby,
+    [SCREENS.LOBBY1]: Lobby1,
     [SCREENS.PLANNER1M]: Planner1M,
+    [SCREENS.PLANNER1W]: Planner1W,
+    [SCREENS.PLANNER1F]: Planner1F,
     [SCREENS.GAME1M]: Game2048M,
-    [SCREENS.GAME2M]: BasketballGame,
+    [SCREENS.GAME1W]: Game2048W,
+    [SCREENS.GAME1F]: Game2048F,
     [SCREENS.BLENDER1M]: Blender1M,
     [SCREENS.BLENDER1W]: Blender1W,
-    [SCREENS.DESKTOP]: DesktopScreen,
-    // [SCREENS.FINISH]: Finish,
+    [SCREENS.BLENDER1F]: Blender1F,
+    [SCREENS.GAME2M]: BasketballGame,
+
 };
 
 export const preloadImages = [];

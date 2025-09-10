@@ -7,6 +7,8 @@ import { DAY_ARR, DAYS } from '../constants/days';
 import WebApp from '@twa-dev/sdk';
 import { uid } from 'uid';
 import { WEEK_TO_CHALLENGE_NAME } from '../constants/weeksInfo';
+import { useImagePreloader } from '../hooks/useImagePreloader';
+import { initialImages } from '../constants/preloadImages';
 
 const INITIAL_DAY_ACTIVITY = {
     completedAt: null,
@@ -75,6 +77,8 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
+    return 2;
+
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;
@@ -140,13 +144,6 @@ const mockPl = {
     [DAYS.Friday]: {isCompleted: false},
 }
 
-const mockBl = {
-    [DAYS.Monday]: {isCompleted: true},
-    [DAYS.Wednesday]: {isCompleted: true},
-    [DAYS.Friday]: {isCompleted: false},
-}
-
-
 export function ProgressProvider(props) {
     const { children } = props
     const [isLoading, setIsLoading] = useState();
@@ -159,12 +156,16 @@ export function ProgressProvider(props) {
     const [newAchieve, setNewAchieve] = useState([]);
     const [isJustEntered, setIsJustEntered] = useState(true);
     const [day, setDay] = useState(CURRENT_DAY);
+    const [isShowWeekLobbyInfo, setIsShowWeekLobbyInfo] = useState(false);
     const [tgError, setTgError] = useState({isError: false, message: ''});
     const screen = screens[currentScreen];
   
     const client = useRef();
     const recordId = useRef();
     const isDesktop = useRef(false);
+    const tgInfo = useRef();
+
+    useImagePreloader(initialImages);
 
     const setUserBdData = (record) => {
         recordId.current = record?.id;
@@ -175,31 +176,23 @@ export function ProgressProvider(props) {
         
         const firstUncompletedCh = Object.keys(data[`game${WEEK_TO_CHALLENGE_NAME[week]}`] ?? {}).find((key) => !data[`game${WEEK_TO_CHALLENGE_NAME[week]}`][key]?.isCompleted);
         const firstUncompletedPlanner = Object.keys(data[`planner${week}`] ?? {}).find((key) => !data[`planner${week}`][key]?.isCompleted);
-        const firstUncompletedBlender = Object.keys(data[`blender${week}`] ?? {}).find((key) => !data[`blender${week}`][key]?.isCompleted);
 
         // const firstUncompletedCh = Object.keys(mockCh ?? {}).find((key) => !mockCh[key].isCompleted);
         // const firstUncompletedPlanner = Object.keys(mockPl).find((key) => !mockPl[key].isCompleted);
-        // const firstUncompletedBlender = Object.keys(mockBl).find((key) => !mockBl[key].isCompleted);
 
         const indexOfCh = DAY_ARR.indexOf(firstUncompletedCh) > -1 ? DAY_ARR.indexOf(firstUncompletedCh) : 2;
-        const indexOfBlend= DAY_ARR.indexOf(firstUncompletedBlender) > -1 ? DAY_ARR.indexOf(firstUncompletedBlender) : 2;
         const indexOfPlann = DAY_ARR.indexOf(firstUncompletedPlanner) > -1 ? DAY_ARR.indexOf(firstUncompletedPlanner) : 2;
 
-        const isSameDay = (+indexOfCh === +indexOfBlend) && (+indexOfCh === +indexOfPlann);
-
-        if (!isSameDay) {
-            dayIndex = Math.min(indexOfCh, indexOfBlend, indexOfPlann);
-        } else if (week < CURRENT_WEEK) {
-            dayIndex = DAY_ARR.indexOf(firstUncompletedCh);
-            dayIndex = dayIndex === DAY_ARR.length - 1 ? dayIndex : dayIndex + 1;
+        if (week < CURRENT_WEEK) {
+            dayIndex = Math.min(indexOfCh, indexOfPlann);
         } else {
             const currentDay = 1;
             dayIndex = DAY_ARR.indexOf(firstUncompletedCh);
-            dayIndex = dayIndex < currentDay ? dayIndex + 1 : currentDay;
+            dayIndex = dayIndex < currentDay ? dayIndex : currentDay;
         }
 
         setDay(DAY_ARR[dayIndex]);
-        
+        setIsShowWeekLobbyInfo(!data.planner1[DAYS.Monday].isCompleted);
         setUserInfo(data);
         setTotalPoints(scriptData?.pointsTotal ?? data.points);
         setPoints(data.points);
@@ -210,6 +203,8 @@ export function ProgressProvider(props) {
         setIsLoading(true);
         try {
             const info = await loadRecord();
+
+            tgInfo.current = info.systemData;
 
             if (isDesktop.current) {
                 setCurrentScreen(SCREENS.DESKTOP);
@@ -223,6 +218,34 @@ export function ProgressProvider(props) {
 
             setUserBdData(info);
 
+            const {data = {}} = info
+            const checkDay = getMoscowTime().getDay();
+
+            if (checkDay === 1 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
+                updateUser({
+                    [`week${CURRENT_WEEK}EnterPoints`]: {
+                        ...data[`week${CURRENT_WEEK}EnterPoints`], 
+                        [DAYS.Monday]: 50,
+                    }
+                });
+            }
+            if (checkDay === 3 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Wednesday]) {
+                updateUser({
+                    [`week${CURRENT_WEEK}EnterPoints`]: {
+                        ...data[`week${CURRENT_WEEK}EnterPoints`], 
+                        [DAYS.Wednesday]: 50,
+                    }
+                });
+            }
+            if (checkDay === 5 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Friday]) {
+                updateUser({
+                    [`week${CURRENT_WEEK}EnterPoints`]: {
+                        ...data[`week${CURRENT_WEEK}EnterPoints`], 
+                        [DAYS.Friday]: 50,
+                    }
+                });
+            }
+
             if (getUrlParam('screen')) {
                 setCurrentScreen(getUrlParam('screen'));
 
@@ -231,8 +254,11 @@ export function ProgressProvider(props) {
 
             if (!info.data.email) {
                 setCurrentScreen(INITIAL_STATE.screen);
+                return;
             } else if (!info.data.seenStartInfo) {
-                setCurrentScreen(CURRENT_WEEK > 0 ? SCREENS.START : SCREENS.WAITING);
+                setCurrentScreen(CURRENT_WEEK > 0 ? SCREENS.INTRO_RULES : SCREENS.WAITING);
+
+                return;
             } else {
                 setCurrentScreen(SCREENS.LOBBY);
             }
@@ -315,6 +341,10 @@ export function ProgressProvider(props) {
         updateUser(({readenLetters: {...user.readenLetters, [`week${week}`]: true}})).catch(() => {});
     }
 
+    const readLifehack = (week, day) => {
+        updateUser(({lifehacks: [...user.lifehacks, `week${week}day${day}`]})).catch(() => {});
+    }
+
     const addDayFinding = (id) => {
         updateUser(({findings: [...user.findings, id]})).catch(() => {});
     }
@@ -367,8 +397,16 @@ export function ProgressProvider(props) {
         );
 
         const data = await loadRecord();
-        setTotalPoints(data?.scriptData.totalPoints);
+        setTotalPoints(prev => data?.scriptData.totalPoints ?? prev + finishPoints);
     }
+
+    const updateTotalPoints = async () => {
+        const data = await loadRecord();
+
+        if (data?.scriptData.totalPoints) {
+            setTotalPoints(data?.scriptData.totalPoints);
+        }
+    };
 
     const updateUser = async (changed) => {
         setUserInfo(changed);
@@ -425,6 +463,15 @@ export function ProgressProvider(props) {
         return !!record?.id;
     };
 
+    const changeDay = () => {
+        setDay(prev => {
+            const index = DAY_ARR.indexOf(prev);
+            if (index > 1) return DAY_ARR[0];
+
+            return DAY_ARR[index + 1];
+        })
+    }
+
 
     const state = {
         screen,
@@ -454,7 +501,13 @@ export function ProgressProvider(props) {
         dropGame,
         isJustEntered,
         setIsJustEntered,
-        day
+        day,
+        readLifehack,
+        changeDay,
+        isShowWeekLobbyInfo,
+        setIsShowWeekLobbyInfo,
+        updateTotalPoints,
+        tgInfo
     }
 
     return (

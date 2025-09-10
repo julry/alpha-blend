@@ -3,7 +3,7 @@ import { CURRENT_WEEK, useProgress } from "../../../contexts/ProgressContext";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const Content = styled(Block)`
     position: absolute;
@@ -48,6 +48,8 @@ const PointsInfo = styled.p`
     font-weight: 700;
     font-size: ${({$ratio}) => $ratio * 30}px;
     margin-right: var(--spacing_x1);
+    line-height: 90%;
+    margin-top: calc(1.5 * var(--spacing_x1));
 `;
 
 const ProfileWrapper = styled.div`
@@ -119,11 +121,11 @@ export const ProfileModal = ({isOpen, ...props}) => {
     const [isRefInfoModal, setIsRefInfoModal] = useState(false);
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
-    const { user, totalPoints } = useProgress();
+    const { user, totalPoints, tgInfo } = useProgress();
 
-    const handleCopy = () => {
-        const link = new URL(window.location.origin);
-        link.searchParams.set('refId', `ref_${user.id}`);
+    const handleCopy = useCallback(() => {
+        if (!tgInfo.current.tgInitBotName || !tgInfo.current.tgUserId) return;
+        const link = `https://t.me/${tgInfo.current.tgInitBotName}?start=ref${tgInfo.current.tgUserId}`;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(link.toString()).then(() => {
                 setIsSuccessCopy(true);
@@ -131,7 +133,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                 setTimeout(() => setIsSuccessCopy(false), 3000);
             });
         }
-    };
+    }, []);
 
     return (
         <Modal isDarken isOpen={isOpen}>
@@ -176,7 +178,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     <SmallText>Скопируй и отправляй друзьям,{'\n'}чтобы получить дополнительные баллы!</SmallText>
                 </RefDesc>
                 <RefBlock $ratio={ratio}>
-                    <p>ref_link_{user.id}</p>
+                    <p>ref_link_{tgInfo.current.tgUserId}</p>
                     {
                         isSuccessCopy ? 
                         <FlexBlock>
@@ -188,8 +190,8 @@ export const ProfileModal = ({isOpen, ...props}) => {
                          : (
                             <CopyButton onClick={handleCopy}>
                                 <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.5 13H4V4H13V5.5" stroke="#263D8D" stroke-opacity="0.3"/>
-                                    <rect x="8" y="7" width="9" height="9" stroke="#263D8D" stroke-opacity="0.3"/>
+                                    <path d="M6.5 13H4V4H13V5.5" stroke="#263D8D" strokeOpacity="0.3"/>
+                                    <rect x="8" y="7" width="9" height="9" stroke="#263D8D" strokeOpacity="0.3"/>
                                 </svg>
                             </CopyButton>
                         )

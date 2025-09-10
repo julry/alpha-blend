@@ -86,6 +86,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
 
     const weekData = weekInfo.find((info) => info.week === week);
     const collegueMessage = weekData.plannersCollegueMessage[day];
+
     const findingId = findings.find((finding) => finding.day === day && finding.week === week).id;
 
     const commonAmount = morningCards.length + dayCards.length + eveningCards.length;
@@ -173,9 +174,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
                 </AnimatePresence>
             </Wrapper>
             <CommonModal isOpen={isCollegue} isCollegue btnText="Получить лайфхак" onClose={handleShowFinding}>
-                <p>
-                    {collegueMessage}
-                </p>
+                {typeof collegueMessage  === 'function' ? collegueMessage() : <p>collegueMessage</p>}
             </CommonModal>
 
             <FindingModal isOpen={isFinding} onClose={() => next(lobbyScreen)} id={findingId} isNew buttonText={"В комнату"}/>
