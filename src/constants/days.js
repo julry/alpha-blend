@@ -3,3 +3,5 @@ export const DAYS = {
     Wednesday: 'Wednesday',
     Friday: 'Friday'
 };
+
+export const DAY_ARR = Object.values(DAYS);

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import { Bold } from "./Spans";
+import { FlexWrapper } from "./ContentWrapper";
 
 const Wrapper = styled.div`
     display: flex;
@@ -27,6 +28,7 @@ const Text = styled.p`
     font-size: var(--font_xs);
     margin-top: var(--spacing_x1);
 `;
+
 
 export const Achievement = ({icon, title, text, isActive, ...props}) => {
     const ratio = useSizeRatio();

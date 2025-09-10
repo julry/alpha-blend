@@ -8,6 +8,7 @@ const Wrapper = styled(FlexWrapper)`
     padding: 0;
     padding-top: var(--spacing_x6);
     height: auto;
+    min-height: unset;
     max-width: var(--content-width);
 
     & > svg {
@@ -15,36 +16,22 @@ const Wrapper = styled(FlexWrapper)`
     }
 `;
 
-const COLOR_TO_BG = {
-    green: 'rgba(143, 255, 0, 0.25)',
-    red: 'rgba(239, 49, 36, 0.25)',
-    purple: 'rgba(154, 46, 252, 0.25)',
-}
-
-const COLOR_TO_TEXT = {
-    green: '#89F301',
-    red: 'var(--color-red)',
-    purple: '#9A2EFC',
+const TYPE_TO_TEXT = {
+    morning: '#F4A89F',
+    day: '#F18677',
+    evening: '#EC6353',
 }
 
 const Title = styled.h3`
     position: absolute;
-    top: 2px;
+    top: var(--spacing_x2);
     font-weight: 900;
-    font-size: ${({$ratio}) => $ratio * 70}px;
+    font-size: ${({$ratio}) => $ratio * 30}px;
     text-align: center;
     letter-spacing: -0.03em;
-    z-index: 2;
+    z-index: 4;
     text-transform: uppercase;
-    color: ${({$color}) => COLOR_TO_TEXT[$color]};
-    clip-path: inset(0 0 65% 0);
-`;
-
-const TitleBottom = styled(Title)`
-    clip-path: inset(35% 0 0 0);
-    filter: blur(4.7px);
-    width: 100%;
-    text-align: center;
+    color: ${({$type}) => TYPE_TO_TEXT[$type]};
 `;
 
 const ColorBlock = styled.div`
@@ -52,25 +39,23 @@ const ColorBlock = styled.div`
     display: flex;
     align-items: center;
     box-shadow: -14px -3px 40.7px -12px rgba(0, 0, 0, 0.35);
-    /* box-shadow: -14px -3px 40.7px -12px rgba(0, 0, 0, 0.35), inset 6px 6px 8.6px rgba(255, 255, 255, 0.8), inset -6px -6px 8.6px rgba(255, 255, 255, 0.8); */
     backdrop-filter: blur(4.7px);
     border-radius: var(--border-radius-md); 
-    background: ${({$color}) => COLOR_TO_BG[$color]};
+    background-color: transparent;
     width: 100%;
     height: ${({$ratio}) => $ratio * 103}px;
-    z-index: 4;
+    z-index: 2;
     gap: var(--spacing_x1);
     padding: ${({$ratio}) => $ratio * 8}px ${({$ratio}) => $ratio * 6}px;
 `;
 
-export const TimeBlock = ({title, color, onClick, cards}) => {
+export const TimeBlock = ({title, type, onClick, cards}) => {
     const ratio = useSizeRatio();
 
     return (
         <Wrapper onClick={onClick}>
-            <Title $ratio={ratio} $color={color}>{title}</Title>
-            <TitleBottom $ratio={ratio} $color={color}>{title}</TitleBottom>
-            <ColorBlock $ratio={ratio} $color={color}>
+            <Title $ratio={ratio} $type={type}>{title}</Title>
+            <ColorBlock $ratio={ratio} $type={type}>
                 {cards.map(({points, ...card}) => (
                     <PlanCard key={card.id} card={card} shownPoints={points} isNotDraggable/>
                 ))}

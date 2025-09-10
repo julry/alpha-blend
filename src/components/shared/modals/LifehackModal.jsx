@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { Modal } from "./Modal";
 import { Block } from "../Block";
 import { Button } from "../Button";
-import { findings } from "../../../constants/findings";
-import { useProgress } from "../../../contexts/ProgressContext";
 
 const ModalStyled = styled(Modal)`
     position: fixed;
@@ -23,7 +21,6 @@ const ButtonStyled = styled(Button)`
     margin-top: auto;
     margin-bottom: var(--spacing_x6);
 `;
-
 
 const TitleWrapper = styled.div`
     background: #9A2EFC;

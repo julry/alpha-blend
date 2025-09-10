@@ -67,7 +67,7 @@ const DoneDrinksWrapper = styled.div `
     z-index: 12;
 `;
 
-export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, lobbyScreen, isNeverPlayed2, isDelayed=true }) => {
+export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, lobbyScreen, gameName, day, isDelayed=true }) => {
     const ratio = useSizeRatio();
     const {
         isPaused,
@@ -88,9 +88,9 @@ export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, l
         handleBack,
         blenderDrop,
         setBlenderDrop,
-        peopleAmount
-    } = useGame({isNeverPlayed, lobbyScreen, isNeverPlayed2, week, isDelayed});
-
+        peopleAmount,
+        handleBlenderStart
+    } = useGame({isNeverPlayed, lobbyScreen, gameName, week, isDelayed, day, drinkInfo});
 
      const HTML5toTouch = {
         backends: [
@@ -124,6 +124,7 @@ export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, l
                         onCardClick={handleClickBlenderCard} 
                         cards={blenderCards} 
                         onBlenderStop={handleBlenderStop}
+                        onBlenderClick={handleBlenderStart}
                         resetBlender={handleResetBlender}
                         onDrop={setBlenderDrop}
                     />
@@ -149,7 +150,7 @@ export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, l
                     </AnimatePresence>
                     <DoneDrinksWrapper $ratio={ratio}>
                         {doneDrinks.map((drink, index) => (
-                            <DoneDrinkOject key={`${drink.id}_${index}`} drink={drink}/>
+                            <DoneDrinkOject key={`${drink.id}_${index}`} drink={drink} doneDrinkIndex={index}/>
                         ))}
                     </DoneDrinksWrapper>
                 </DndProvider>

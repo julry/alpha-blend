@@ -13,6 +13,11 @@ import { Block } from "../shared/Block";
 import { LifehackModal } from "../shared/modals/LifehackModal";
 import { CommonModal } from "../shared/modals/CommonModal";
 import { SCREENS } from "../../constants/screens";
+import { NewAchieveModal } from "../shared/modals/NewAchieveModal";
+import { DAYS, DAY_ARR } from "../../constants/days";
+import { screens } from "../../constants/screensComponents";
+import { AnimatePresence } from "framer-motion";
+import { LobbyMenu } from "../shared/LobbyMenu";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -62,16 +67,17 @@ const TabletInfo = styled(Block)`
 `;
 
 export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLaptopClick, ...props }) => {
-    const { next, user, readWeekLetter } = useProgress();
+    const { next, user, day, newAchieve, setNewAchieve, isJustEntered } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [isAchieveModal, setIsAchieveModal] = useState(false);
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
     const [isFinishShown, setIsFinishShown] = useState(false);
-    
+    const [menuType, setMenuType] = useState();
+
     const week = props.week ?? CURRENT_WEEK;
-    const day = props.day ?? CURRENT_DAY;
+
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
 
@@ -110,8 +116,6 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 if (isLetterShown) {
                     setIsLetterModal(true);
 
-                    readWeekLetter(week)
-                    // setUserInfo({readenLetter: ({...user.readenLetter, [weekName]: true})});
                     return;
                 }
 
@@ -122,23 +126,32 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 }
 
                 // Челлендж недели
-                next(props.challengeScreen);
+                // next(screens[`GAME${week}${day.charAt(0).toUpperCase()}`]);
                 break;
             case 'planner':
+                setMenuType('planner');
+
                 if (!isPlanner) return;
 
+
+                //open planner menu
                 // Планнер-игра
-                next(props.plannerScreen);
+                // next(screens[`Planner${week}${day.charAt(0).toUpperCase()}`]);
                 break;
             case 'blender':
+                setMenuType('blender');
+
                 if (!isCup) return;
 
+                //open blender menu
                 // Блендер-игра
-                next(props.blenderScreen);
+                // next(props.blenderScreen);
                 break;
             case 'game': {
-                if (!isGame) return;
+                setMenuType('game');
 
+                if (!isGame) return;
+                //open challenge menu
                 break;
             }
             default:
@@ -181,11 +194,12 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             <ProfileModal isOpen={isUserModal} onClose={() => setIsUserModal(false)} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
-
+            
             <LetterModal isOpen={isLetterModal} onClose={() => setIsLetterModal(false)} checkedWeek={week}/>
             <LifehackModal isOpen={isFindingModal} onClose={() => setIsFindingModal(false)} lifehack={weekMessages?.lifehacks?.[day]}/>
             
-            {isPlanner && !hideTips && (
+            <NewAchieveModal isOpen={newAchieve.length > 0} achieveId={newAchieve[0]} onClose={() => {setNewAchieve(prev => prev.slice(1))}}/>
+            {isPlanner && isJustEntered && !hideTips && (
                 <TabletInfo>
                     <p>{typeof plannerMessage === 'function' ? plannerMessage() : plannerMessage}</p>
                 </TabletInfo>
@@ -195,6 +209,9 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 {props.endMessage}
             </CommonModal>
 
+            <AnimatePresence>
+                {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
+            </AnimatePresence>
             <ItemsStyled
                 onClick={handleClickItem}
                 isLaptopLetter={isLetterShown}

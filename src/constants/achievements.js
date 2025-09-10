@@ -11,7 +11,7 @@ export const achievements = [
     },
     {
         id: 1,
-        text: 'Поиграл хотя бы один раз во все игры недели. ',
+        text: 'Поиграл хотя бы один раз во все игры недели.',
         title: 'Вошёл в ритм',
         icon: () => (
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">

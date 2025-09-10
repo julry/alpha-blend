@@ -52,7 +52,7 @@ const Dot = styled.div`
 export function ScreenContent() {
     const { screen, isLoading, tgError } = useProgress();
     const Screen = useMemo(() => screen, [screen]);
-    useImagePreloader(preloadImages);
+    // useImagePreloader(preloadImages);
 
     if (tgError.isError) return (
         <div>

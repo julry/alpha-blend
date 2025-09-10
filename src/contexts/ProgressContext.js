@@ -3,9 +3,10 @@ import { createContext, useEffect, useContext, useRef, useState } from 'react'
 import { SCREENS, NEXT_SCREENS } from "../constants/screens";
 import { screens } from "../constants/screensComponents";
 import { getUrlParam } from "../utils/getUrlParam";
-import { DAYS } from '../constants/days';
+import { DAY_ARR, DAYS } from '../constants/days';
 import WebApp from '@twa-dev/sdk';
 import { uid } from 'uid';
+import { WEEK_TO_CHALLENGE_NAME } from '../constants/weeksInfo';
 
 const INITIAL_DAY_ACTIVITY = {
     completedAt: null,
@@ -44,6 +45,7 @@ const INITIAL_USER = {
     week2Points: 0,
     week3Points: 0,
     week4Points: 0,
+    achieves: [],
     week1EnterPoints: INITIAL_DAY_POINTS_DATA,
     week2EnterPoints: INITIAL_DAY_POINTS_DATA,
     week3EnterPoints: INITIAL_DAY_POINTS_DATA,
@@ -126,6 +128,25 @@ const ProgressContext = createContext(INITIAL_STATE);
 const API_LINK = process.env.REACT_APP_API_URL;
 const DEV_ID = process.env.REACT_APP_DEV_ID;
 
+const mockCh = {
+    [DAYS.Monday]: {isCompleted: true},
+    [DAYS.Wednesday]: {isCompleted: true},
+    [DAYS.Friday]: {isCompleted: false},
+}
+
+const mockPl = {
+    [DAYS.Monday]: {isCompleted: true},
+    [DAYS.Wednesday]: {isCompleted: true},
+    [DAYS.Friday]: {isCompleted: false},
+}
+
+const mockBl = {
+    [DAYS.Monday]: {isCompleted: true},
+    [DAYS.Wednesday]: {isCompleted: true},
+    [DAYS.Friday]: {isCompleted: false},
+}
+
+
 export function ProgressProvider(props) {
     const { children } = props
     const [isLoading, setIsLoading] = useState();
@@ -135,13 +156,9 @@ export function ProgressProvider(props) {
     const [weekPoints, setWeekPoints] = useState(INITIAL_STATE.weekPoints);
     const [user, setUser] = useState(INITIAL_STATE.user);
     const [passedWeeks, setPassedWeeks] = useState(INITIAL_STATE.passedWeeks);
-    // const [planners, setPlanners] = useState(INITIAL_STATE.planners);
-    // const [challenges, setChallenges] = useState(INITIAL_STATE.challenges);
-    // const [blenders, setBlenders] = useState(INITIAL_STATE.blenders);
-    // const [achievements, setAchievements] = useState(INITIAL_STATE.achievements);
-    // const [findings, setFindings] = useState(INITIAL_STATE.findings);
-    // const [drinks, setDrinks] = useState(INITIAL_STATE.drinks);
-    // const [lifehacks, setLifehacks] = useState(INITIAL_STATE.lifehacks);
+    const [newAchieve, setNewAchieve] = useState([]);
+    const [isJustEntered, setIsJustEntered] = useState(true);
+    const [day, setDay] = useState(CURRENT_DAY);
     const [tgError, setTgError] = useState({isError: false, message: ''});
     const screen = screens[currentScreen];
   
@@ -152,28 +169,41 @@ export function ProgressProvider(props) {
     const setUserBdData = (record) => {
         recordId.current = record?.id;
         const { data = {}, scriptData = {}} = record;
+        const week = data.passedWeeks[data.passedWeeks.length - 1] ?? 1;
 
+        let dayIndex = DAY_ARR.indexOf(CURRENT_DAY);
+        
+        const firstUncompletedCh = Object.keys(data[`game${WEEK_TO_CHALLENGE_NAME[week]}`] ?? {}).find((key) => !data[`game${WEEK_TO_CHALLENGE_NAME[week]}`][key]?.isCompleted);
+        const firstUncompletedPlanner = Object.keys(data[`planner${week}`] ?? {}).find((key) => !data[`planner${week}`][key]?.isCompleted);
+        const firstUncompletedBlender = Object.keys(data[`blender${week}`] ?? {}).find((key) => !data[`blender${week}`][key]?.isCompleted);
+
+        // const firstUncompletedCh = Object.keys(mockCh ?? {}).find((key) => !mockCh[key].isCompleted);
+        // const firstUncompletedPlanner = Object.keys(mockPl).find((key) => !mockPl[key].isCompleted);
+        // const firstUncompletedBlender = Object.keys(mockBl).find((key) => !mockBl[key].isCompleted);
+
+        const indexOfCh = DAY_ARR.indexOf(firstUncompletedCh) > -1 ? DAY_ARR.indexOf(firstUncompletedCh) : 2;
+        const indexOfBlend= DAY_ARR.indexOf(firstUncompletedBlender) > -1 ? DAY_ARR.indexOf(firstUncompletedBlender) : 2;
+        const indexOfPlann = DAY_ARR.indexOf(firstUncompletedPlanner) > -1 ? DAY_ARR.indexOf(firstUncompletedPlanner) : 2;
+
+        const isSameDay = (+indexOfCh === +indexOfBlend) && (+indexOfCh === +indexOfPlann);
+
+        if (!isSameDay) {
+            dayIndex = Math.min(indexOfCh, indexOfBlend, indexOfPlann);
+        } else if (week < CURRENT_WEEK) {
+            dayIndex = DAY_ARR.indexOf(firstUncompletedCh);
+            dayIndex = dayIndex === DAY_ARR.length - 1 ? dayIndex : dayIndex + 1;
+        } else {
+            const currentDay = 1;
+            dayIndex = DAY_ARR.indexOf(firstUncompletedCh);
+            dayIndex = dayIndex < currentDay ? dayIndex + 1 : currentDay;
+        }
+
+        setDay(DAY_ARR[dayIndex]);
+        
         setUserInfo(data);
         setTotalPoints(scriptData?.pointsTotal ?? data.points);
         setPoints(data.points);
         setWeekPoints(data[`week${CURRENT_WEEK}Points`]);
-
-        if (!data.email) return;
-
-        // const {
-        //     planner1, planner2, planner3, planner4, 
-        //     blender1, blender2, blender3, blender4,
-        //     game2048, gameBasket, gamePuzzle, gameMoles,
-        //     achieves, drinks: dataDrinks, findings: dataFindings, lifehacks: dataLifehacks
-        // } = record.data;
-
-        // setPlanners([planner1, planner2, planner3, planner4]);
-        // setBlenders([blender1, blender2, blender3, blender4]);
-        // setChallenges([game2048, gameBasket, gamePuzzle, gameMoles]);
-        // setAchievements(achieves);
-        // setDrinks(dataDrinks);
-        // setFindings(dataFindings);
-        // setLifehacks(dataLifehacks);
     }
 
     const initProject = async () => {
@@ -204,7 +234,6 @@ export function ProgressProvider(props) {
             } else if (!info.data.seenStartInfo) {
                 setCurrentScreen(CURRENT_WEEK > 0 ? SCREENS.START : SCREENS.WAITING);
             } else {
-                //TODO: Доработать перед запуском
                 setCurrentScreen(SCREENS.LOBBY);
             }
         } catch (e) {
@@ -289,8 +318,22 @@ export function ProgressProvider(props) {
     const addDayFinding = (id) => {
         updateUser(({findings: [...user.findings, id]})).catch(() => {});
     }
+
+    const dropGame = async ({gameName, day, tries}) => {
+        if (user[gameName][day].isCompleted) return;
+
+        await updateUser(
+            {
+                [gameName]: { ...user[gameName], [day]: {
+                    ...user[gameName][day],
+                    tries,
+                }},
+            }
+        );
+
+    }
     
-    const endGame = async ({finishPoints, gameName, week, day}) => {
+    const endGame = async ({finishPoints, gameName, week, day, addictiveData}) => {
         if (user[gameName][day].isCompleted) return;
 
         if (week === CURRENT_WEEK) {
@@ -298,6 +341,17 @@ export function ProgressProvider(props) {
         }
 
         const endTimeMsc = getMoscowTime();
+
+        if (!user.achieves.includes(4) && gameName.includes('blender')) {
+            let times = 0;
+
+            times += Object.values(user.blender1).filter(val => val.isCompleted);
+            times += Object.values(user.blender2).filter(val => val.isCompleted);
+            times += Object.values(user.blender3).filter(val => val.isCompleted);
+            times += Object.values(user.blender4).filter(val => val.isCompleted);
+
+            if (times > 2) registrateAchieve(4);
+        }
 
         await updateUser(
             {
@@ -307,7 +361,8 @@ export function ProgressProvider(props) {
                     completedAt: endTimeMsc.toDateString() + ' ' + endTimeMsc.toTimeString(),
                     points: finishPoints
                 }},
-                points: (user.points ?? 0) + finishPoints
+                points: (user.points ?? 0) + finishPoints,
+                ...addictiveData,
             }
         );
 
@@ -334,6 +389,11 @@ export function ProgressProvider(props) {
             return { isError: true };
         }
     }
+
+    const registrateAchieve = (id) => {
+        setNewAchieve(prev => [...prev, id]);
+        updateUser({achieves: [...user.achieves, id]});
+    };
 
     const registrateUser = async (args) => {
         const data = {
@@ -387,7 +447,14 @@ export function ProgressProvider(props) {
         isLoading,
         patchData,
         tgError,
-        checkEmailRegistrated
+        checkEmailRegistrated,
+        registrateAchieve,
+        setNewAchieve,
+        newAchieve,
+        dropGame,
+        isJustEntered,
+        setIsJustEntered,
+        day
     }
 
     return (

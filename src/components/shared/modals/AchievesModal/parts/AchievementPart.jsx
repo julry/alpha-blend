@@ -4,6 +4,7 @@ import { ContentBlock } from "./ContentBlock";
 import { Achievement } from "../../../Achievement";
 import { achievements } from "../../../../../constants/achievements";
 import { useSizeRatio } from "../../../../../hooks/useSizeRatio";
+import { useProgress } from "../../../../../contexts/ProgressContext";
 
 const TitleStyled = styled(Title)`
     margin: var(--spacing_x4) 0;
@@ -14,7 +15,8 @@ const ContentBlockStyled = styled(ContentBlock)`
     gap: var(--spacing_x1);
 `;
 
-export const AchievementPart = ({ openedAchievements = [] }) => {
+export const AchievementPart = () => {
+    const { user } = useProgress();
     const ratio = useSizeRatio();
 
     return (
@@ -24,7 +26,7 @@ export const AchievementPart = ({ openedAchievements = [] }) => {
             </TitleStyled>
             <ContentBlockStyled $ratio={ratio}>
                 {achievements.map(({ id, ...achievement }) => (
-                    <Achievement key={id} isActive={openedAchievements.includes(id)} {...achievement} />
+                    <Achievement key={id} isActive={user.achieves?.includes(id)} {...achievement} />
                 ))}
             </ContentBlockStyled>
         </>

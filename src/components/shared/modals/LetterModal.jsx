@@ -12,7 +12,11 @@ export const LetterModal = ({ isOpen, onClose, checkedWeek, isDarken}) => {
     const text = letterData?.[`text${part}`];
 
     const handleClick = () => {
-        setPart(prev => prev + 1)
+        if (isLast) {
+            onClose();
+            return;
+        }
+        setPart(prev => prev + 1);
     }
 
     return (

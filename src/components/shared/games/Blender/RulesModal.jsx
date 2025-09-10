@@ -135,7 +135,7 @@ export const RulesModal = ({ isOpen, initialPart, onClose }) => {
                 <div style={{ height: '100%' }}>
                     <ArrowButton onClick={handlePrev}>
                         <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 1.5L6 9.5L14 17.5" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M14 1.5L6 9.5L14 17.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </ArrowButton>
                 </div>
@@ -150,7 +150,7 @@ export const RulesModal = ({ isOpen, initialPart, onClose }) => {
                 </ContentWrapper>
                 <ArrowButtonRight onClick={handleNext}>
                     <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </ArrowButtonRight>
             </Content>

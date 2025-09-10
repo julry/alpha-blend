@@ -15,12 +15,13 @@ const ModalStyled = styled(Modal)`
 
 const BlockStyled = styled(Block)`
     position: absolute;
-    top: calc(50% - var(--spacing_x8));
-    max-height: calc(100% - var(--spacing_x8) - var(--spacing_x10));
-    min-height: calc(100% - var(--spacing_x8) - var(--spacing_x10));
+    top: calc(50% - var(--spacing_x10));
+    max-height: calc(100% - var(--spacing_x10) - var(--spacing_x10));
+    /* min-height: calc(100% - var(--spacing_x8) - var(--spacing_x10)); */
     overflow-y: auto;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: left;
 `;
 
 const ButtonStyled = styled(Button)`
@@ -40,17 +41,8 @@ const TextWrapper = styled.div`
     }
 `;
     
-export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew}) => {
-    const { addDayFinding } = useProgress();
+export const FindingModal = ({ isOpen, onClose, children, id, week, day, buttonText}) => {
     const finding = findings.find((hack) => id !== undefined ? hack.id === id : hack.week === week && hack.day === day);
-
-    const handleClick = () => {
-        if (isNew) {
-            //TODO: запись на сервер
-            addDayFinding(id ?? finding.id);
-        }
-        onClose?.();
-    };
 
     return (
         (
@@ -62,7 +54,7 @@ export const FindingModal = ({ isOpen, onClose, children, id, week, day, isNew})
                 {children}
             </TextWrapper>
         </BlockStyled>
-        <ButtonStyled onClick={handleClick}>Понятно</ButtonStyled>
+        <ButtonStyled onClick={onClose}>{buttonText ?? 'Понятно'}</ButtonStyled>
     </ModalStyled>
 )
     )

@@ -18,6 +18,8 @@ export const Blender1M = () => {
             drinkInfo={drinkInfo}
             isNeverPlayed
             week={1}
+            day={DAYS.Monday}
+            gameName={'blender1'}
         />
     )
 }

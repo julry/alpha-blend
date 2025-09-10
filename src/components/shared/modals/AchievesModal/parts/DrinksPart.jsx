@@ -3,6 +3,9 @@ import { useSizeRatio } from "../../../../../hooks/useSizeRatio";
 import { Title } from "../../../Title";
 import { drinks } from "../../../../../constants/drinks";
 import { MIN_MOCKUP_WIDTH } from "../../../../ScreenTemplate";
+import { useProgress } from "../../../../../contexts/ProgressContext";
+import { DrinkModal } from "../../DrinkModal";
+import { useState } from "react";
 
 const TitleStyled = styled(Title)`
     width: 100%;
@@ -45,17 +48,6 @@ const DrinkWrapper = styled.div`
     justify-content: center;
     width: ${({ $ratio }) => $ratio * 100}px;
     height: ${({ $ratio }) => $ratio * 115}px;
-
-    /* @media screen and (max-height: 670px) {
-        height: ${({ $ratio }) => $ratio * 108}px;
-    }
-
-    @media screen and (max-height: 630px) {
-        height: ${({ $ratio }) => $ratio * 96}px;
-    }
-    @media screen and (max-height: 590px) {
-        height: ${({ $ratio }) => $ratio * 86}px;
-    } */
 `;
 
 const DrinkInfo = styled.div`
@@ -66,7 +58,8 @@ const DrinkInfo = styled.div`
     height: ${({ $ratio }) => $ratio * 30}px;
     width: 100%;
     background: #FFFFFF;
-    box-shadow: 0px 0px 48px -12px rgba(0, 0, 0, 0.45), 2px 2px 12px -8px rgba(0, 0, 0, 0.15);
+    
+    box-shadow: 0px 0px 10px 4px ${({$isActive, $shadow}) => $isActive ?  $shadow : 'rgba(255, 0, 0, 0.15)'}, 0px 0px 2px 0px rgba(0,0,0,0.15);
     border-radius: 100px;
     font-size: var(--font_xs);
     z-index: 5;
@@ -76,6 +69,7 @@ const DrinkInfo = styled.div`
     & p {
         width: min-content;
         line-height: 0.85;
+        font-weight: 500;
     }
 `;
 
@@ -90,10 +84,19 @@ const DrinkPicture = styled.img`
     z-index: 2;
 `;
 
-export const DrinksPart = ({openedDrinks = []}) => {
+export const DrinksPart = () => {
+    const {user} = useProgress();
     const ratio = useSizeRatio();
+    const [infoDrink, setIsInfoDrink] = useState();
 
-    const getIsOpened = (id) => openedDrinks.includes(id);
+    const handleOpenDrink = (drink) => {
+        if (!getIsOpened(drink.id)) return;
+
+        setIsInfoDrink(drink);
+    }
+
+    const getIsOpened = (id) => user.drinks?.includes(id);
+
     return (
         <>
             <TitleStyled $ratio={ratio}>
@@ -103,21 +106,22 @@ export const DrinksPart = ({openedDrinks = []}) => {
                 Напитков
             </TitleStyled>
             <GridWrapper $ratio={ratio}>
-                {drinks.map(({id, title, openedPic, closedPic, bottom, size}) => (
-                    <DrinkWrapper key={id} $ratio={ratio}>
-                        <DrinkInfo $ratio={ratio}>
-                            <p>{getIsOpened(id) ? title : '???'}</p>
+                {drinks.map((drink) => (
+                    <DrinkWrapper key={drink.id} $ratio={ratio} onClick={() => handleOpenDrink(drink)}>
+                        <DrinkInfo $ratio={ratio} $shadow={drink.shadow} $isActive={getIsOpened(drink.id)}>
+                            <p>{getIsOpened(drink.id) ? drink.title : '???'}</p>
                         </DrinkInfo>
                         <DrinkPicture 
-                            src={getIsOpened(id) ? openedPic : closedPic} 
+                            src={getIsOpened(drink.id) ? drink.openedPic : drink.closedPic} 
                             alt="title"
                             $ratio={ratio}
-                            $bottom={bottom}
-                            $size={size}
+                            $bottom={drink.bottom}
+                            $size={drink.size}
                         />
                     </DrinkWrapper>
                 ))}
             </GridWrapper>
+            <DrinkModal isOpen={infoDrink !== undefined} onClose={() => setIsInfoDrink()} drink={infoDrink}/>
         </>
     )
 }

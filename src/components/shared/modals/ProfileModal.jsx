@@ -119,7 +119,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
     const [isRefInfoModal, setIsRefInfoModal] = useState(false);
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
-    const { user, weekPoints, totalPoints } = useProgress();
+    const { user, totalPoints } = useProgress();
 
     const handleCopy = () => {
         const link = new URL(window.location.origin);
@@ -139,7 +139,7 @@ export const ProfileModal = ({isOpen, ...props}) => {
                 <FlexBlock>
                     <ProfileWrapper $ratio={ratio}>
                         <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.5 11.3333C12.8012 11.3333 14.6666 9.46785 14.6666 7.16667C14.6666 4.86548 12.8012 3 10.5 3C8.19879 3 6.33331 4.86548 6.33331 7.16667C6.33331 9.46785 8.19879 11.3333 10.5 11.3333ZM10.5 11.3333C12.2681 11.3333 13.9638 12.0357 15.214 13.286C16.4643 14.5362 17.1666 16.2319 17.1666 18M10.5 11.3333C8.73187 11.3333 7.03618 12.0357 5.78593 13.286C4.53569 14.5362 3.83331 16.2319 3.83331 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.5 11.3333C12.8012 11.3333 14.6666 9.46785 14.6666 7.16667C14.6666 4.86548 12.8012 3 10.5 3C8.19879 3 6.33331 4.86548 6.33331 7.16667C6.33331 9.46785 8.19879 11.3333 10.5 11.3333ZM10.5 11.3333C12.2681 11.3333 13.9638 12.0357 15.214 13.286C16.4643 14.5362 17.1666 16.2319 17.1666 18M10.5 11.3333C8.73187 11.3333 7.03618 12.0357 5.78593 13.286C4.53569 14.5362 3.83331 16.2319 3.83331 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     </ProfileWrapper>
                     <Subtitle>ID {user.id}</Subtitle>

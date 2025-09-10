@@ -6,6 +6,7 @@ import { Block } from "../../shared/Block";
 import { PlannerGame } from "../../shared/games/PlannerGame"
 import { useRef, useState } from "react";
 import { Modal } from "../../shared/modals/Modal";
+import { Bold } from "../../shared/Spans";
 
 const ModalStyled = styled(Modal)`
     bottom: auto;
@@ -53,7 +54,7 @@ export const Planner1M = () => {
             <ModalStyled isOpen={isInfo}>
                 <ChallengeInfo hasCloseIcon={true} onClose={handleCloseInfo}>
                     <p>
-                        Помнишь письмо про хакатон? Это и есть челлендж недели. Не забудь добавить карточку в список дел — за неё дают больше баллов!
+                        <Bold>Помнишь письмо про хакатон?</Bold> Это и есть челлендж недели. Не забудь добавить карточку в список дел — без неё не получится запланировать день!
                     </p>
                 </ChallengeInfo>
             </ModalStyled>

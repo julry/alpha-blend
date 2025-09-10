@@ -3,6 +3,7 @@ import { Modal } from "./Modal";
 import { Block } from "../Block";
 import { Title } from "../Title";
 import { Bold } from "../Spans";
+import { useSizeRatio } from "../../../hooks/useSizeRatio";
 
 const ModalStyled = styled(Modal)`
     position: fixed;
@@ -15,7 +16,6 @@ const BlockStyled = styled(Block)`
     position: absolute;
     top: 50%;
     max-height: calc(100% - var(--spacing_x8));
-    min-height: calc(100% - var(--spacing_x8));
     overflow-y: auto;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -43,7 +43,7 @@ const DrinkWrapper = styled.div`
     align-items: center;
     overflow: hidden;
     height: 100%;
-    width: 80px;
+    width: ${({$modalPicWidth}) => $modalPicWidth}px;
 `;
 
 const DrinkPic = styled.img`
@@ -64,34 +64,39 @@ const LiStyled = styled.li`
 const Description = styled.p`
     flex: 1;
 `;
+
+const FullWidth = styled.div`
+    width: 100%;
+`;
     
 export const DrinkModal = ({ isOpen, onClose, drink = {}}) => {
+    const ratio = useSizeRatio();
     return (
     <ModalStyled isOpen={isOpen} isDarken>
         <BlockStyled hasCloseIcon onClose={onClose}>
             <Title>{drink?.title}</Title>
-            <InfoBlock $size={drink?.size}>
-                <DrinkWrapper>
-                    <DrinkPic src={drink.openedPic} $size={drink.size}/>
+            <InfoBlock $size={drink?.size * ratio}>
+                <DrinkWrapper $modalPicWidth={drink.modalPicWidth * ratio}>
+                    <DrinkPic src={drink.openedPic} $size={drink.size * ratio}/>
                 </DrinkWrapper>
                 <Description>{drink?.description}</Description>
             </InfoBlock>
-            <div>
+            <FullWidth>
                 <p><Bold>Ингридиенты</Bold></p>
                 <UlStyled>
-                    {drink.ingridientsText.map((text) => (
+                    {drink.ingridientsText?.map((text) => (
                         <LiStyled key={text.slice(0, 20)}>{text}</LiStyled>
                     ))}
                 </UlStyled>
-            </div>
-            <div>
+            </FullWidth>
+            <FullWidth>
                 <p><Bold>Приготовление</Bold></p>
                 <UlStyled>
-                    {drink.recipeText.map((text) => (
+                    {drink.recipeText?.map((text) => (
                         <LiStyled key={text.slice(0, 20)}>{text}</LiStyled>
                     ))}
                 </UlStyled>
-            </div>
+            </FullWidth>
         </BlockStyled>
     </ModalStyled>
     )

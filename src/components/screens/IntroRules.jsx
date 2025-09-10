@@ -35,7 +35,7 @@ const CommonModalStyled = styled(CommonModal)`
 
 export const IntroRules = () => {
     const [part, setPart] = useState(0);
-    const { user, next, updateUser } = useProgress();
+    const { user, next, updateUser, setNewAchieve } = useProgress();
 
     const getText = () => {
         if (part === 0) return (
@@ -91,16 +91,21 @@ export const IntroRules = () => {
 
     const handleNext = () => {
         setPart(prev => prev + 1);
-        updateUser({ seenStartInfo: true, readenLetters: {...user.readenLetters, week1: true} })
     };
 
+    const handleFinish = () => {
+        handleNext();
+    }
+
     const handleClose = () => {
+        updateUser({ seenStartInfo: true, readenLetters: {...user.readenLetters, week1: true}, achieves: [...user.achieves, 0] });
+        setNewAchieve(prev => [...prev, 0]);
         next();
     };
 
     return (
         <>
-            <Lobby hideTips isLaptop={part === 4} isLaptopLetter={part === 4} onLaptopClick={handleNext} plannerScreen={SCREENS.PLANNER1M}/>
+            <Lobby hideTips isLaptop={part === 4} isLaptopLetter={part === 4} onLaptopClick={handleFinish} plannerScreen={SCREENS.PLANNER1M}/>
             <CommonModalStyled
                 isOpen={part < 4}
                 isDisabledAnimation={part !== 0}
@@ -109,7 +114,7 @@ export const IntroRules = () => {
                 {getText()}
             </CommonModalStyled>
             {part === 4 && (
-                <ButtonStyled onClick={handleNext}>
+                <ButtonStyled onClick={handleFinish}>
                     Далее
                 </ButtonStyled>
             )}

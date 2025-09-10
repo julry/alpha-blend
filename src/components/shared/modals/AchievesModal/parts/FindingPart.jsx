@@ -7,6 +7,7 @@ import { FindingModal } from "../../FindingModal";
 import { Finding } from "./FindingDetail";
 import { useSizeRatio } from "../../../../../hooks/useSizeRatio";
 import { Block } from "../../../Block";
+import { useProgress } from "../../../../../contexts/ProgressContext";
 
 const TitleStyled = styled(Title)`
     margin: var(--spacing_x4) 0;
@@ -31,7 +32,9 @@ const FindingTitle = styled(Title)`
     width: 100%;
 `;
 
-export const FindingPart = ({openedFindings}) => {
+export const FindingPart = () => {
+    const {user} = useProgress();
+
     const ratio = useSizeRatio();
     const [openedFinding, setOpenedFinding] = useState();
     return (
@@ -40,7 +43,7 @@ export const FindingPart = ({openedFindings}) => {
                 Находки
             </TitleStyled>
             <ContentBlockStyled>
-                {openedFindings.map((id) => (
+                {(user.findings ?? []).map((id) => (
                     id === openedFinding ? (
                         <FindingBlock>
                             <FindingTitle>

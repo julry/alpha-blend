@@ -15,33 +15,15 @@ const Wrapper = styled(motion.div)`
     background: #FFFFFF;
     border-radius: var(--border-radius-sm);
     cursor: ${({ $isNotDraggable }) => $isNotDraggable ? 'auto' : 'pointer'};
-    ${({$isPicked}) => $isPicked ? 'margin-right: var(--spacing_x2); box-shadow: 0px 0px 8px -3px rgba(0, 0, 0, 0.25);' : ''};
+    ${({$isPicked}) => $isPicked ? 'margin-right: var(--spacing_x2); box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25), inset 0 0 1px 1px rgba(255, 0, 0, 0.25);' : ''};
     ${({$isSpecial}) => $isSpecial ? 'border: 1px solid rgba(239, 49, 36, 0.6); box-shadow: 0px 0px 10px var(--color-red);' : ''};
 `;
 
 const Icon = styled.img`
     width: 100%;
-    height: ${({ $ratio }) => $ratio * 53}px;
+    flex: 1;
     margin-bottom: var(--spacing_x1);
-    box-shadow: inset 0 0 1px 1px red;
     flex-shrink: 0;
-`;
-
-const Points = styled(motion.p)`
-    position: absolute;
-    top: var(--spacing_x4);
-    left: var(--spacing_x4);
-    font-weight: 900;
-    font-size: ${({$ratio}) => $ratio * 30}px;
-    line-height: ${({$ratio}) => $ratio * 39}px;
-    letter-spacing: 0.02em;
-    color: var(--color-red);
-    -webkit-text-stroke: 2px white;
-    text-stroke: 2px white;
-
-    @supports not ((text-stroke: 2px white) or (-webkit-text-stroke: 2px white)) {
-        text-shadow: 0 0 2px white;
-    }
 `;
 
 const Text = styled.p`
@@ -51,24 +33,13 @@ const Text = styled.p`
     letter-spacing: -0.03em;
     text-transform: lowercase;
     width: 100%;
+    font-weight: 500;
     white-space: pre;
 `;
 
-export const PlanCard = memo(({ card, isNotDraggable, shownPoints, isPicked, onClick }) => {
+export const PlanCard = memo(({ card, isNotDraggable, isPicked, onClick }) => {
     const ratio = useSizeRatio();
-    const [isShownPoints, setIsShownPoints] = useState(shownPoints > 0);
     const { icon, text, isSpecial } = card ?? {};
-
-    useEffect(() => {
-        if (!shownPoints) return;
-
-        const timer = setTimeout(() => {
-            setIsShownPoints(false);
-        }, 1300);
-
-        return () => clearTimeout(timer);
-    }, [shownPoints]);
-
 
     return (
         <Wrapper
@@ -76,7 +47,6 @@ export const PlanCard = memo(({ card, isNotDraggable, shownPoints, isPicked, onC
             $isNotDraggable={isNotDraggable}
             $isSpecial={isSpecial}
             $isPicked={isPicked}
-            // ref={drag}
             initial={{
                 scale: 1,
             }}
@@ -94,22 +64,6 @@ export const PlanCard = memo(({ card, isNotDraggable, shownPoints, isPicked, onC
             >
                 {text}
             </Text>
-            <AnimatePresence>
-                {isShownPoints && (
-                    <Points
-                        initial={{
-                            opacity: 0,
-                            height: 0,
-                        }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.1 }}
-                        $ratio={ratio}
-                    >
-                        +{shownPoints}
-                    </Points>
-                )}
-            </AnimatePresence>
         </Wrapper>
     )
 });

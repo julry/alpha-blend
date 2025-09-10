@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
@@ -118,6 +118,7 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
     const handlePrev = () => {
         setPart(prev => prev - 1 >= 0 ? prev - 1 : amount - 1);
     }
+
 
     const getContent = () => {
         switch (part) {
@@ -260,14 +261,14 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                 <div>
                     <ArrowButton onClick={ handlePrev }>
                         <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 1.5L6 9.5L14 17.5" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 1.5L6 9.5L14 17.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     </ArrowButton>
                 </div>
                 <div>
                     <BackButton $ratio={ratio} onClick={onClose}>
                         <svg viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 11L3 6M3 6L8 1M3 6L15 6" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 11L3 6M3 6L8 1M3 6L15 6" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     </BackButton>
                     { getContent() }
@@ -279,7 +280,7 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                 </div>
                 <ArrowButtonRight onClick={ handleNext }>
                     <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </ArrowButtonRight>
             </Content>

@@ -12,10 +12,15 @@ import { BackHeader } from "../../BackHeader";
 import { SkipModal } from "../../modals/SkipModal";
 import { findings } from "../../../../constants/findings";
 import { weekInfo } from "../../../../constants/weeksInfo";
+import { Button } from "../../Button";
+import { AnimatePresence, motion } from "framer-motion";
+import { EndGameModal } from "./EndGameModal";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
     height: 100%;
+    padding-left: 0;
+    padding-right: 0;
 `;
 
 const Amount = styled.p`
@@ -34,42 +39,56 @@ const CardsContainer = styled.div`
     white-space: nowrap; /* Предотвращает перенос элементов */
     touch-action: pan-x;
     scroll-snap-type: x mandatory;
-    padding: var(--spacing_x3) 0;
+    padding: var(--spacing_x3) var(--spacing_x2);
+    margin-top: auto;
+`;
+
+const BlocksWrapper = styled.div`
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 var(--spacing_x4);
+    max-height: 500px;
+`;
+
+const HeaderStyled = styled(BackHeader)`
+    padding: 0 var(--spacing_x4);
+`;
+
+const ButtonWrapper = styled(motion.div)`
+    position: absolute;
+    bottom: var(--spacing_x6);
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 const MAX_AMOUNT = 9;
 
 export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCloseRules }) => {
-    const { next, endGame } = useProgress();
+    const { user, next, endGame } = useProgress();
     const ratio = useSizeRatio();
-    const [isRules, setIsRules] = useState(isNeverPlayed);
-    const [isSkipping, setIsSkipping] = useState(false);
+ 
     const [dayCards, setDayCards] = useState([]);
     const [morningCards, setMorningCards] = useState([]);
     const [eveningCards, setEveningCards] = useState([]);
     const [shownCards, setShownCards] = useState(cards);
+    const [pickedCard, setPickedCard] = useState();
+
+    const [isRules, setIsRules] = useState(isNeverPlayed);
+    const [isSkipping, setIsSkipping] = useState(false);
     const [isCollegue, setIsCollegue] = useState(false);
     const [isFinding, setIsFinding] = useState(false);
-    const [isFinishModal, setIsFinishModal] = useState(false);
-    const [pickedCard, setPickedCard] = useState();
-    const [finishPoints, setFinishPoints] = useState(0);
+    const [endModal, setEndModal] = useState({shown: false});
 
     const weekData = weekInfo.find((info) => info.week === week);
     const collegueMessage = weekData.plannersCollegueMessage[day];
     const findingId = findings.find((finding) => finding.day === day && finding.week === week).id;
-    const finishMessage = weekData.plannersEndMessage[day];
-       
 
     const commonAmount = morningCards.length + dayCards.length + eveningCards.length;
-
-    useEffect(() => {
-        if (commonAmount === MAX_AMOUNT) {
-            const finished = finishPoints;
-            setFinishPoints(prev => prev + 15);
-            setIsCollegue(true);
-            endGame({finishPoints: finished + 15, gameName: 'planners', week, day});
-        }
-    }, [commonAmount]);
 
     const handleFieldPick = (time) => {
         if (!pickedCard) return;
@@ -87,7 +106,6 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
             setEveningCards(prev => [...prev, pickedCard]);
         };
 
-        setFinishPoints(prev => prev + pickedCard.points);
         setShownCards(prev => prev.filter(({ id }) => id !== pickedCard.id));
         setPickedCard();
     };
@@ -96,42 +114,74 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
         setIsCollegue(false);
         setIsFinding(true);
     };
-    const handleShowFinish = () => {
-        setIsFinding(false);
-        setIsFinishModal(true);
-    };
 
     const handleCloseRules = () => {
         onCloseRules?.();
         setIsRules(false);
     };
 
+    const handleFinish = () => {
+        let isWin = false;
+        if (!shownCards.find((card) => card.isSpecial)) {
+            isWin = true;
+            endGame({finishPoints: 10, gameName: `planner${week}`, week, day, addictiveData: {
+                findings: [...user.findings, findingId],
+            }});
+        }
+
+        setEndModal({shown: true, isWin});
+    };
+
+    const handleClickEnd = () => {
+        if (endModal.isWin) {
+            setIsCollegue(true);
+        } else {
+            setShownCards(cards);
+            setMorningCards([]);
+            setEveningCards([]);
+            setDayCards([]);
+        }
+
+        setEndModal({shown: false});
+    };
+
     return (
         <>
             <Wrapper>
-                <BackHeader onBack={() => setIsSkipping(true)} onInfoClick={() => setIsRules(true)}>
+                <HeaderStyled onBack={() => setIsSkipping(true)} onInfoClick={() => setIsRules(true)}>
                     <Amount $ratio={ratio}>{commonAmount}/{MAX_AMOUNT}</Amount>
-                </BackHeader>
-                <TimeBlock title="утро" color="green" cards={morningCards} onClick={() => handleFieldPick('morning')} />
-                <TimeBlock title="день" color="red" cards={dayCards} onClick={() => handleFieldPick('day')} />
-                <TimeBlock title="вечер" color="purple" cards={eveningCards} onClick={() => handleFieldPick('evening')} />
+                </HeaderStyled>
+                <BlocksWrapper>
+                    <TimeBlock title="утро" type="morning" cards={morningCards} onClick={() => handleFieldPick('morning')} />
+                    <TimeBlock title="день" type="day" cards={dayCards} onClick={() => handleFieldPick('day')} />
+                    <TimeBlock title="вечер" type="evening" cards={eveningCards} onClick={() => handleFieldPick('evening')} />
+                </BlocksWrapper>
+                
                 <CardsContainer>
                     {shownCards.map((card) => (
                         <PlanCard key={card.id} card={card} onClick={() => setPickedCard(prev => prev?.id === card.id ? undefined : card)} isPicked={pickedCard?.id === card.id}/>
                     ))}
                 </CardsContainer>
+                <AnimatePresence>
+                    {commonAmount === MAX_AMOUNT && (
+                        <ButtonWrapper initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                            <Button onClick={handleFinish}>
+                                Запланировать
+                            </Button>
+                        </ButtonWrapper>
+                    )}
+                </AnimatePresence>
             </Wrapper>
             <CommonModal isOpen={isCollegue} isCollegue btnText="Получить лайфхак" onClose={handleShowFinding}>
                 <p>
                     {collegueMessage}
                 </p>
             </CommonModal>
-            <FindingModal isOpen={isFinding} onClose={handleShowFinish} id={findingId} isNew />
-            <CommonModal isOpen={isFinishModal} btnText="В комнату" onClose={() => next(lobbyScreen)}>
-                <p>{finishMessage}</p>
-            </CommonModal>
+
+            <FindingModal isOpen={isFinding} onClose={() => next(lobbyScreen)} id={findingId} isNew buttonText={"В комнату"}/>
             <RulesModal isOpen={isRules} onClose={handleCloseRules} />
             <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={() => next(lobbyScreen)} />
+            <EndGameModal isOpen={endModal.shown} isWin={endModal.isWin} onClick={handleClickEnd} />
         </>
 
     )

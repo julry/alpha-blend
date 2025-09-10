@@ -32,7 +32,7 @@ export const RulesModal = ({ onClose, isOpen }) => {
                 <Button onClick={() => setOpenedPart(3)}>Челлендж недели</Button>
                 <Button onClick={() => setOpenedPart(4)}>Блендер</Button>
             </Content>
-            <InfoModal isOpen={openedPart !== undefined} initialPart={openedPart} onClose={() => setOpenedPart()}/>
+            <InfoModal key={`info_${openedPart}`} isOpen={openedPart !== undefined} initialPart={openedPart} onClose={() => setOpenedPart()}/>
         </Modal>
     )
 }

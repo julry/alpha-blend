@@ -17,40 +17,26 @@ const Wrapper = styled(FlexWrapper)`
 
 const BuildingWrapper = styled.div`
     background: url(${building}) center 100% no-repeat;
-    background-size: contain;
+    background-size: ${({$ratio}) => $ratio * 375}px ${({$ratio}) => $ratio * 667}px;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-bottom: 32vw;
-    padding-left: 11.46vw;
-
-    @media (min-width: 450px) {
-        padding-bottom: ${({$ratio}) => $ratio * 120}px;
-        padding-left: ${({$ratio}) => $ratio * 43}px;
-    }
+    align-items: center;
+    margin: 0 auto;
+    padding-bottom: ${({$ratio}) => $ratio * 120}px;
 `;
 
 const Floor = styled.div`
-    height: 20.26vw;
+    height: ${({$ratio}) => $ratio * 76}px;
     width: 100%;
-    max-width: 78.133vw;
+    max-width: ${({$ratio}) => $ratio * 293}px;
     position: relative;
-
     ${({$isActive}) => $isActive && 'box-shadow: 0px 0px 13.1px #ED3125; border: 1px solid #EF3124;'}
-   
+
     & + & {
-        margin-top: 4.2vw;
-    }
-
-     @media (min-width: 450px) {
-        height: ${({$ratio}) => $ratio * 76}px;
-        max-width: ${({$ratio}) => $ratio * 293}px;
-
-        & + & {
-            margin-top: ${({$ratio}) => $ratio * 16}px;
-        }
+        margin-top: ${({$ratio}) => $ratio * 16}px;
     }
 `;
 
@@ -75,6 +61,7 @@ const LockStyled = styled.svg`
 
 export const WeekLobby = ({isHideUnavailable}) => {
     const { passedWeeks = [], user } = useProgress();
+    //TODO: переделать условие на показ (пермеенную в прогресс + проверка первого планнера)
     const [isShownInfo, setIsShownInfo] = useState(!user?.seenStartInfo);
     const [isClosedInfo, setIsClosedInfo] = useState(false);
 
@@ -83,15 +70,15 @@ export const WeekLobby = ({isHideUnavailable}) => {
     const getIsFloorActive = (index) => {
         if (index > CURRENT_WEEK) return;
 
-         const isCURRENT_WEEKPassed = passedWeeks.includes(CURRENT_WEEK);
+         const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
 
-        return isCURRENT_WEEKPassed ? index === CURRENT_WEEK : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
+        return isWeekPassed ? index === CURRENT_WEEK : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
     };
 
     const getIsFloorUnavailable = (index) => {
-        const isCURRENT_WEEKPassed = passedWeeks.includes(CURRENT_WEEK);
+        const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
         
-        return isCURRENT_WEEKPassed ? index > CURRENT_WEEK : (index > ((passedWeeks[passedWeeks.length - 1] ?? 0) + 1));
+        return isWeekPassed ? index > CURRENT_WEEK : (index > ((passedWeeks[passedWeeks.length - 1] ?? 0) + 1));
     }
 
     const handleFloorClick = (index) => {
@@ -99,6 +86,10 @@ export const WeekLobby = ({isHideUnavailable}) => {
             setIsClosedInfo(true);
         }
     };
+
+    const handleCloseInfo = () => {
+        setIsShownInfo(false)
+    }
 
     return (
         <Wrapper>
@@ -116,7 +107,7 @@ export const WeekLobby = ({isHideUnavailable}) => {
                     </Floor>
                 ))}
             </BuildingWrapper>
-            <CommonModal isOpen={isShownInfo} isDarken btnText="Понятно" onClose={() => setIsShownInfo(false)}>
+            <CommonModal isOpen={isShownInfo} isDarken btnText="Понятно" onClose={handleCloseInfo}>
                 <p><Bold>Это главное меню.</Bold></p>
                 <p>   
                     Здесь собраны все <Bold>4 недели игры:</Bold> какие-то уже открыты, а остальные появятся на своей неделе.

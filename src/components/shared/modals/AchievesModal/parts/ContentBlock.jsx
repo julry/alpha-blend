@@ -58,9 +58,6 @@ export const ContentBlock = (props) => {
 
     useEffect(() => {
         if (!$ref?.current) return;
-        console.log($ref.current.scrollHeight);
-        console.log($ref.current.scrollHeight - $ref.current.clientHeight);
-        console.log($ref.current.scrollTop);
 
         setHasShadow($ref.current.scrollHeight > $ref.current.clientHeight)
     }, []);

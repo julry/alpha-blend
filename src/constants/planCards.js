@@ -1,63 +1,77 @@
+import planning from '../assets/images/planner/plan.png';
+import breakfast from '../assets/images/planner/break.png';
+import music from '../assets/images/planner/music.png';
+import running from '../assets/images/planner/running.png';
+import job from '../assets/images/planner/job.png';
+import study from '../assets/images/planner/study.png';
+import phone from '../assets/images/planner/phone.png';
+import med from '../assets/images/planner/meditation.png';
+import relax from '../assets/images/planner/relax.png';
+import cleaning from '../assets/images/planner/cleaning.png';
+import diary from '../assets/images/planner/dairy.png';
+import brain from '../assets/images/planner/brainstorm.png';
+
 export const planCardsWeek1_Monday = [
+    {
+        id: 3,
+        text: 'планирование\nдня',
+        icon: planning,
+    },
     {
         id: 0,
         text: 'завтрак',
-        points: 5,
+        icon: breakfast,
     },
     {
         id: 1,
         text: 'музыка',
-        points: 5,
+        icon: music,
     },
     {
         id: 2,
         text: 'пробежка',
-        points: 5,
-    },
-    {
-        id: 3,
-        text: 'шопинг',
-        points: 5,
+        icon: running,
     },
     {
         id: 4,
         text: 'работа',
-        points: 5,
+        icon: job,
     },
     {
         id: 5,
         text: 'учёба',
-        points: 5,
+        icon: study,
     },
     {
         id: 6,
         text: 'думскроллинг',
-        points: 5,
+        icon: phone,
     },
     {
         id: 7,
         text: 'медитация',
-        points: 5,
+        icon: med,
     },
     {
         id: 8,
         text: 'отдых',
-        points: 5,
+        icon: relax
     },
     {
         id: 9,
         text: 'уборка',
-        points: 5,
+        icon: cleaning,
+    },
+    {
+        id: 11,
+        text: 'дневник',
+        icon: diary,
     },
     {
         id: 10,
         text: 'брейншторм\nхакатона',
-        points: 10,
+        icon: brain,
         isSpecial: true,
     },
-    {
-        id: 11,
-        text: 'встреча\nс друзьями',
-        points: 5,
-    },
+    
 ]

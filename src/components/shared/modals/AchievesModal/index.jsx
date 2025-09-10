@@ -11,6 +11,7 @@ import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { DrinksPart } from "./parts/DrinksPart";
 import { achievements } from "../../../../constants/achievements";
 import { BackHeader } from "../../BackHeader";
+import { drinks } from "../../../../constants/drinks";
 
 const Wrapper = styled(FlexWrapper)`
     background: #FFFFFF;
@@ -65,19 +66,19 @@ export const AchievesModal = ({ onClose, isOpen }) => {
     const [isRulesModal, setIsRulesModal] = useState(false);
     const [stage, setStage] = useState(0);
     const ratio = useSizeRatio();
-    const { user, drinks } = useProgress();
+    const { user } = useProgress();
 
     const getHeaderContent = () => {
         switch (stage) {
             case 0:
                 return (
-                    <Amount $ratio={ratio}>{user?.achievements?.length ?? 0}/{achievements?.length ?? 0}</Amount>
+                    <Amount $ratio={ratio}>{new Set(user?.achieves ?? [])?.size ?? 0}/{achievements?.length ?? 0}</Amount>
                 );
             case 1:
                 return;
             case 2:
                 return (
-                    <Amount $ratio={ratio}>{drinks?.length ?? 0}/12</Amount>
+                    <Amount $ratio={ratio}>{new Set(user?.drinks ?? [])?.size ?? 0}/{drinks.length}</Amount>
                 );
             default:
                 return;
@@ -87,9 +88,9 @@ export const AchievesModal = ({ onClose, isOpen }) => {
     const getContent = () => {
         switch (stage) {
             case 0:
-                return <AchievementPart openedAchievements={[0]} />;
+                return <AchievementPart />;
             case 1:
-                return <FindingPart openedFindings={[0, 1]} />;
+                return <FindingPart />;
             case 2:
                 return <DrinksPart />;
             default:

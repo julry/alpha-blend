@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Modal } from "./Modal";
-import { Block } from "../Block";
-import { Button } from "../Button";
-import { Title } from "../Title";
-import { Bold, RedText } from "../Spans";
+import { Modal } from "../../modals/Modal";
+import { Title } from "../../Title";
+import { Bold, RedText } from "../../Spans";
+import { Block } from "../../Block";
+import { Button } from "../../Button";
 
 const ModalStyled = styled(Modal)`
     display: flex;
@@ -20,9 +20,8 @@ const BlockStyled = styled(Block)`
 
 const ButtonStyled= styled(Button)`
     margin-top: auto;
-    padding-bottom: var(--spacing_x6);
+    margin-bottom: var(--spacing_x6);
 `;
-
 
 export const EndGameModal = ({ children, isOpen, onClose, points, isWin }) => {
     return (

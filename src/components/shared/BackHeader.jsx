@@ -8,8 +8,8 @@ const Header = styled.div`
     align-items: center;
 `;
 
-export const BackHeader = ({onBack, onInfoClick, children}) => (
-    <Header>
+export const BackHeader = ({ className, onBack, onInfoClick, children}) => (
+    <Header className={className}>
         <IconButton onClick={onBack} icon={{ width: 24, height: 16 }}>
             <svg viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.1 16C6.86 14.505 5.56 13.2121 4.2 12.1212C2.88 10.9899 1.48 10.0606 0 9.33333V6.72727C2.96 5.19192 5.66 2.9495 8.1 0H12.72C12.28 1.17172 11.76 2.28283 11.16 3.33333C10.6 4.34343 10 5.31313 9.36 6.24242V9.81818C10 10.6667 10.6 11.6162 11.16 12.6667C11.76 13.6768 12.28 14.7879 12.72 16H8.1ZM9 10.4848L9.06 5.51515H24V10.4848H9Z" fill="white" />

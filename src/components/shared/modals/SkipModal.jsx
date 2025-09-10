@@ -28,16 +28,14 @@ const ButtonWrapper= styled.div`
 `;
 
 
-export const SkipModal = ({ isOpen, onClose, onExit }) => {
-    return (
-        <ModalStyled isDarken isOpen={isOpen}>
-            <BlockStyled>
-                <p><Bold>Ты точно хочешь выйти?</Bold></p>
-            </BlockStyled>
-            <ButtonWrapper>
-                <Button onClick={onClose}>Продолжить</Button>
-                <Button type="secondary" onClick={onExit}>Выйти</Button>
-            </ButtonWrapper>
-        </ModalStyled>
-    );
-};
+export const SkipModal = ({ isOpen, onClose, onExit }) => (
+    <ModalStyled isDarken isOpen={isOpen}>
+        <BlockStyled>
+            <p><Bold>Ты точно хочешь выйти?</Bold></p>
+        </BlockStyled>
+        <ButtonWrapper>
+            <Button onClick={onClose}>Продолжить</Button>
+            <Button type="secondary" onClick={onExit}>Выйти</Button>
+        </ButtonWrapper>
+    </ModalStyled>
+);
