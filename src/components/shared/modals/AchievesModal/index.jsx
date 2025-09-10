@@ -41,21 +41,33 @@ const ButtonStyled = styled.button`
     width: ${({ $ratio }) => $ratio * 48}px;
     height: ${({ $ratio }) => $ratio * 48}px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--spacing_x1);
+
+    & svg {
+        margin: auto;
+        width: ${({ $ratio }) => $ratio * 14}px;
+        height: ${({ $ratio }) => $ratio * 18}px;
+    }
 `;
 
 const ArrowStyled = styled(ButtonArrow)`
     position: absolute;
-`;
-const ButtonArrowLeft = styled(ArrowStyled)`
-    transform: scale(-4.5);
-    left:  var(--spacing_x4);
-    top: var(--spacing_x4);
+    inset: 0;
 `;
 
+const ButtonArrowLeft = styled(ArrowStyled)`
+    transform: scale(-1);
+    /* left:  var(--spacing_x4); */
+    /* top: var(--spacing_x4); */
+`;
+
+
 const ButtonArrowRight = styled(ArrowStyled)`
-    transform: scale(4.5);
-    top: calc(0px - ${({ $ratio }) => $ratio * 18}px);
-    right: ${({ $ratio }) => $ratio * 18}px;
+    /* transform: scale(4.5); */
+    /* top: calc(0px - ${({ $ratio }) => $ratio * 18}px); */
+    /* right: ${({ $ratio }) => $ratio * 18}px; */
 `;
 
 const Amount = styled.p`

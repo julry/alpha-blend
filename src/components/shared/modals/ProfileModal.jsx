@@ -3,7 +3,7 @@ import { CURRENT_WEEK, useProgress } from "../../../contexts/ProgressContext";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 const Content = styled(Block)`
     position: absolute;
@@ -117,8 +117,7 @@ const RefDesc = styled.div`
     margin-bottom: var(--spacing_x1);
 `;
 
-export const ProfileModal = ({isOpen, ...props}) => {
-    const [isRefInfoModal, setIsRefInfoModal] = useState(false);
+export const ProfileModal = memo(({isOpen, ...props}) => {
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
     const { user, totalPoints, tgInfo } = useProgress();
@@ -198,15 +197,6 @@ export const ProfileModal = ({isOpen, ...props}) => {
                     }
                 </RefBlock>
             </Content>
-            {isRefInfoModal && (
-                <Modal isDarken>
-                    <InfoModalBlock onClose={() => setIsRefInfoModal(false)} hasCloseIcon>
-                        <p>
-                            Скопируй реферальную ссылку и отправляй друзьям,{'\n'}чтобы получить дополнительные баллы!
-                        </p>
-                    </InfoModalBlock>
-                </Modal>
-            )}
         </Modal>
     )
-}
+});

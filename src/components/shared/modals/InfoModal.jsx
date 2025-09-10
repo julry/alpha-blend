@@ -53,6 +53,8 @@ const BackButton = styled.button`
     top: var(--spacing_x3);
     left: var(--spacing_x3);
     margin-right: auto;
+    background-color: transparent;
+
 
     & svg {
         width: ${({$ratio}) => $ratio * 18}px;
@@ -280,7 +282,7 @@ export const InfoModal = ({ isOpen, initialPart, onClose }) => {
                 </div>
                 <ArrowButtonRight onClick={ handleNext }>
                     <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M6 17.5L14 9.5L6 1.5" stroke="#263D8D" stroke-opacity="0.3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                     </svg>
                 </ArrowButtonRight>
             </Content>

@@ -28,7 +28,7 @@ export const EndGameModal = ({ children, isOpen, onClick, isWin }) => {
         <ModalStyled isDarken isOpen={isOpen}>
             <BlockStyled>
                 <Title>
-                   {isWin ? 'ОТЛИЧНО' : 'чТО-ТО НЕ ТАК!'}
+                   {isWin ? 'ОТЛИЧНО' : 'ЧТО-ТО НЕ ТАК!'}
                 </Title>
                 {children}
                 {isWin ? (

@@ -137,7 +137,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         setPeopleAmount(0);
     };
 
-    const handleStartGameModal = () => {
+    const handleStartGame = () => {
         setIsFirstRules(false);
         setTimeout(replay);
     };
@@ -263,7 +263,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         getFriends,
         handleClickCard,
         handleFinishTraining,
-        handleStartGameModal,
+        handleStartGame,
         getEducationFriend,
         closeEndModal,
         closeCollegueModal,

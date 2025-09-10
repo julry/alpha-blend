@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { useTimer } from "../../../../hooks/useTimer";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { persons, QUEUE_TO_PERSON_TIME } from "./constants";
 import { Points } from "../parts/Points";
 import { motion, useAnimation } from "framer-motion";
@@ -44,7 +44,7 @@ const PointsStyled = styled(Points)`
     transform: translateX(-50%);
 `;
 
-export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, isFinished, queueAmount, friendId, personId, drink, onEndTimer, onGetDrink, points, hideInfo, position = 'center' }) => {
+export const Person = memo(({ setBlenderDrop, blenderDrop, isStopped, ingridients, isFinished, queueAmount, friendId, personId, drink, onEndTimer, onGetDrink, points, hideInfo, position = 'center' }) => {
     const ratio = useSizeRatio();
     const controls = useAnimation();
     const controlsInfo = useAnimation();
@@ -133,4 +133,4 @@ export const Person = ({ setBlenderDrop, blenderDrop, isStopped, ingridients, is
             <PointsStyled $ratio={ratio} isShown={points > 0} shownPoints={points} />
         </Wrapper>
     )
-}
+});
