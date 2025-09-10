@@ -170,7 +170,8 @@ export function ProgressProvider(props) {
     const setUserBdData = (record) => {
         recordId.current = record?.id;
         const { data = {}, scriptData = {}} = record;
-        const week = data.passedWeeks[data.passedWeeks.length - 1] ?? 1;
+        const passedWeeksBd = data.passedWeeks ?? [];
+        const week = passedWeeksBd[passedWeeksBd.length - 1] ?? 1;
 
         let dayIndex = DAY_ARR.indexOf(CURRENT_DAY);
         
@@ -192,10 +193,11 @@ export function ProgressProvider(props) {
         }
 
         setDay(DAY_ARR[dayIndex]);
-        setIsShowWeekLobbyInfo(!data.planner1[DAYS.Monday].isCompleted);
+        setIsShowWeekLobbyInfo(!data.planner1?.[DAYS.Monday]?.isCompleted);
         setUserInfo(data);
         setTotalPoints(scriptData?.pointsTotal ?? data.points);
         setPoints(data.points);
+        setPassedWeeks(passedWeeksBd);
         setWeekPoints(data[`week${CURRENT_WEEK}Points`]);
     }
 
