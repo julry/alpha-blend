@@ -29,6 +29,7 @@ const Wrapper = styled(motion.div)`
     height: ${({ height, $ratio }) => $ratio * height}px;
     z-index: ${({ $position }) => POSITION_TO_INDEX[$position]};
     transition: left 300ms;
+    will-change: height, opacity;
 `;
 
 const Image = styled.img`

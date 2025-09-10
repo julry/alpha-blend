@@ -68,3 +68,7 @@ a {
 a:visited {
   color: inherit;
 }
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

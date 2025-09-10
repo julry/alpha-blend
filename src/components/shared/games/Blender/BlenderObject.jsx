@@ -89,6 +89,7 @@ const LiquidWrapper = styled.div`
 const Liquid = styled.div`
     width: 300%;
     height: 75%;
+    will-change: transform;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     background: rgba(148, 190, 235, 0.65);
@@ -109,6 +110,7 @@ position: absolute;
     position: absolute;
     width: 4px;
     height: 4px;
+    will-change: transform;
     background: rgba(255, 255, 255, 1);
     border-radius: 50%;
     bottom: 20%;
@@ -128,6 +130,8 @@ position: absolute;
   left: ${({$left}) => $left + 10 * Math.random()}%;
   animation: ${bubble}  1.2s ease-in infinite;
   animation-delay: ${({$left}) => $left / 600}s;
+    will-change: transform;
+
 }`
 
 const ErrorSign = styled(motion.div)`
