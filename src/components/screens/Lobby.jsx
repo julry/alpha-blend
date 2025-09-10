@@ -78,6 +78,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
     const [finishModal, setFinishModal] = useState({shown: false});
+    const [hasClosed, setHasClosed] = useState(false);
 
     const [menuType, setMenuType] = useState();
 
@@ -91,7 +92,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day].isCompleted;
     const isBlenderUndone = !user?.[`blender${week}`]?.[day].isCompleted;
 
-    // const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
+    const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
     const isBulbShown = !isChallengeUndone && !user?.lifehacks.includes(`week${week}day${day}`);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown;
@@ -100,12 +101,24 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isGame = !isPlanerUndone && isChallengeUndone;
 
     const plannerMessage = weekMessages?.plannersMessage?.[day];
+    const letterMessage = weekMessages?.letterMessage;
     let endMessage = weekMessages?.dayEndMessages?.[day];
     endMessage = endMessage ?? (user.isTargeted ? weekMessages?.weekEndMessageVip : weekMessages.weekEndMessage);
 
     useEffect(() => {
         updateTotalPoints().catch(() => {});
     }, []);
+
+    useEffect(() => {
+        if (isPlanerUndone || isBlenderUndone || hasClosed) return;
+        const isPrevWeek = week < CURRENT_WEEK;
+        const isPrevDay = !isPrevWeek && (DAY_ARR.indexOf(day) < DAY_ARR.indexOf(CURRENT_DAY));
+        const hasMoreToPass = isPrevWeek || isPrevDay;
+
+        if (!hasMoreToPass && !isAllDone) return;
+
+        setFinishModal({shown: true, hasMoreToPass});
+    }, [isPlanerUndone, isBlenderUndone, isAllDone, day, week, hasClosed]);
 
     const handleClickItem = (item) => {
         switch (item) {
@@ -162,13 +175,12 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     const handleCloseFinding = () => {
         setIsFindingModal(false);
-        const isPrevWeek = week < CURRENT_WEEK;
-        const isPrevDay = !isPrevWeek && (DAY_ARR.indexOf(day) < DAY_ARR.indexOf(CURRENT_DAY));
-        const hasMoreToPass =  isPrevWeek || isPrevDay;
-
-        setFinishModal({shown: true, hasMoreToPass});
     };
 
+    const handleCloseFinish = () => {
+        setHasClosed(true);
+        setFinishModal({shown: false});
+    }
     return (
         <Wrapper>
             <Content>
@@ -209,14 +221,22 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             <LifehackModal isOpen={isFindingModal} onClose={handleCloseFinding} lifehack={weekMessages?.lifehacks?.[day]}/>
             
             <NewAchieveModal isOpen={newAchieve.length > 0} achieveId={newAchieve[0]} onClose={() => {setNewAchieve(prev => prev.slice(1))}}/>
+            
             {isPlanner && isJustEntered && !hideTips && (
                 <TabletInfo>
-                    <p>{typeof plannerMessage === 'function' ? plannerMessage() : plannerMessage}</p>
+                    {typeof plannerMessage === 'function' ? plannerMessage() : plannerMessage}
                 </TabletInfo>
             )}
+            {
+                isLetterShown && letterMessage !== undefined && (
+                    <TabletInfo>
+                        {typeof letterMessage === 'function' ? letterMessage() : letterMessage}
+                    </TabletInfo>
+                )
+            }
             <FinishContinuesModal 
                 isOpen={finishModal.shown} 
-                onClose={() => setFinishModal({shown: false})} 
+                onClose={handleCloseFinish} 
                 hasMore={finishModal.hasMoreToPass} 
                 endMessage={endMessage}
             />

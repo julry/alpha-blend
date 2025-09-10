@@ -136,11 +136,12 @@ position: absolute;
 
 const ErrorSign = styled(motion.div)`
     position: absolute;
-    top: 50%;
-    left: 40%;
+    top: 55%;
+    left: 45%;
     transform: translate(-50%, -50%);
     height: ${({$ratio}) => $ratio * 50}px;
     width: ${({$ratio}) => $ratio * 50}px;
+    z-index: 43;
 `;
 
 export const BlenderObject = memo(({cards = [], onDrop, buttonChildren, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
