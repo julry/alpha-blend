@@ -127,9 +127,7 @@ export const AchievesModal = ({ onClose, isOpen }) => {
                         <ButtonArrowRight $ratio={ratio} isDisabled={stage === 2} />
                     </ButtonStyled>
                 </ButtonsWrapper>
-                {isRulesModal && (
-                    <RulesModal onClose={() => setIsRulesModal(false)} />
-                )}
+                <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             </Wrapper>
         </Modal>
     )

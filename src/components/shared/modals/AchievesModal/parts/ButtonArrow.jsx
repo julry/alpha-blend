@@ -1,5 +1,5 @@
 export const ButtonArrow = ({ isDisabled, ...props }) => (
-       <svg {...props} width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5.0849 18C6.4497 16.3182 7.8805 14.8636 9.3774 13.6364C10.8302 12.3636 12.3711 11.3182 14 10.5V7.5682C10.7421 5.8409 7.7704 3.3182 5.0849 0H0C0.4843 1.3182 1.0566 2.5682 1.717 3.75C2.3333 4.8864 2.9937 5.9773 3.6981 7.0227V11.0455C2.9937 12 2.3333 13.0682 1.717 14.25C1.0566 15.3864 0.4843 16.6364 0 18H5.0849Z" fill={isDisabled ? '#B2B7C5' : '#EF3124'}/>
     </svg>
 );
