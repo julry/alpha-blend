@@ -98,7 +98,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
-    console.log(day);
+    
     const isLetterShown = isLaptopLetter || !user.readenLetters?.[weekName];
     const isPlanerUndone = !user?.[`planner${week}`]?.[day]?.isCompleted;
     const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day]?.isCompleted;
@@ -161,7 +161,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     }, [isPlanerUndone, isBlenderUndone, isAllDone, day, week, hasClosed]);
 
     const handleClickItem = (item) => {
-        if (['game', 'planner', 'blender'].includes(item)) {
+        if (['game', 'planner', 'blender'].includes(item) && !hideTips) {
             setMenuType(item);
             setIsJustEntered(false);
         };

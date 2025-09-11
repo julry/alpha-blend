@@ -173,7 +173,7 @@ export function ProgressProvider(props) {
         recordId.current = record?.id;
         const { data = {}, scriptData = {}} = record;
         const passedWeeksBd = data.passedWeeks ?? [];
-        const week = passedWeeksBd[passedWeeksBd.length - 1] ?? 1;
+        const week = (passedWeeksBd[passedWeeksBd.length - 1] >= CURRENT_WEEK - 1) ? CURRENT_WEEK : passedWeeksBd[passedWeeksBd.length - 1] ?? 1;
 
         let dayIndex = DAY_ARR.indexOf(CURRENT_DAY);
         
@@ -378,10 +378,10 @@ export function ProgressProvider(props) {
         if (!user.achieves.includes(4) && gameName.includes('blender')) {
             let times = 0;
 
-            times += Object.values(user.blender1).filter(val => val.isCompleted);
-            times += Object.values(user.blender2).filter(val => val.isCompleted);
-            times += Object.values(user.blender3).filter(val => val.isCompleted);
-            times += Object.values(user.blender4).filter(val => val.isCompleted);
+            times += Object.values(user.blender1).filter(val => val.isCompleted).length;
+            times += Object.values(user.blender2).filter(val => val.isCompleted).length;
+            times += Object.values(user.blender3).filter(val => val.isCompleted).length;
+            times += Object.values(user.blender4).filter(val => val.isCompleted).length;
 
             if (times > 2) registrateAchieve(4);
         }

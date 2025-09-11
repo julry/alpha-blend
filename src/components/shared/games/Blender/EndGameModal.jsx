@@ -32,10 +32,7 @@ export const EndGameModal = ({ children, isOpen, onClose, points, isWin }) => {
                 </Title>
                 {children}
                 {isWin ? (
-                    <>
-                        <p>Все напитки отданы вовремя.</p>
                         <p>Ты заработал <RedText><Bold>{points}</Bold></RedText> <Bold>баллов</Bold>.</p>
-                    </>
                 ) : (
                     <p>Не переживай, тебя ждут другие игры и задания. В этот раз ты заработал <RedText><Bold>{points}</Bold></RedText> <Bold>баллов</Bold>.</p>
                 )}
