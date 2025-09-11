@@ -3,7 +3,7 @@ import { HighlightedItems } from "../shared/HighligthedItems"
 import { FlexWrapper } from "../shared/ContentWrapper";
 import lobbyBg from '../../assets/images/lobbyBg.png';
 import { IconButton } from "../shared/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PersonIcon } from "../shared/svg/PersonIcon";
 import { AchievesModal, ProfileModal, RulesModal } from "../shared/modals";
 import { CURRENT_DAY, CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext";
@@ -16,8 +16,9 @@ import { SCREENS } from "../../constants/screens";
 import { NewAchieveModal } from "../shared/modals/NewAchieveModal";
 import { AnimatePresence } from "framer-motion";
 import { LobbyMenu } from "../shared/LobbyMenu";
-import { DAY_ARR } from "../../constants/days";
+import { DAY_ARR, DAYS } from "../../constants/days";
 import { FinishContinuesModal } from "./FinishContinuesModal";
+import { Bold } from "../shared/Spans";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -66,6 +67,14 @@ const TabletInfo = styled(Block)`
     transform: translateX(-50%);
 `;
 
+const Tip = styled(Block)`
+    position: absolute;
+    z-index: 4;
+    ${({$isRigth}) => $isRigth ? 'right: var(--spacing_x5)': 'left: var(--spacing_x7)'};
+    max-width: 57%;
+    bottom: calc(var(--spacing_x6) * 10 + var(--spacing_x1)/2);
+`;
+
 export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLaptopClick, ...props }) => {
     const { 
         next, user, day, newAchieve, setNewAchieve, 
@@ -78,9 +87,13 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
     const [finishModal, setFinishModal] = useState({shown: false});
+    const [isGameTip, setIsGameTip] = useState(false);
+    const [isCupTip, setIsCupTip] = useState(false);
     const [hasClosed, setHasClosed] = useState(false);
 
     const [menuType, setMenuType] = useState();
+
+    const tipsClosed = useRef({cup: false, game: false});
 
     const week = props.week ?? CURRENT_WEEK;
 
@@ -99,7 +112,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isCup = !isPlanerUndone && isBlenderUndone;
     const isPlanner = !isLetterShown && isPlanerUndone;
     const isGame = !isPlanerUndone && isChallengeUndone;
-
+    
     const plannerMessage = weekMessages?.plannersMessage?.[day];
     const letterMessage = weekMessages?.letterMessage;
     let endMessage = weekMessages?.dayEndMessages?.[day];
@@ -108,6 +121,32 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     useEffect(() => {
         updateTotalPoints().catch(() => {});
     }, []);
+
+    useEffect(() => {
+        if (tipsClosed.current.cup) return;
+        const isTipC = !user?.blender1[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted && !menuType;
+
+        setIsCupTip(isTipC);
+    }, [menuType]);
+
+    useEffect(() => {
+        if (tipsClosed.current.game) return;
+        const isTipG = !user?.game2048[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted && !isCupTip && !menuType;
+
+        setIsGameTip(isTipG);
+    }, [isCupTip, menuType]);
+
+    const handleCloseTip = (type) => {
+        tipsClosed.current[type] = true;
+
+        if (type === 'cup') {
+            setIsCupTip(false);
+
+            return;
+        }
+
+        setIsGameTip(false);
+    };
 
     useEffect(() => {
         if (isPlanerUndone || isBlenderUndone || hasClosed) return;
@@ -234,13 +273,16 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                     </TabletInfo>
                 )
             }
+
+            {isGameTip && (<Tip key="game" $isRigth hasCloseIcon onClose={() => handleCloseTip('game')}><p><Bold>Нажми на приставку,</Bold> чтобы перейти к челленджу недели.</p></Tip>)}
+            {isCupTip && <Tip key="cup" hasCloseIcon onClose={() => handleCloseTip('cup')}><p><Bold>Нажми на кружку,</Bold> если хочешь поиграть в «Блендер».</p></Tip>}
+
             <FinishContinuesModal 
                 isOpen={finishModal.shown} 
                 onClose={handleCloseFinish} 
                 hasMore={finishModal.hasMoreToPass} 
                 endMessage={endMessage}
             />
-
             <AnimatePresence>
                 {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
             </AnimatePresence>
