@@ -105,7 +105,7 @@ export const RulesModal = ({ isOpen, initialPart, onClose }) => {
                             <Li>В игре <Bold><RedText>1 </RedText>раунд  —</Bold> в него приходит несколько гостей</Li>
                             <Li>У каждого гостя над головой появляется рецепт и таймер на <Bold><RedText>15 </RedText>секунд</Bold></Li>
                             <Li>Напиток готовится в блендере за 2 секунды после нажатия на кнопку</Li>
-                            <Li>За правильный заказ ты получаешь <Bold><RedText>+10 </RedText> баллов</Bold></Li>
+                            <Li>За правильный заказ ты получаешь <Bold><RedText>+10 </RedText>баллов</Bold></Li>
                         </ul>
                     </>
                 )
