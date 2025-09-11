@@ -24,6 +24,7 @@ const Achieve = styled(Achievement)`
 
 const CloseIcon = styled.button`
     margin-left: auto;
+    background-color: transparent;
     width: ${({ $ratio }) => $ratio * 12}px;
     height: ${({ $ratio }) => $ratio * 12}px;
     min-height: ${({ $ratio }) => $ratio * 12}px;
