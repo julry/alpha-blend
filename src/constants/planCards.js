@@ -107,7 +107,7 @@ export const planCardsWeek1_Wednesday = [
     },
     {
         id: 1,
-        text: 'Игра на инструменте',
+        text: 'Игра\nна инструменте',
         icon: guitar,
     },
     {
