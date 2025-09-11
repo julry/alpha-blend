@@ -11,7 +11,6 @@ import { LetterModal } from "../shared/modals/LetterModal";
 import { WEEK_TO_CHALLENGE_NAME, weekInfo } from "../../constants/weeksInfo";
 import { Block } from "../shared/Block";
 import { LifehackModal } from "../shared/modals/LifehackModal";
-import { CommonModal } from "../shared/modals/CommonModal";
 import { SCREENS } from "../../constants/screens";
 import { NewAchieveModal } from "../shared/modals/NewAchieveModal";
 import { AnimatePresence } from "framer-motion";
@@ -99,11 +98,11 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
-
+    console.log(day);
     const isLetterShown = isLaptopLetter || !user.readenLetters?.[weekName];
-    const isPlanerUndone = !user?.[`planner${week}`]?.[day].isCompleted;
-    const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day].isCompleted;
-    const isBlenderUndone = !user?.[`blender${week}`]?.[day].isCompleted;
+    const isPlanerUndone = !user?.[`planner${week}`]?.[day]?.isCompleted;
+    const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day]?.isCompleted;
+    const isBlenderUndone = !user?.[`blender${week}`]?.[day]?.isCompleted;
 
     const isAllDone = !(isPlanerUndone || isChallengeUndone || isBlenderUndone);
     const isBulbShown = !isChallengeUndone && !user?.lifehacks.includes(`week${week}day${day}`);
@@ -124,14 +123,16 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     useEffect(() => {
         if (tipsClosed.current.cup) return;
-        const isTipC = !user?.blender1[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted && !menuType;
+        const isTipC = !user?.blender1[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted 
+        && !menuType && !isLetterShown && !isPlanner;
 
         setIsCupTip(isTipC);
     }, [menuType]);
 
     useEffect(() => {
         if (tipsClosed.current.game) return;
-        const isTipG = !user?.game2048[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted && !isCupTip && !menuType;
+        const isTipG = !user?.game2048[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted &&
+         !isCupTip && !menuType && !isLetterShown && !isPlanner;
 
         setIsGameTip(isTipG);
     }, [isCupTip, menuType]);
@@ -160,56 +161,34 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     }, [isPlanerUndone, isBlenderUndone, isAllDone, day, week, hasClosed]);
 
     const handleClickItem = (item) => {
-        switch (item) {
-            case 'laptop':
-                if (!isLaptop) return;
-
-                if (typeof onLaptopClick === 'function') {
-                    onLaptopClick?.();
-
-                    return;
-                }
-
-                setIsJustEntered(false);
-
-                if (isLetterShown) {
-                    setIsLetterModal(true);
-                    readWeekLetter(week);
-                    return;
-                }
-
-                if (isBulbShown) {
-                    setIsFindingModal(true);
-                    readLifehack(week, day);
-                    return;
-                }
-
-                break;
-            case 'planner':
-                if (!isPlanner) return;
-                setIsJustEntered(false);
-
-                setMenuType('planner');
-
-                break;
-            case 'blender':
-                if (!isCup) return;
-                setIsJustEntered(false);
-
-                setMenuType('blender');
-
-                break;
-            case 'game': {
-                if (!isGame) return;
-                setIsJustEntered(false);
-
-                setMenuType('game');
-
-                break;
-            }
-            default:
-                break;
+        if (['game', 'planner', 'blender'].includes(item)) {
+            setMenuType(item);
+            setIsJustEntered(false);
         };
+
+        if (item === 'laptop') {
+            if (!isLaptop) return;
+
+            if (typeof onLaptopClick === 'function') {
+                onLaptopClick?.();
+
+                return;
+            }
+
+            setIsJustEntered(false);
+
+            if (isLetterShown) {
+                setIsLetterModal(true);
+                readWeekLetter(week);
+                return;
+            }
+
+            if (isBulbShown) {
+                setIsFindingModal(true);
+                readLifehack(week, day);
+                return;
+            }
+        }
     };
 
     const handleCloseFinding = () => {

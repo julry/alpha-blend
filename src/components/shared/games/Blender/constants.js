@@ -16,7 +16,7 @@ export const FINISH_SCORE = 256;
 
 export const MAX_TIME = 1 * 60 + 30;
 
-export const BLENDER_TIME = 2;
+export const BLENDER_TIME = 1;
 export const QUEUE_TO_PERSON_TIME = {
     1: 15,
     2: 15,

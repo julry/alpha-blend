@@ -159,7 +159,7 @@ export const Registration1 = () => {
             return;
         }
 
-        next(SCREENS.START);
+        next(SCREENS.INTRO_RULES);
     }
 
     const handlePickUniversity = (id, name) => {

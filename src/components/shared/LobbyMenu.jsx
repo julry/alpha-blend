@@ -90,6 +90,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
     const [isInitial, setIsInitial] = useState(true);
     const [isAlreadyDone, setIsAlreadyDone] = useState(false);
     const [isClosed, setIsClosed] = useState(false);
+    const [isClosedThisDay, setIsClosedThisDay] = useState(false);
     const {user, next, day: progressDay} = useProgress();
     const gameName = type === 'game' ? `game${WEEK_TO_CHALLENGE_NAME[week]}` : `${type}${week}`;
 
@@ -97,9 +98,20 @@ export const LobbyMenu = ({week, type, onClose}) => {
 
     const getIsCompleted = (day) => user[gameName][day]?.isCompleted;
     const getIsCurrent = (day, prevDay) => !getIsCompleted(day) && (day === DAYS.Monday || getIsCompleted(prevDay));
+    const getIsCurrentShown = (day, prevDay) => (type === 'planner' && getIsCurrent(day, prevDay)) 
+    || (type !== 'planner' && user[`planner${week}`][day]?.isCompleted && getIsCurrent(day, prevDay));
 
     const handleClick = (day, prevDay) => {
         if (getIsCurrent(day, prevDay)) {
+            if (type !== 'planner' && !user[`planner${week}`][day].isCompleted) {
+                setIsClosed();
+                setIsAlreadyDone(false);
+                setIsInitial(false);
+                setIsClosedThisDay(true);
+
+                return;
+            };
+
             next(WEEK_TO_GAME_SCREENS[week][type][day]);
 
             return;
@@ -108,12 +120,14 @@ export const LobbyMenu = ({week, type, onClose}) => {
         if (getIsCompleted(day)) {
             setIsInitial(false);
             setIsClosed();
+            setIsClosedThisDay();
             setIsAlreadyDone(true);
 
             return;
         }
 
         setIsInitial(false);
+        setIsClosedThisDay(false);
         setIsAlreadyDone(false);
         setIsClosed(day);
     };
@@ -127,7 +141,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
                         $ratio={ratio} 
                         onClick={() => handleClick(DAYS.Monday)}
                         $isCompleted={getIsCompleted(DAYS.Monday)}
-                        $isCurrent={!getIsCompleted(DAYS.Monday)}
+                        $isCurrent={getIsCurrentShown(DAYS.Monday)}
                     >
                         {icon()}
                     </IconButton>
@@ -136,7 +150,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
                         $ratio={ratio} 
                         onClick={() => handleClick(DAYS.Wednesday, DAYS.Monday)}
                         $isCompleted={getIsCompleted(DAYS.Wednesday)}
-                        $isCurrent={getIsCurrent(DAYS.Wednesday, DAYS.Monday)}
+                        $isCurrent={getIsCurrentShown(DAYS.Wednesday, DAYS.Monday)}
                     >
                         {icon()}
                     </IconButton>
@@ -145,7 +159,7 @@ export const LobbyMenu = ({week, type, onClose}) => {
                         $ratio={ratio} 
                         onClick={() => handleClick(DAYS.Friday, DAYS.Wednesday)}
                         $isCompleted={getIsCompleted(DAYS.Friday)}
-                        $isCurrent={getIsCurrent(DAYS.Friday, DAYS.Wednesday)}
+                        $isCurrent={getIsCurrentShown(DAYS.Friday, DAYS.Wednesday)}
                     >
                         {icon()}
                     </IconButton>
@@ -176,6 +190,15 @@ export const LobbyMenu = ({week, type, onClose}) => {
                             <Block>
                                 <p><Bold>Пока закрыто —</Bold> эти игры откроются в {DAY_TO_NAME[isClosed]}.</p>
                                 <p>Новые игры появляются{'\n'}<Bold>по понедельникам, средам и пятницам.</Bold></p>
+                            </Block>
+                        </InfoWrapper> 
+                    )
+                }
+                {
+                    isClosedThisDay && (
+                       <InfoWrapper initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+                            <Block>
+                                <p><Bold>Пока недоступно</Bold></p>
                             </Block>
                         </InfoWrapper> 
                     )

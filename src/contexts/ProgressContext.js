@@ -77,7 +77,7 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
-    return 2;
+    return 1;
 
     const today = getMoscowTime();
 
@@ -91,6 +91,8 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
+    return DAYS.Friday;
+
     const day = getMoscowTime().getDay();
 
     switch (day) {
@@ -184,11 +186,10 @@ export function ProgressProvider(props) {
         const indexOfCh = DAY_ARR.indexOf(firstUncompletedCh) > -1 ? DAY_ARR.indexOf(firstUncompletedCh) : 2;
         const indexOfPlann = DAY_ARR.indexOf(firstUncompletedPlanner) > -1 ? DAY_ARR.indexOf(firstUncompletedPlanner) : 2;
 
-        if (week < CURRENT_WEEK) {
-            dayIndex = Math.min(indexOfCh, indexOfPlann);
-        } else {
-            const currentDay = 1;
-            dayIndex = DAY_ARR.indexOf(firstUncompletedCh);
+        dayIndex = Math.min(indexOfCh, indexOfPlann);
+
+        if (week >= CURRENT_WEEK) {
+            const currentDay = DAY_ARR.indexOf(CURRENT_DAY);
             dayIndex = dayIndex < currentDay ? dayIndex : currentDay;
         }
 

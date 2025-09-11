@@ -83,6 +83,8 @@ export const WeekLobby = ({isHideUnavailable}) => {
     const handleFloorClick = (index) => {
         if (getIsFloorUnavailable(index)) {
             setIsClosedInfo(true);
+
+            return;
         }
 
         next(SCREENS[`LOBBY${index}`]);

@@ -148,6 +148,8 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     }
 
     const finishGame = ({isWin, finishPoints}) => {
+        if (isFinished) return;
+
         const drinks = user?.drinks ?? [];
         endGame({finishPoints: finishPoints ?? points, gameName, week, day, addictiveData: {drinks: [...drinks, drinkInfo.id]}});
         setIsEndModal({shown: true, isWin,  points: finishPoints ?? points});
@@ -250,6 +252,12 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
         //записать прохождение
         next(lobbyScreen);
     }
+
+    useEffect(() => {
+        if (!isFinished && peopleAmount >= LEVEL_TO_PEOPLE_AMOUNT[week]) {
+            finishGame({isWin: true});
+        }
+    }, [peopleAmount, isFinished])
 
     const modalFuncs = {
         handleCloseDrink,
