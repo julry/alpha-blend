@@ -144,7 +144,7 @@ const ErrorSign = styled(motion.div)`
     z-index: 43;
 `;
 
-export const BlenderObject = memo(({cards = [], onDrop, buttonChildren, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
+export const BlenderObject = memo(({cards = [], onDrop, resetBlender, buttonChildren, isStopped, onCardClick, onBlenderClick, onBlenderStop, className}) => {
     const ratio = useSizeRatio();
     const [isBlendering, setIsBlendering] = useState(false);
     const [drink, setDrink] = useState();
@@ -175,6 +175,7 @@ export const BlenderObject = memo(({cards = [], onDrop, buttonChildren, isStoppe
         if (!blendering) {
             setIsError(true);
             setTimeout(() => setIsError(false), 500);
+            resetBlender();
             return;
         }
 

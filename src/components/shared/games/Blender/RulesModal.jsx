@@ -4,6 +4,8 @@ import { Block } from "../../Block";
 import { Title } from "../../Title";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { Modal } from "../../modals/Modal";
+import { Li } from "../../Li";
+import { RedText } from "../../Spans";
 
 const Content = styled(Block)`
     position: absolute;
@@ -12,6 +14,11 @@ const Content = styled(Block)`
     transform: translate(-50%, -50%);
     flex-direction: row;
     justify-content: center;
+
+    & li {
+        font-size: var(--font_sm);
+        text-align: left;
+    }
 `;
 
 const TitleStyled = styled(Title)`
@@ -92,37 +99,25 @@ export const RulesModal = ({ isOpen, initialPart, onClose }) => {
                 return (
                     <>
                         <Text>
-                            К тебе в гости пришли друзья, которым нужно помочь найти баланс. У каждого разный запрос, но ты всегда готов помочь советом. Всего в игре 3 раунда — готовь напитки быстро, чтобы заработать максимум баллов:
+                            Ты встречаешь друзей, каждому нужен свой напиток. <Bold>Успей помочь им найти баланс!</Bold>
                         </Text>
-                        <Text>
-                            Над головой друга  — <Bold>бабл, внутри которого нужные элементы</Bold> (например, апельсин + мята)
-                        </Text>
-                        <Text>
-                            Справа — <Bold>шкала ожидания</Bold>: чем быстрее отдашь напиток, тем больше баллов
-                        </Text>
+                        <ul>
+                            <Li>В игре <Bold><RedText>1 </RedText>раунд  —</Bold> в него приходит несколько гостей</Li>
+                            <Li>У каждого гостя над головой появляется рецепт и таймер на <Bold><RedText>15 </RedText>секунд</Bold></Li>
+                            <Li>Напиток готовится в блендере за 2 секунды после нажатия на кнопку</Li>
+                            <Li>За правильный заказ ты получаешь <Bold><RedText>+10 </RedText> баллов</Bold></Li>
+                        </ul>
                     </>
                 )
             case 1:
                 return (
-                    <>
-                        <Text>
-                            <Bold>Нажимай на ингредиенты</Bold> — они попадают в блендер (максимум 3)
-                        </Text>
-                        <Text>
-                            <Bold>Ошибся?</Bold> Нажми на лишний ингредиент, чтобы удалить
-
-                        </Text>
-                        <Text>
-                            <Bold>Нажми на кнопку блендера</Bold> — напиток будет готов через 3 секунды.
-                        </Text>
-                        <Text>
-                            После этого <Bold>перетащи стакан </Bold>нужному другу.
-                        </Text>
-
-                        <Text>
-                            Удачи — собери как можно больше напитков до конца раунда!
-                        </Text>
-                    </>
+                    <ul>
+                            <Li>Если напиток не подошёл гостю, его можно оставить на столе и отдать другому</Li>
+                            <Li>На столе помещается не больше 3 напитков, если никакой из них не подойдет другу, ты теряешь попытку</Li>
+                            <Li>Ошибка в рецепте сбрасывает ингредиенты</Li>
+                            <Li>Если время ожидания истечёт, гость уйдёт, и баллы не начислятся</Li>
+                            <Li>У тебя есть <Bold><RedText>3</RedText> попытки</Bold> на прохождение игры</Li>
+                    </ul>
                 );
             default:
                 break;
@@ -140,7 +135,7 @@ export const RulesModal = ({ isOpen, initialPart, onClose }) => {
                     </ArrowButton>
                 </div>
                 <ContentWrapper>
-                    <TitleStyled>как играть</TitleStyled>
+                    <TitleStyled>{part === 0 ? 'как играть?' : 'Важно'}</TitleStyled>
                     {getContent()}
                     <ProgressWrapper $ratio={ratio}>
                         {progress.map((p) => (
