@@ -134,18 +134,6 @@ const ProgressContext = createContext(INITIAL_STATE);
 const API_LINK = process.env.REACT_APP_API_URL;
 const DEV_ID = process.env.REACT_APP_DEV_ID;
 
-const mockCh = {
-    [DAYS.Monday]: {isCompleted: true},
-    [DAYS.Wednesday]: {isCompleted: true},
-    [DAYS.Friday]: {isCompleted: false},
-}
-
-const mockPl = {
-    [DAYS.Monday]: {isCompleted: true},
-    [DAYS.Wednesday]: {isCompleted: true},
-    [DAYS.Friday]: {isCompleted: false},
-}
-
 export function ProgressProvider(props) {
     const { children } = props
     const [isLoading, setIsLoading] = useState();
@@ -179,9 +167,6 @@ export function ProgressProvider(props) {
         
         const firstUncompletedCh = Object.keys(data[`game${WEEK_TO_CHALLENGE_NAME[week]}`] ?? {}).find((key) => !data[`game${WEEK_TO_CHALLENGE_NAME[week]}`][key]?.isCompleted);
         const firstUncompletedPlanner = Object.keys(data[`planner${week}`] ?? {}).find((key) => !data[`planner${week}`][key]?.isCompleted);
-
-        // const firstUncompletedCh = Object.keys(mockCh ?? {}).find((key) => !mockCh[key].isCompleted);
-        // const firstUncompletedPlanner = Object.keys(mockPl).find((key) => !mockPl[key].isCompleted);
 
         const indexOfCh = DAY_ARR.indexOf(firstUncompletedCh) > -1 ? DAY_ARR.indexOf(firstUncompletedCh) : 2;
         const indexOfPlann = DAY_ARR.indexOf(firstUncompletedPlanner) > -1 ? DAY_ARR.indexOf(firstUncompletedPlanner) : 2;
@@ -366,6 +351,15 @@ export function ProgressProvider(props) {
 
     }
     
+    const formatDate = (date) => new Intl.DateTimeFormat('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).format(date).replace(',', '');
+
     const endGame = async ({finishPoints, gameName, week, day, addictiveData}) => {
         if (user[gameName][day].isCompleted) return;
 
@@ -391,7 +385,7 @@ export function ProgressProvider(props) {
                 [`week${week}Points`]: (user[`week${week}Points`] ?? 0) + finishPoints,
                 [gameName]: { ...user[gameName], [day]: {
                     isCompleted: true,
-                    completedAt: endTimeMsc.toDateString() + ' ' + endTimeMsc.toTimeString(),
+                    completedAt: formatDate(endTimeMsc),
                     points: finishPoints
                 }},
                 points: (user.points ?? 0) + finishPoints,
