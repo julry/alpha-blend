@@ -7,8 +7,7 @@ import { BlenderGame } from "../../shared/games/Blender";
 export const Blender2M = () => {
     const weekData = weekInfo.find((info) => info.week === 2);
     const collegueMessage = weekData.blenderCollegueMessage?.[DAYS.Monday];
-    //TODO: поменять айди
-    const drinkInfo = drinks.find(drink => drink.id === 0);
+    const drinkInfo = drinks.find(drink => drink.id === 2);
 
     return (
         <BlenderGame 

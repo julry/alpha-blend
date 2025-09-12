@@ -26,6 +26,11 @@ import hack from '../assets/images/planner/hack.png';
 import plants from '../assets/images/planner/plants.png';
 import spa from '../assets/images/planner/spa.png';
 import travel from '../assets/images/planner/travel.png';
+import bicycle from '../assets/images/planner/bicycle.png';
+import doctor from '../assets/images/planner/doctor.png';
+import match from '../assets/images/planner/match.png';
+import runTrain from '../assets/images/planner/runTrain.png';
+import shopping from '../assets/images/planner/shopping.png';
 
 import ananas from '../assets/images/ingridients/ananas.png';
 import apple from '../assets/images/ingridients/apple.png';
@@ -95,6 +100,6 @@ export const commonImages = [
 ];
 
 export const week1Images = [...commonImages];
-export const week2Images = [...commonImages];
+export const week2Images = [...commonImages, bicycle, doctor, match, runTrain, shopping];
 export const week3Images = [...commonImages, matcha, pear];
 export const week4Images = [...commonImages, matcha, pear];

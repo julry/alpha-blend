@@ -4,8 +4,6 @@ export const SCREENS = {
     INTRO: 'INTRO',
     INTRO_REG: 'INTRO_REG',
     REG_1: 'REG_1',
-    // REG_2: 'REG_2',
-    START: 'START',
     WAITING: 'WAITING',
     INTRO_RULES: 'INTRO_RULES',
     LOBBY: 'LOBBY',
@@ -54,12 +52,8 @@ export const SCREENS = {
 
 export const NEXT_SCREENS = {
     [SCREENS.INTRO_REG]: SCREENS.REG_1,
-    // [SCREENS.REG_1]: SCREENS.REG_2,
-    // [SCREENS.REG_2]: SCREENS.START,
-    // [SCREENS.START]: SCREENS.INTRO_RULES,
     [SCREENS.INTRO_RULES]: SCREENS.LOBBY1,
 }
-
 
 export const GAME_SCREENS_WEEK1 = {
     game: {

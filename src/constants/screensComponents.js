@@ -3,7 +3,6 @@ import { IntroRegistration } from "../components/screens/IntroRegistration";
 import { IntroRules } from "../components/screens/IntroRules";
 import { WaitingGameScreen } from "../components/screens/Waiting";
 import { WeekLobby } from "../components/screens/WeekLobby";
-import { Start } from "../components/screens/Start";
 import { Registration1 } from "../components/screens/Registration1";
 import { DesktopScreen } from "../components/screens/DesktopScreen";
 
@@ -28,7 +27,6 @@ export const screens = {
     [SCREENS.WAITING]: WaitingGameScreen,
     [SCREENS.INTRO_RULES]: IntroRules,
     [SCREENS.DESKTOP]: DesktopScreen,
-    [SCREENS.START]: Start,
     [SCREENS.LOBBY]: WeekLobby,
     [SCREENS.LOBBY1]: Lobby1,
     [SCREENS.PLANNER1M]: Planner1M,
