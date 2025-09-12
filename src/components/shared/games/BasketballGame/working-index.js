@@ -1,61 +1,38 @@
+import { useEffect, useState } from 'react';
+import { FlexWrapper } from '../../ContentWrapper';
 import { useGame } from './useGame';
+import styled from 'styled-components';
+import { useSizeRatio } from '../../../../hooks/useSizeRatio';
+
+const Wrapper = styled(FlexWrapper)`
+  padding: 0;
+
+    & > div {
+      justify-content: flex-end;
+      padding: 0;
+    }
+`;
+
 
 const WorkBasketballGame = () => {
-  const {gameContainerRef, showCurrentBest, currentScore} = useGame();
+  const [width, setWidth] = useState(0); 
+  const [height, setHeight] = useState(0); 
+  const [dpr, setDpr] = useState(0); 
+  const {gameContainerRef, showCurrentBest, currentScore} = useGame({ width, height, dpr });
+
+  useEffect(() => {
+    const rect = gameContainerRef.current.getBoundingClientRect();
+      
+      // Устанавливаем атрибуты width/height (важно для качества)
+    setWidth(rect.width);
+    setHeight(rect.height > 700 ? 700 : rect.height);
+    setDpr(window?.devicePixelRatio || 1);
+  }, []);
 
   return (
-    <div style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-        <div ref={gameContainerRef} style={{ display: 'inline-block' }}></div>
-        
-        {/* Оверлей для отображения счета поверх игры */}
-        <div style={{
-          position: 'absolute',
-          top: '312px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center',
-          pointerEvents: 'none',
-          width: '100%'
-        }}>
-          {showCurrentBest && (
-            <div style={{
-              fontFamily: 'Arial',
-              fontSize: '20px',
-              color: '#000',
-              position: 'absolute',
-              top: '-31px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '100%'
-            }}>
-              Current Best
-            </div>
-          )}
-          <div style={{
-            fontFamily: 'Arial',
-            fontSize: '40px',
-            color: '#000'
-          }}>
-            {currentScore}
-          </div>
-          {/* {showCurrentBest && (
-            <div style={{
-              fontFamily: 'Arial',
-              fontSize: '40px',
-              color: '#00e6e6',
-              position: 'absolute',
-              top: '0',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '100%'
-            }}>
-              {highScore}
-            </div>
-          )} */}
-        </div>
-      </div>
-    </div>
+    <Wrapper>
+        <FlexWrapper ref={gameContainerRef}></FlexWrapper>
+    </Wrapper>
   );
 };
 

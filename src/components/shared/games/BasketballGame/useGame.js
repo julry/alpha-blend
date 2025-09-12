@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import ballPic from './images/ball.png';
-import hoopPic from './images/hoop.png';
-import frontRimPic from './images/front_rim2.png';
-import sideRimPic from './images/side_rim.png';
+import hoopPic from './images/hoop.svg';
+import frontRimPic from './images/front_rim.svg';
+import sideRimPic from './images/side_rim.svg';
 import { MIN_MOCKUP_WIDTH } from "../../../ScreenTemplate";
 
-export const useGame = () => {
+export const useGame = ({width, height, dpr}) => {
     const ratio = useSizeRatio();
     const gameContainerRef = useRef(null);
     const [currentScore, setCurrentScore] = useState(0);
@@ -18,7 +18,7 @@ export const useGame = () => {
     const preloadImages = () => {
         const images = {
             'ball': ballPic,
-            // 'hoop': './images/hoop.png',
+            'hoop': hoopPic,
             'side_rim': sideRimPic,
             'front_rim': frontRimPic,
         };
@@ -35,11 +35,9 @@ export const useGame = () => {
     };
 
     useEffect(() => {
+        if (!height || !width || !dpr) return;
         // Инициализация игры после монтирования компонента
         const initGame = async () => {
-            console.log('initing');
-            console.log('!gameContainerRef.current', !gameContainerRef.current);
-            console.log('gameRef.current', gameRef.current);
         if (!gameContainerRef.current || gameRef.current) return;
         
         try {
@@ -54,8 +52,9 @@ export const useGame = () => {
                 restitution: 0.63 // Коэффициент упругости как в оригинале
             },
             elements: {},
-            width: window?.outerWidth <= MIN_MOCKUP_WIDTH ? window.outerWidth * ratio : 375 * ratio,
-            height: window?.outerWidth <= MIN_MOCKUP_WIDTH ? window.outerHeight * ratio : 375 * ratio,
+            width: width,
+            height: height,
+            dpr,
             isRunning: true,
             init() {
                 // Сохраняем загруженные изображения
@@ -65,19 +64,22 @@ export const useGame = () => {
                 
                 // Создаем холст для игры
                 const canvas = document.createElement('canvas');
-                canvas.width = this.width ?? window?.outerWidth <= MIN_MOCKUP_WIDTH ? window.outerWidth * ratio : 375 * ratio;
-                canvas.height = this.height ?? window?.outerWidth <= MIN_MOCKUP_WIDTH ? window.outerHeight * ratio : 677 * ratio;
+
+                canvas.width = width;
+                canvas.height = height;
                 canvas.style.margin = '0 auto';
                 canvas.style.display = 'block';
+                canvas.style.width = width;
+                canvas.style.height = height;
                 canvas.style.backgroundColor = '#ffffff';
-                
+
                 gameContainerRef.current.innerHTML = '';
-                console.log(canvas);
                 gameContainerRef.current.appendChild(canvas);
                 
                 const ctx = canvas.getContext('2d');
+               
                 this.ctx = ctx;
-                
+
                 // Создаем элементы игры
                 this.createGameElements();
                 
@@ -89,21 +91,21 @@ export const useGame = () => {
                 // Создаем мяч со случайной позицией по X
                 const randomX = 60 + Math.random() * 280;
                 this.elements.ball = {
-                x: currentScore === 0 ? 175 : randomX,
-                y: 547,
-                radius: 30,
-                velocity: { x: 0, y: 0 },
-                launched: false,
-                isBelowHoop: false,
-                rotation: 0
+                    x: 0,
+                    y: 0,
+                    radius: 30,
+                    velocity: { x: 0, y: 0 },
+                    launched: false,
+                    isBelowHoop: false,
+                    rotation: 0
                 };
                 
                 // Создаем кольцо
                 this.elements.hoop = {
-                x: 88,
-                y: 62,
-                width: 224,
-                height: 122
+                    x: 0,
+                    y: 0,
+                    width: 236,
+                    height: 150
                 };
                 
                 // Создаем обод (как в оригинале)
@@ -270,6 +272,10 @@ export const useGame = () => {
             update(deltaTime) {
                 const ball = this.elements.ball;
                 const delta = deltaTime / 1000; // Преобразуем в секунды
+                this.ctx.mozImageSmoothingEnabled = false;
+                this.ctx.webkitImageSmoothingEnabled = false;
+                this.ctx.msImageSmoothingEnabled = false;
+                this.ctx.imageSmoothingEnabled = false;
                 
                 if (ball.launched) {
                 // Применяем гравитацию
@@ -321,6 +327,7 @@ export const useGame = () => {
                     ball.velocity.x = -Math.abs(ball.velocity.x) * this.physics.restitution;
                 }
                 }
+                // this.ctx.scale(this.dpr, this.dpr);
             },
             resetBall() {
                 this.physics.gravity.y = 0;
@@ -351,7 +358,9 @@ export const useGame = () => {
                 // Рисуем кольцо
                 const hoopImg = this.images.hoop;
                 if (hoopImg) {
-                ctx.drawImage(hoopImg, this.elements.hoop.x, this.elements.hoop.y, 
+                     ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(hoopImg, this.elements.hoop.x, this.elements.hoop.y, 
                             this.elements.hoop.width, this.elements.hoop.height);
                 }
                 
@@ -417,7 +426,7 @@ export const useGame = () => {
             gameRef.current = null;
         }
         };
-    }, [currentScore, highScore, ratio]);
+    }, [currentScore, highScore, ratio, width, height, dpr]);
 
     return {gameContainerRef, showCurrentBest, currentScore};
 }

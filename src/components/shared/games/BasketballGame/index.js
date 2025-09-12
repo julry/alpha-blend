@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGame } from './useGame copy2';
+import { FlexWrapper } from '../../ContentWrapper';
+import styled from 'styled-components';
+
 
 const BasketballGame = () => {
   const [currentScore, setCurrentScore] = useState(0);
@@ -13,7 +16,6 @@ const BasketballGame = () => {
     <div style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
       <div style={{ position: 'relative', display: 'inline-block' }}>
         <div ref={gameContainerRef} style={{ display: 'inline-block' }}></div>
-        
         {/* Оверлей для отображения счета поверх игры */}
         <div style={{
           position: 'absolute',

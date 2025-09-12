@@ -199,7 +199,7 @@ export const LobbyMenu = ({ week, type, onClose }) => {
                     isClosedThisDay && (
                         <InfoWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                             <Block>
-                                <p><Bold>Пока недоступно</Bold></p>
+                                <p><Bold>Пока закрыто — пройди планнер</Bold>, чтобы открыть эту игру.</p>
                             </Block>
                         </InfoWrapper>
                     )

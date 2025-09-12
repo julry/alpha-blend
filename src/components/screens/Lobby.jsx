@@ -165,7 +165,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
         if (!hasMoreToPass && !isAllDone) return;
 
-        setFinishModal({shown: true, hasMoreToPass});
+        setFinishModal({shown: true, hasMoreToPass, isAllDone});
     }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed]);
 
     const handleClickItem = (item) => {
@@ -273,6 +273,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 onClose={handleCloseFinish} 
                 hasMore={finishModal.hasMoreToPass} 
                 endMessage={endMessage}
+                isAllDone={finishModal.isAllDone}
             />
             <AnimatePresence>
                 {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
