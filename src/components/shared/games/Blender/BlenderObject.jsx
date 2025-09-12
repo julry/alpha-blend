@@ -203,7 +203,7 @@ export const BlenderObject = memo(({cards = [], onDrop, resetBlender, buttonChil
                     {isError && (
                         <ErrorSign $ratio={ratio} initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
                             <svg width="100%" height="100%" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1.47089 1.471L10.5291 10.5292M10.5291 1.471L1.47089 10.5292" stroke="var(--color-red)" stroke-opacity="1" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M1.47089 1.471L10.5291 10.5292M10.5291 1.471L1.47089 10.5292" stroke="var(--color-red)" strokeOpacity="1" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </ErrorSign>
                     )}

@@ -98,7 +98,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
-    
+
     const isLetterShown = isLaptopLetter || !user.readenLetters?.[weekName];
     const isPlanerUndone = !user?.[`planner${week}`]?.[day]?.isCompleted;
     const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day]?.isCompleted;
@@ -150,7 +150,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     };
 
     useEffect(() => {
-        if (isPlanerUndone || isBlenderUndone || hasClosed) return;
+        if (isPlanerUndone || isChallengeUndone || hasClosed) return;
         const isPrevWeek = week < CURRENT_WEEK;
         const isPrevDay = !isPrevWeek && (DAY_ARR.indexOf(day) < DAY_ARR.indexOf(CURRENT_DAY));
         const hasMoreToPass = isPrevWeek || isPrevDay;
@@ -158,7 +158,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
         if (!hasMoreToPass && !isAllDone) return;
 
         setFinishModal({shown: true, hasMoreToPass});
-    }, [isPlanerUndone, isBlenderUndone, isAllDone, day, week, hasClosed]);
+    }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed]);
 
     const handleClickItem = (item) => {
         if (['game', 'planner', 'blender'].includes(item) && !hideTips) {
