@@ -78,7 +78,8 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const { 
         next, user, day, newAchieve, setNewAchieve, 
         isJustEntered, setIsJustEntered, readLifehack, 
-        readWeekLetter, updateTotalPoints
+        readWeekLetter, updateTotalPoints, updateUser,
+        setPassedWeeks,
      } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
     const [isRulesModal, setIsRulesModal] = useState(false);
@@ -99,6 +100,13 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
 
+    const getBlenderShow= () => {
+        const dayIndex = DAY_ARR.indexOf(day) + +(user?.[`planner${week}`][day]?.isCompleted);
+        const days = Object.keys(DAYS).slice(0, dayIndex);
+
+        return days.some((key) => !user?.[`blender${week}`][key]?.isCompleted);
+    }
+
     const isLetterShown = isLaptopLetter || !user.readenLetters?.[weekName];
     const isPlanerUndone = !user?.[`planner${week}`]?.[day]?.isCompleted;
     const isChallengeUndone = !user?.[`game${WEEK_TO_CHALLENGE_NAME[week]}`]?.[day]?.isCompleted;
@@ -108,7 +116,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const isBulbShown = !isChallengeUndone && !user?.lifehacks.includes(`week${week}day${day}`);
 
     const isLaptop = isLaptopHighlightened || isBulbShown || isLetterShown;
-    const isCup = !isPlanerUndone && isBlenderUndone;
+    const isCup = getBlenderShow();
     const isPlanner = !isLetterShown && isPlanerUndone;
     const isGame = !isPlanerUndone && isChallengeUndone;
     
@@ -175,8 +183,6 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 return;
             }
 
-            setIsJustEntered(false);
-
             if (isLetterShown) {
                 setIsLetterModal(true);
                 readWeekLetter(week);
@@ -196,9 +202,15 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     };
 
     const handleCloseFinish = () => {
+        if (day === DAYS.Friday && !user?.passedWeeks.includes(week)) {
+            updateUser({passedWeeks: [...(user.passedWeeks ?? []), week]});
+            setPassedWeeks(prev => prev.includes(week) ? prev : [...prev, week]);
+        }
+
         setHasClosed(true);
         setFinishModal({shown: false});
-    }
+    };
+
     return (
         <Wrapper>
             <Content>
@@ -240,7 +252,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             
             <NewAchieveModal isOpen={newAchieve.length > 0} achieveId={newAchieve[0]} onClose={() => {setNewAchieve(prev => prev.slice(1))}}/>
             
-            {isPlanner && isJustEntered && !hideTips && (
+            {isPlanner && isJustEntered && !hideTips && !isLetterModal && (
                 <TabletInfo>
                     {typeof plannerMessage === 'function' ? plannerMessage() : plannerMessage}
                 </TabletInfo>

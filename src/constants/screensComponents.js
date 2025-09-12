@@ -12,6 +12,10 @@ import {
     Game2048W, Planner1F, Planner1M, Planner1W, Lobby1 
 } from '../components/screens/week1';
 
+import { 
+    Blender2F, Blender2M, Blender2W, Planner2F, Planner2M, Planner2W, Lobby2 
+} from '../components/screens/week2';
+
 import BasketballGame from "../components/shared/games/BasketballGame/working-index";
 
 import { SCREENS } from "./screens";
@@ -34,6 +38,13 @@ export const screens = {
     [SCREENS.BLENDER1M]: Blender1M,
     [SCREENS.BLENDER1W]: Blender1W,
     [SCREENS.BLENDER1F]: Blender1F,
+    [SCREENS.LOBBY2]: Lobby2,
+    [SCREENS.PLANNER2M]: Planner2M,
+    [SCREENS.PLANNER2W]: Planner2W,
+    [SCREENS.PLANNER2F]: Planner2F,
+    [SCREENS.BLENDER2M]: Blender2M,
+    [SCREENS.BLENDER2W]: Blender2W,
+    [SCREENS.BLENDER2F]: Blender2F,
     [SCREENS.GAME2M]: BasketballGame,
 
 };

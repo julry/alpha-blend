@@ -221,3 +221,195 @@ export const planCardsWeek1_Friday = [
         isSpecial: true,
     },
 ];
+
+export const planCardsWeek2_Monday = [
+    {
+        id: 3,
+        text: 'планирование\nдня',
+        icon: planning,
+    },
+    {
+        id: 0,
+        text: 'завтрак',
+        icon: breakfast,
+    },
+    {
+        id: 1,
+        text: 'музыка',
+        icon: music,
+    },
+    {
+        id: 2,
+        text: 'пробежка',
+        icon: running,
+    },
+    {
+        id: 4,
+        text: 'работа',
+        icon: job,
+    },
+    {
+        id: 5,
+        text: 'учёба',
+        icon: study,
+    },
+    {
+        id: 6,
+        text: 'думскроллинг',
+        icon: phone,
+    },
+    {
+        id: 7,
+        text: 'медитация',
+        icon: med,
+    },
+    {
+        id: 8,
+        text: 'отдых',
+        icon: relax
+    },
+    {
+        id: 9,
+        text: 'уборка',
+        icon: cleaning,
+    },
+    {
+        id: 11,
+        text: 'дневник',
+        icon: diary,
+    },
+    {
+        id: 10,
+        text: 'брейншторм\nхакатона',
+        icon: brain,
+        isSpecial: true,
+    },
+];
+
+export const planCardsWeek2_Wednesday = [
+    {
+        id: 3,
+        text: 'саморазвитие',
+        icon: selfImprov,
+    },
+    {
+        id: 0,
+        text: 'Смузи-брейк',
+        icon: smoothie,
+    },
+    {
+        id: 1,
+        text: 'Игра\nна инструменте',
+        icon: guitar,
+    },
+    {
+        id: 2,
+        text: 'Аффирмации',
+        icon: affirm,
+    },
+    {
+        id: 7,
+        text: 'Быстрый\nперекус',
+        icon: snack,
+    },
+    {
+        id: 8,
+        text: 'разбор задач',
+        icon: tasks,
+    },
+    {
+        id: 9,
+        text: 'фриланс-\nзаказ',
+        icon: freelance,
+    },
+    {
+        id: 11,
+        text: 'встреча\nс друзьями',
+        icon: meeting,
+    },
+    {
+        id: 4,
+        text: 'творчество',
+        icon: art,
+    },
+    {
+        id: 5,
+        text: 'зарядка',
+        icon: sport,
+    },
+    {
+        id: 6,
+        text: 'созвон',
+        icon: call,
+    },
+    {
+        id: 10,
+        text: 'хакатон\nс коллегами',
+        icon: hackL,
+        isSpecial: true,
+    },
+];
+
+export const planCardsWeek2_Friday = [
+        {
+        id: 3,
+        text: 'планирование\nдня',
+        icon: planning,
+    },
+    {
+        id: 0,
+        text: 'завтрак',
+        icon: breakfast,
+    },
+    {
+        id: 1,
+        text: 'музыка',
+        icon: music,
+    },
+    {
+        id: 7,
+        text: 'медитация',
+        icon: med,
+    },
+    {
+        id: 8,
+        text: 'отдых',
+        icon: relax
+    },
+    {
+        id: 9,
+        text: 'уборка',
+        icon: cleaning,
+    },
+    {
+        id: 11,
+        text: 'дневник',
+        icon: diary,
+    },
+    {
+        id: 2,
+        text: 'творчество',
+        icon: art,
+    },
+    {
+        id: 4,
+        text: 'путешествие',
+        icon: travel,
+    },
+    {
+        id: 5,
+        text: 'забота\nо растениях',
+        icon: plants,
+    },
+    {
+        id: 6,
+        text: 'спа',
+        icon: spa,
+    },
+    {
+        id: 10,
+        text: 'хакатон\nс коллегами',
+        icon: hack,
+        isSpecial: true,
+    },
+];

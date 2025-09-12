@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";

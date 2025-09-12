@@ -348,7 +348,6 @@ export function ProgressProvider(props) {
                 }},
             }
         );
-
     }
     
     const formatDate = (date) => new Intl.DateTimeFormat('ru-RU', {

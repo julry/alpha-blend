@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const useTimer = ({ timerId, isStart, initialTime, reverse, onFinish, onStop }) => {
+export const useTimer = ({ timerId, isStart, initialTime, reverse, onFinish, onStop, interval = 1 }) => {
     const [time, setTime] = useState(initialTime);
     const $interval = useRef(null);
     const $time = useRef(initialTime);
     const $restart = useRef(false);
+    const started = useRef(false);
 
     useEffect(() => {
         if (isStart) {
@@ -18,13 +19,14 @@ export const useTimer = ({ timerId, isStart, initialTime, reverse, onFinish, onS
                 $interval.current = null;
             }
 
-            $interval.current = setInterval(() => {
+            if (!started.current) {
                 setTime($time.current);
+                started.current = true;
 
                 if (reverse) {
-                    $time.current += 1;
+                    $time.current += interval;
                 } else {
-                    if ($time.current === 0) {
+                    if ($time.current <= 0) {
                         onFinish?.();
                         clearInterval($interval.current);
                         $interval.current = null;
@@ -32,10 +34,28 @@ export const useTimer = ({ timerId, isStart, initialTime, reverse, onFinish, onS
                         return;
                     }
 
-                    $time.current -= 1;
+                    $time.current -= interval;
+                }
+            }
+
+            $interval.current = setInterval(() => {
+                setTime($time.current);
+
+                if (reverse) {
+                    $time.current += interval;
+                } else {
+                    if ($time.current <= 0) {
+                        onFinish?.();
+                        clearInterval($interval.current);
+                        $interval.current = null;
+
+                        return;
+                    }
+
+                    $time.current -= interval;
                 }
 
-            }, 1000);
+            }, interval * 1000);
         }
         if (!isStart) {
             onStop?.($time.current);

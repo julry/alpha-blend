@@ -160,7 +160,7 @@ export const BlenderObject = memo(({cards = [], onDrop, resetBlender, buttonChil
         },
     }), []);
 
-    useTimer({ isStart: isBlendering && !isStopped, initialTime: BLENDER_TIME, onFinish: handleBlenderFinish, timerId })
+    useTimer({ isStart: isBlendering && !isStopped, initialTime: BLENDER_TIME, onFinish: handleBlenderFinish, timerId, interval: 0.5 })
 
     const handleCardClick = (index) => {
         if (isBlendering) return;

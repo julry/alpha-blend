@@ -3,9 +3,9 @@ import { DAYS } from "./days";
 
 export const WEEK_TO_CHALLENGE_NAME = {
     1: '2048',
-    2: 'basket',
-    3: 'puzzle',
-    4: 'mole'
+    2: 'Basket',
+    3: 'Puzzle',
+    4: 'Mole'
 }
 
 export const weekInfo = [

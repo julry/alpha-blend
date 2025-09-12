@@ -69,7 +69,7 @@ export const WeekLobby = ({isHideUnavailable}) => {
     const getIsFloorActive = (index) => {
         if (index > CURRENT_WEEK) return;
 
-         const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
+        const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
 
         return isWeekPassed ? index === CURRENT_WEEK : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
     };
