@@ -33,7 +33,9 @@ import doctor from '../assets/images/planner/doctor.png';
 import match from '../assets/images/planner/match.png';
 import runTrain from '../assets/images/planner/runTrain.png';
 import shopping from '../assets/images/planner/shopping.png';
-
+import gallery from '../assets/images/planner/gallery.png';
+import ballet from '../assets/images/planner/ballet.png';
+import juzz from '../assets/images/planner/juzz.png';
 
 export const planCardsWeek1_Monday = [
     {
@@ -112,7 +114,7 @@ export const planCardsWeek1_Wednesday = [
     },
     {
         id: 1,
-        text: 'Игра\nна инструменте',
+        text: 'Игра\nна инструменте',
         icon: guitar,
     },
     {
@@ -240,7 +242,7 @@ export const planCardsWeek2_Monday = [
     },
     {
         id: 1,
-        text: 'Игра\nна инструменте',
+        text: 'Игра на\nинструменте',
         icon: guitar,
     },
     {
@@ -368,7 +370,7 @@ export const planCardsWeek2_Friday = [
     },
     {
         id: 1,
-        text: 'Игра\nна инструменте',
+        text: 'Игра на\nинструменте',
         icon: guitar,
     },
     {
@@ -415,6 +417,200 @@ export const planCardsWeek2_Friday = [
         id: 10,
         text: 'матч с\nбаскетбольной\nкомандой',
         icon: match,
+        isSpecial: true,
+    },
+];
+
+//TODO: Перепроверить
+
+export const planCardsWeek3_Monday = [
+    {
+        id: 3,
+        text: 'планирование\nдня',
+        icon: planning,
+    },
+    {
+        id: 0,
+        text: 'завтрак',
+        icon: breakfast,
+    },
+    {
+        id: 1,
+        text: 'музыка',
+        icon: music,
+    },
+    {
+        id: 2,
+        text: 'пробежка',
+        icon: running,
+    },
+    {
+        id: 4,
+        text: 'работа',
+        icon: job,
+    },
+    {
+        id: 5,
+        text: 'учёба',
+        icon: study,
+    },
+    {
+        id: 6,
+        text: 'думскроллинг',
+        icon: phone,
+    },
+    {
+        id: 7,
+        text: 'медитация',
+        icon: med,
+    },
+    {
+        id: 8,
+        text: 'отдых',
+        icon: relax
+    },
+    {
+        id: 9,
+        text: 'спа',
+        icon: spa,
+    },
+    {
+        id: 11,
+        text: 'дневник',
+        icon: diary,
+    },
+    {
+        id: 10,
+        text: 'пойти\nна открытие\nгалереи',
+        icon: gallery,
+        isSpecial: true,
+    },
+];
+
+export const planCardsWeek3_Wednesday = [
+    {
+        id: 3,
+        text: 'саморазвитие',
+        icon: selfImprov,
+    },
+    {
+        id: 0,
+        text: 'Смузи-брейк',
+        icon: smoothie,
+    },
+    {
+        id: 1,
+        text: 'Игра на\nинструменте',
+        icon: guitar,
+    },
+    {
+        id: 2,
+        text: 'Аффирмации',
+        icon: affirm,
+    },
+    {
+        id: 7,
+        text: 'Быстрый\nперекус',
+        icon: snack,
+    },
+    {
+        id: 8,
+        text: 'разбор задач',
+        icon: tasks,
+    },
+    {
+        id: 9,
+        text: 'фриланс-\nзаказ',
+        icon: freelance,
+    },
+    {
+        id: 11,
+        text: 'встреча\nс друзьями',
+        icon: meeting,
+    },
+    {
+        id: 2,
+        text: 'творчество',
+        icon: art,
+    },
+    {
+        id: 9,
+        text: 'уборка',
+        icon: cleaning,
+    },
+     {
+        id: 46,
+        text: 'психолог',
+        icon: doctor,
+    },
+    {
+        id: 10,
+        text: 'сходить\nна балет',
+        icon: ballet,
+        isSpecial: true,
+    },
+];
+
+export const planCardsWeek3_Friday = [
+    {
+        id: 3,
+        text: 'планирование\nдня',
+        icon: planning,
+    },
+    {
+        id: 0,
+        text: 'завтрак',
+        icon: breakfast,
+    },
+    {
+        id: 1,
+        text: 'музыка',
+        icon: music,
+    },
+    {
+        id: 2,
+        text: 'пробежка',
+        icon: running,
+    },
+    {
+        id: 4,
+        text: 'работа',
+        icon: job,
+    },
+    {
+        id: 5,
+        text: 'учёба',
+        icon: study,
+    },
+    {
+        id: 6,
+        text: 'думскроллинг',
+        icon: phone,
+    },
+    {
+        id: 7,
+        text: 'медитация',
+        icon: med,
+    },
+    {
+        id: 8,
+        text: 'отдых',
+        icon: relax
+    },
+    {
+        id: 421,
+        text: 'путешествие',
+        icon: travel,
+    },
+    {
+        id: 523,
+        text: 'забота\nо растениях',
+        icon: plants,
+    },
+    {
+        id: 10,
+        text: 'посетить\nджазовый клуб',
+        icon: juzz,
         isSpecial: true,
     },
 ];

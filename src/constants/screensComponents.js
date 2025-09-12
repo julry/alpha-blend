@@ -12,14 +12,15 @@ import {
 } from '../components/screens/week1';
 
 import { 
-    Blender2F, Blender2M, Blender2W, Planner2F, Planner2M, Planner2W, Lobby2 
+    Blender2F, Blender2M, Blender2W, Planner2F, Planner2M, Planner2W, Lobby2,
+    GameBasketM, GameBasketW, GameBasketF
 } from '../components/screens/week2';
 
+import { 
+    Blender3F, Blender3M, Blender3W, Planner3F, Planner3M, Planner3W, Lobby3 
+} from '../components/screens/week3';
 
 import { SCREENS } from "./screens";
-import { GameBasketM } from "../components/screens/week2/GameBasketM";
-import { GameBasketW } from "../components/screens/week2/GameBasketW";
-import { GameBasketF } from "../components/screens/week2/GameBasketF";
 
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
@@ -48,6 +49,13 @@ export const screens = {
     [SCREENS.GAME2M]: GameBasketM,
     [SCREENS.GAME2W]: GameBasketW,
     [SCREENS.GAME2F]: GameBasketF,
+    [SCREENS.LOBBY3]: Lobby3,
+    [SCREENS.PLANNER3M]: Planner3M,
+    [SCREENS.PLANNER3W]: Planner3W,
+    [SCREENS.PLANNER3F]: Planner3F,
+    [SCREENS.BLENDER3M]: Blender3M,
+    [SCREENS.BLENDER3W]: Blender3W,
+    [SCREENS.BLENDER3F]: Blender3F,
 
 };
 

@@ -1,14 +1,14 @@
 import { DAYS } from "../../../constants/days";
-import { planCardsWeek2_Wednesday } from "../../../constants/planCards";
+import { planCardsWeek3_Wednesday } from "../../../constants/planCards";
 import { SCREENS } from "../../../constants/screens";
 import { PlannerGame } from "../../shared/games/PlannerGame"
 
-export const Planner2W = () => {
+export const Planner3W = () => {
     return (
         <PlannerGame 
-            cards={planCardsWeek2_Wednesday} 
-            lobbyScreen={SCREENS.LOBBY2}
-            week={2}
+            cards={planCardsWeek3_Wednesday} 
+            lobbyScreen={SCREENS.LOBBY3}
+            week={3}
             day={DAYS.Wednesday}
         />
     )

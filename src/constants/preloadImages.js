@@ -31,6 +31,9 @@ import doctor from '../assets/images/planner/doctor.png';
 import match from '../assets/images/planner/match.png';
 import runTrain from '../assets/images/planner/runTrain.png';
 import shopping from '../assets/images/planner/shopping.png';
+import gallery from '../assets/images/planner/gallery.png';
+import ballet from '../assets/images/planner/ballet.png';
+import juzz from '../assets/images/planner/juzz.png';
 
 import ananas from '../assets/images/ingridients/ananas.png';
 import apple from '../assets/images/ingridients/apple.png';
@@ -93,13 +96,13 @@ export const initialImages = [
 
 export const commonImages = [
     ananas, apple, banana, blackberry, coconut, ice, lemon, mint, orange, strawberry,
-    hack, hackL, plants, spa, travel, call, sport, art, meeting, planning, breakfast,
-    music, running, job, study, phone, med, relax, cleaning, diary, brain, selfImprov,
+    plants, spa, travel, call, sport, art, meeting, planning, breakfast,
+    music, running, job, study, phone, med, relax, cleaning, diary, selfImprov,
     smoothie, guitar, affirm, snack, tasks, freelance, girl0, girl1, man0, blender,
     table
 ];
 
-export const week1Images = [...commonImages];
+export const week1Images = [...commonImages, hack, hackL, brain];
 export const week2Images = [...commonImages, bicycle, doctor, match, runTrain, shopping];
-export const week3Images = [...commonImages, matcha, pear];
+export const week3Images = [...commonImages, matcha, pear, gallery, ballet, juzz];
 export const week4Images = [...commonImages, matcha, pear];
