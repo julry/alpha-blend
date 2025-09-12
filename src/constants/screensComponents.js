@@ -16,9 +16,11 @@ import {
     Blender2F, Blender2M, Blender2W, Planner2F, Planner2M, Planner2W, Lobby2 
 } from '../components/screens/week2';
 
-import BasketballGame from "../components/shared/games/BasketballGame/working-index";
 
 import { SCREENS } from "./screens";
+import { GameBasketM } from "../components/screens/week2/GameBasketM";
+import { GameBasketW } from "../components/screens/week2/GameBasketW";
+import { GameBasketF } from "../components/screens/week2/GameBasketF";
 
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
@@ -45,7 +47,9 @@ export const screens = {
     [SCREENS.BLENDER2M]: Blender2M,
     [SCREENS.BLENDER2W]: Blender2W,
     [SCREENS.BLENDER2F]: Blender2F,
-    [SCREENS.GAME2M]: BasketballGame,
+    [SCREENS.GAME2M]: GameBasketM,
+    [SCREENS.GAME2W]: GameBasketW,
+    [SCREENS.GAME2F]: GameBasketF,
 
 };
 
