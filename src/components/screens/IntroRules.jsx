@@ -2,19 +2,11 @@ import { useState } from "react"
 import { Lobby } from "./Lobby";
 import { CommonModal } from "../shared/modals/CommonModal";
 import { useProgress } from "../../contexts/ProgressContext";
-import { Button, IconButton } from "../shared/Button";
+import { IconButton } from "../shared/Button";
 import styled from "styled-components";
 import { LetterModal } from "../shared/modals/LetterModal";
 import { SCREENS } from "../../constants/screens";
 import { Bold, RedText } from "../shared/Spans";
-
-const ButtonStyled = styled(Button)`
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: var(--spacing_x6);
-    z-index: 10;
-`;
 
 const IconButtonStyled = styled(IconButton)`
     position: absolute;
@@ -56,7 +48,7 @@ export const IntroRules = () => {
                     <Bold>Эта кнопка ведёт в главное меню.</Bold> 
                 </p>
                 <p>
-                    Там собраны все недели — пройденные, и те, что только откроются.
+                    Там собраны все недели — пройденные и те, что только откроются.
                 </p>
             </>
         )
