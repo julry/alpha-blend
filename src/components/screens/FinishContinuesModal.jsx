@@ -1,5 +1,5 @@
 import { useProgress } from "../../contexts/ProgressContext"
-import { CommonModal } from "../shared/modals/CommonModal";
+import { CommonModal } from "../shared/modals";
 import { Bold } from "../shared/Spans";
 
 export const FinishContinuesModal = ({isOpen, hasMore, endMessage, onClose, isAllDone}) => {

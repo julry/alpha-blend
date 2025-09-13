@@ -1,11 +1,8 @@
-import { SkipModal } from "../../modals/SkipModal";
-import { DrinkModal } from "../../modals/DrinkModal";
+import { SkipModal, DrinkModal, CommonModal, StartGameModal } from "../../modals";
+import { Bold } from "../../Spans";
 import { EndGameModal } from "./EndGameModal";
-import { CommonModal } from "../../modals/CommonModal";
 import { RulesModal } from "./RulesModal";
 import { FirstRulesModal } from "./FirstRulesModal";
-import { Bold } from "../../Spans";
-import { StartGameModal } from "../../modals/StartGameModal";
 
 export const ModalsPart = ({modalsState, modalsFunc, onGoLobby, drinkInfo, collegueMessage}) => {
     return (

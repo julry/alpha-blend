@@ -5,13 +5,14 @@ import { useProgress } from '../../../../contexts/ProgressContext';
 import { weekInfo } from '../../../../constants/weeksInfo';
 import { SCREENS } from '../../../../constants/screens';
 import { useSizeRatio } from '../../../../hooks/useSizeRatio';
-import { CommonModal, SkipModal, StartGameModal, EndGameModal } from '../../modals';
+import { CommonModal, SkipModal } from '../../modals';
 import { FlexWrapper } from '../../ContentWrapper';
 import { BackHeader } from '../../BackHeader';
 import { Bold, RedText } from '../../Spans';
 import { Timer } from '../parts';
 import { MAX_TIME } from './constants';
 import { RulesModal } from './RulesModal';
+import { EndGameModal } from './EndGameModal';
 import { useGame } from './useGame';
 
 const Wrapper = styled(FlexWrapper)`
@@ -42,29 +43,28 @@ const Amount = styled.p`
     font-weight: 400;
 `;
 
-export const BasketballGame = ({ isNeverPlayed, day }) => {
-    const { next, endGame,} = useProgress();
+export const PuzzleGame = ({ day, startText, endText }) => {
+    const { next, endGame } = useProgress();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [dpr, setDpr] = useState(0);
     const ratio = useSizeRatio();
     const [isRulesModal, setIsRulesModal] = useState();
-    const [isFirstMessage, setIsFirstMessage] = useState(isNeverPlayed);
+    const [isFirstMessage, setIsFirstMessage] = useState(true);
     const [isSkipping, setIsSkipping] = useState(false);
     const [isEndModal, setIsEndModal] = useState({ shown: false, title: '' });
     const [isCollegueModal, setIsCollegueModal] = useState(false);
-    const [isStartModal, setIsStartModal] = useState(!isNeverPlayed);
     const $timerId = useRef(uid());
     const isGameActive = useMemo(
-        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal || isStartModal),
-        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal, isStartModal],
+        () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal),
+        [isRulesModal, isSkipping, isEndModal, isFirstMessage, isCollegueModal],
     );
-    const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 2).challengeCollegueMessage[day], [day]);
+    const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 3).challengeCollegueMessage[day], [day]);
 
-    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr, });
+    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr });
 
     const handleBack = () => {
-        next(SCREENS.LOBBY2);
+        next(SCREENS.LOBBY3);
     };
 
     useEffect(() => {
@@ -75,21 +75,10 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
         setDpr(window?.devicePixelRatio || 1);
     }, []);
 
-    const restartGame = () => {
-        $timerId.current = uid();
-        setIsEndModal();
-        setCurrentScore(0);
-    }
 
-    const finishGame = (isTime) => {
-        endGame({ finishPoints: currentScore, gameName: 'gameBasket', week: 2, day });
-       
-        setIsEndModal({ shown: true, isTime });
-    }
-
-    const handleCloseEndModal = () => {
-        setIsEndModal({ shown: false });
-        setIsCollegueModal(true);
+    const finishGame = () => {
+        endGame({ finishPoints: currentScore, gameName: 'gamePuzzle', week: 3, day });
+        setIsEndModal({ shown: true });
     }
 
     return (
@@ -108,25 +97,17 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
             <CanvasWrapper ref={gameContainerRef} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <CommonModal isOpen={isFirstMessage} btnText="Играть" onClose={() => setIsFirstMessage(false)}>
-                <p>
-                    <Bold>Готов проверить меткость?
-                    </Bold>
-                </p>
-                <p>
-                    Зажми мяч и проведи пальцем вверх, чтобы совершить бросок. Точное попадание в кольцо даёт <Bold><RedText>10</RedText> баллов.</Bold>
-                </p>
-                <p><Bold>Промах — минус жизнь.</Bold> У тебя их <Bold>всего <RedText>3</RedText>.</Bold> Успей набрать максимум баллов <Bold>за <RedText>1</RedText> минуту!</Bold></p>
+                {startText}
+                <p>Собери картинку из кусочков пазла<Bold> за <RedText>3</RedText> минуты.</Bold></p>
             </CommonModal>
-            <CommonModal isOpen={isCollegueModal} isCollegue onClose={() => next(SCREENS.LOBBY2)} btnText="В комнату">
+            <CommonModal isOpen={isCollegueModal} isCollegue onClose={() => next(SCREENS.LOBBY3)} btnText="В комнату">
                 {typeof collegueMessage === 'function' ? collegueMessage() : <p>{collegueMessage}</p>}
             </CommonModal>
             <SkipModal isOpen={isSkipping} onClose={() => setIsSkipping(false)} onExit={handleBack} />
             <EndGameModal
                 isOpen={isEndModal?.shown}
-                onClose={handleCloseEndModal}
                 points={currentScore}
             />
-            <StartGameModal isOpen={isStartModal} onClose={() => setIsStartModal(false)} />
         </Wrapper>
     );
 };

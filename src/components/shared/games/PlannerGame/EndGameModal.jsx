@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Modal } from "../../modals/Modal";
+import { Modal } from "../../modals";
 import { Title } from "../../Title";
 import { Bold, RedText } from "../../Spans";
 import { Block } from "../../Block";

@@ -5,7 +5,7 @@ import { SCREENS } from "../../../constants/screens";
 import { Block } from "../../shared/Block";
 import { PlannerGame } from "../../shared/games/PlannerGame"
 import { useRef, useState } from "react";
-import { Modal } from "../../shared/modals/Modal";
+import { Modal } from "../../shared/modals";
 import { Bold } from "../../shared/Spans";
 
 const ModalStyled = styled(Modal)`

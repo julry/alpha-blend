@@ -1,18 +1,17 @@
-import { useRef, useState } from "react"
-import { CommonModal } from "../../modals/CommonModal";
+import { useRef, useState } from "react";
 import styled from "styled-components";
+import { DndProvider } from "react-dnd-multi-backend";
+import { motion } from "framer-motion";
+import { drinks } from "../../../../constants/drinks";
+import { useSizeRatio } from "../../../../hooks/useSizeRatio";
+import { Modal, CommonModal } from "../../modals";
+import { Block } from "../../Block";
+import { Bold, RedText } from "../../Spans";
 import { persons } from "./constants";
 import { Info } from "./Info";
-import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { CardsField } from "./CardsField";
 import { BlenderObject } from "./BlenderObject";
-import { Modal } from "../../modals/Modal";
-import { Block } from "../../Block";
-import { DndProvider } from "react-dnd-multi-backend";
-import { Bold, RedText } from "../../Spans";
-import { motion } from "framer-motion";
 import { DoneDrinkOject } from "./DoneDrinkObject";
-import { drinks } from "../../../../constants/drinks";
 import { Person } from "./Person";
 
 const ThirdPartModal = styled(CommonModal)`

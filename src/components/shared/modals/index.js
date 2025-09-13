@@ -3,4 +3,13 @@ export * from './AchievesModal';
 export * from './FindingModal';
 export * from './RulesModal';
 export * from './AchievesModal';
-
+export * from './EndGameModal';
+export * from './CommonModal';
+export * from './DrinkModal';
+export * from './InfoModal';
+export * from './LetterModal';
+export * from './LifehackModal';
+export * from './Modal';
+export * from './NewAchieveModal';
+export * from './SkipModal';
+export * from './StartGameModal';

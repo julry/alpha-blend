@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Block } from "../../Block";
 import { Title } from "../../Title";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { Modal } from "../../modals/Modal";
+import { Modal } from "../../modals";
 import { Li } from "../../Li";
 import { RedText } from "../../Spans";
 

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Bold, RedText } from "../../Spans";
 import { Block } from "../../Block";
 import { Title } from "../../Title";
-import { Modal } from "../../modals/Modal";
+import { Modal } from "../../modals";
 
 const Content = styled(Block)`
     position: absolute;

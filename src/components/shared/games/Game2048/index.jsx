@@ -1,23 +1,20 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import styled from "styled-components";
 import {useProgress} from "../../../../contexts/ProgressContext";
-import {useGame} from "./useGame";
-import {GameBoard} from "./GameBoard";
-import {GameController} from "./GameController";
-import {ACTIONS} from "./constants";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import {useCallbackRef} from "../../../../hooks/useCallbackRef";
-import { BackHeader } from "../../BackHeader";
-import { Timer } from "../parts";
-import { MAX_TIME } from "./constants";
-import { FlexWrapper } from "../../ContentWrapper";
-import { RulesModal } from "./RulesModal";
-import { CommonModal } from "../../modals/CommonModal";
-import { EndGameModal } from "../../modals/EndGameModal";
-import { SkipModal } from "../../modals/SkipModal";
 import { weekInfo } from "../../../../constants/weeksInfo";
+import { BackHeader } from "../../BackHeader";
+import { FlexWrapper } from "../../ContentWrapper";
+import { CommonModal, EndGameModal, SkipModal, StartGameModal } from "../../modals";
 import { Bold } from "../../Spans";
-import { StartGameModal } from "../../modals/StartGameModal";
+import { Timer } from "../parts";
+
+import {useGame} from "./useGame";
+import { RulesModal } from "./RulesModal";
+import {GameBoard} from "./GameBoard";
+import {GameController} from "./GameController";
+import { ACTIONS, MAX_TIME} from "./constants";
 
 const WrapperInner = styled.div`
     display: flex;

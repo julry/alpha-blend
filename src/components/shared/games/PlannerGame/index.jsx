@@ -1,20 +1,19 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 import { useProgress } from "../../../../contexts/ProgressContext";
+import { useSizeRatio } from "../../../../hooks/useSizeRatio";
+import { findings } from "../../../../constants/findings";
+import { weekInfo } from "../../../../constants/weeksInfo";
 import { FlexWrapper } from "../../ContentWrapper";
-import { useEffect, useState } from "react";
+import { CommonModal, SkipModal } from "../../modals";
+import { FindingModal } from "../../modals";
+import { BackHeader } from "../../BackHeader";
+import { Button } from "../../Button";
+import { EndGameModal } from "./EndGameModal";
 import { TimeBlock } from "./TimeBlock";
 import { RulesModal } from "./RulesModal";
 import { PlanCard } from "./PlanCard";
-import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { CommonModal } from "../../modals/CommonModal";
-import { FindingModal } from "../../modals";
-import { BackHeader } from "../../BackHeader";
-import { SkipModal } from "../../modals/SkipModal";
-import { findings } from "../../../../constants/findings";
-import { weekInfo } from "../../../../constants/weeksInfo";
-import { Button } from "../../Button";
-import { AnimatePresence, motion } from "framer-motion";
-import { EndGameModal } from "./EndGameModal";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;

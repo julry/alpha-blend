@@ -5,7 +5,7 @@ import building from '../../assets/images/building.png';
 import { useSizeRatio } from "../../hooks/useSizeRatio";
 import { CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext";
 import { useState } from "react";
-import { CommonModal } from "../shared/modals/CommonModal";
+import { CommonModal } from "../shared/modals";
 import { Bold } from "../shared/Spans";
 import { SCREENS } from "../../constants/screens";
 

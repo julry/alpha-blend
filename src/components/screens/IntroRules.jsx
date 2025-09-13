@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { Lobby } from "./Lobby";
-import { CommonModal } from "../shared/modals/CommonModal";
+import { CommonModal, LetterModal } from "../shared/modals";
 import { useProgress } from "../../contexts/ProgressContext";
 import { IconButton } from "../shared/Button";
 import styled from "styled-components";
-import { LetterModal } from "../shared/modals/LetterModal";
 import { SCREENS } from "../../constants/screens";
 import { Bold, RedText } from "../shared/Spans";
 
