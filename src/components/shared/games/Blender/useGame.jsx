@@ -167,8 +167,9 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     }
 
     const loseLive = (drinkId) => {
+        if (restartModal || isEndModal.isShown) return;
         if (shownFriends.some((pers) => pers.drink === drinkId) || doneDrinks.length < 2) return;
-        
+
         setLives(prev => prev - 1);
 
         if (lives < 2) {

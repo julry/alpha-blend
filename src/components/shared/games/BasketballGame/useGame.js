@@ -204,7 +204,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         // Минимальная дистанция и время для броска
                         if (distance > 10 && timeElapsed < 1000 && y < this.dragStart.y) {
                             const speedFactor = Math.min(1, distance / 100) * Math.min(1, 500 / timeElapsed);
-                            const xTraj = -2300 * distanceX / distanceY * speedFactor;
+                            const xTraj = -1800 * distanceX / distanceY * speedFactor;
                             this.launchBall(xTraj);
                         }
                     },
@@ -212,7 +212,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         const ball = this.elements.ball;
                         ball.launched = true;
                         ball.velocity.x = xTraj;
-                        ball.velocity.y = this.isTouches ? -1350 : -1500;
+                        ball.velocity.y = this.isTouches ? -1430 : -1500;
                         // Добавляем вращение как в оригинале
                         ball.rotationSpeed = xTraj / 3;
                         this.physics.gravity.y = 3000;
