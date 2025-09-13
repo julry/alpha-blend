@@ -47,7 +47,7 @@ const Amount = styled.p`
 `;
 
 export const BasketballGame = ({ isNeverPlayed, day }) => {
-    const { next, endGame, user, dropGame, rewritePoints } = useProgress();
+    const { next, endGame,} = useProgress();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [dpr, setDpr] = useState(0);
@@ -58,7 +58,6 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
     const [isEndModal, setIsEndModal] = useState({ shown: false, title: '' });
     const [isCollegueModal, setIsCollegueModal] = useState(false);
     const [isStartModal, setIsStartModal] = useState(!isNeverPlayed);
-    const [lives, setLives] = useState(user?.[`gameBasket`][day]?.tries ?? 3);
     const $timerId = useRef(uid());
     const isGameActive = useMemo(
         () => !(isRulesModal || isSkipping || isEndModal?.shown || isFirstMessage || isCollegueModal || isStartModal),
@@ -66,16 +65,9 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
     );
     const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 2).challengeCollegueMessage[day], [day]);
 
-    const handleMiss = useCallback(() => {
-        setLives(prev => prev - 1);
-    }, []);
-
-    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr, onMiss: handleMiss });
+    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr, });
 
     const handleBack = () => {
-        if (lives !== 3 && day !== undefined) {
-            dropGame({ gameName: 'gameBasket', tries: lives, day })
-        }
         next(SCREENS.LOBBY2);
     };
 
@@ -87,10 +79,6 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
         setDpr(window?.devicePixelRatio || 1);
     }, []);
 
-    useEffect(() => {
-        if (lives === 0) finishGame(false);
-    }, [lives]);
-
     const restartGame = () => {
         $timerId.current = uid();
         setIsEndModal();
@@ -98,25 +86,12 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
     }
 
     const finishGame = (isTime) => {
-        const gameData = { finishPoints: currentScore, gameName: 'gameBasket', week: 2, day };
-        if (!lives) {
-            if (user.gameBasket[day].isCompleted) {
-                rewritePoints(gameData)
-            }
-            endGame(gameData);
-        }
+        endGame({ finishPoints: currentScore, gameName: 'gameBasket', week: 2, day });
+       
         setIsEndModal({ shown: true, isTime });
     }
 
     const handleCloseEndModal = () => {
-        const gameData = { finishPoints: currentScore, gameName: 'gameBasket', week: 2, day };
-        if (lives > 0) {
-            if (user.gameBasket[day].isCompleted) {
-                rewritePoints(gameData);
-            }
-            endGame(gameData);
-        }
-
         setIsEndModal({ shown: false });
         setIsCollegueModal(true);
     }
@@ -133,7 +108,6 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
                     />
                     <Amount $ratio={ratio}>{currentScore}</Amount>
                 </BackHeader>
-                <LifeContainer lives={lives} />
             </InfoContainer>
             <CanvasWrapper ref={gameContainerRef} />
             <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
@@ -156,7 +130,6 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
                 onClose={handleCloseEndModal}
                 isTime={isEndModal?.isTime}
                 points={currentScore}
-                lives={lives}
                 onRestart={restartGame}
             />
             <StartGameModal isOpen={isStartModal} onClose={() => setIsStartModal(false)} />

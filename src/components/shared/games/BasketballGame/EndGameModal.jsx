@@ -34,31 +34,15 @@ export const EndGameModal = ({ children, isOpen, onClose, points, isTime, lives,
         <ModalStyled isDarken isOpen={isOpen}>
             <BlockStyled>
                 <Title>
-                   {isTime ? 'ВРЕМЯ ВЫШЛО!' : 'ПОПЫТКИ ЗАКОНЧИЛИСЬ!'}
+                   {'ВРЕМЯ ВЫШЛО!' }
                 </Title>
                 {children}
-                {lives > 0 ? (
-                        <p>
-                            Ты заработал <RedText><Bold>{points}</Bold></RedText> <Bold>баллов</Bold>.{'\n'}
-                            У тебя остались попытки — можешь переиграть, чтобы улучшить свой результат.
-                        </p>
-                ) : (
-                    <p>
-                        Ты заработал <RedText><Bold>{points}</Bold></RedText> <Bold>баллов</Bold>.{'\n'}
-                        У тебя больше не осталось попыток — это конечный результат.
-                    </p>
-                )}
-                
+                <p>
+                    Ты заработал <Bold><RedText>{points}</RedText> баллов</Bold>.
+                </p>
             </BlockStyled>
             <ButtonsWrapper>
-                {lives > 0 ? (
-                   <>
-                        <Button onClick={onRestart}>Ещё раз</Button>
-                        <Button onClick={onClose} type="secondary">Далее</Button>
-                    </>
-                ) : (
-                    <Button onClick={onClose}>Далее</Button>
-                )}
+                <Button onClick={onClose}>Далее</Button>
             </ButtonsWrapper>
         </ModalStyled>
     );
