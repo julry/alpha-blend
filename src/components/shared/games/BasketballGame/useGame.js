@@ -212,7 +212,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         const ball = this.elements.ball;
                         ball.launched = true;
                         ball.velocity.x = xTraj;
-                        ball.velocity.y = this.isTouches ? -1200 : -1500;
+                        ball.velocity.y = this.isTouches ? -1350 : -1500;
                         // Добавляем вращение как в оригинале
                         ball.rotationSpeed = xTraj / 3;
                         this.physics.gravity.y = 3000;
