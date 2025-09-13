@@ -54,6 +54,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                     height: height,
                     dpr,
                     isRunning: true,
+                    isTouches: true,
                     init() {
                         // Сохраняем загруженные изображения
                         loadedImages.forEach(({ name, img }) => {
@@ -133,6 +134,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
                     },
                     handleMouseDown(e) {
+                        this.isTouches = false;
                         const rect = this.canvas.getBoundingClientRect();
                         const x = e.clientX - rect.left
                         const y = e.clientY - rect.top
@@ -161,6 +163,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                     },
                     handleTouchStart(e) {
                         e.preventDefault();
+                        this.isTouches = true;
                         if (e.touches.length === 1) {
                             const rect = this.canvas.getBoundingClientRect();
                             const scaleX = 1;
@@ -182,10 +185,8 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         if (this.isDragging && e.changedTouches.length === 1) {
                             const rect = this.canvas.getBoundingClientRect();
 
-                            const scaleX = 1;
-                            const scaleY = 1;
-                            const x = (e.changedTouches[0].clientX - rect.left) * scaleX;
-                            const y = (e.changedTouches[0].clientY - rect.top) * scaleY;
+                            const x = e.changedTouches[0].clientX - rect.left;
+                            const y = e.changedTouches[0].clientY - rect.top;
                             const timeElapsed = Date.now() - this.dragStart.time;
 
                             this.handleRelease(x, y, timeElapsed);
@@ -211,7 +212,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         const ball = this.elements.ball;
                         ball.launched = true;
                         ball.velocity.x = xTraj;
-                        ball.velocity.y = -1450;
+                        ball.velocity.y = this.isTouches ? -1200 : -1500;
                         // Добавляем вращение как в оригинале
                         ball.rotationSpeed = xTraj / 3;
                         this.physics.gravity.y = 3000;
