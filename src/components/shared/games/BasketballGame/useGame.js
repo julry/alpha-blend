@@ -4,7 +4,7 @@ import ballPic from './images/ball.png';
 import hoopPic from './images/hoop.svg';
 import frontRimPic from './images/front_rim.svg';
 import sideRimPic from './images/side_rim.svg';
-import { GAME_POINTS } from "./constants";
+import { GAME_POINTS, MIN_BALL_POSITION } from "./constants";
 
 export const useGame = ({ width, height, dpr, onMiss }) => {
     const ratio = useSizeRatio();
@@ -92,9 +92,9 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
 
                     createGameElements() {
                         // Создаем мяч со случайной позицией по X
-                        const randomX = 60 + Math.random() * (this.width - 140);
+                        // const randomX = 60 + Math.random() * (this.width - 140);
                         this.elements.ball = {
-                            x: currentScore > 0 ? randomX : 100 * ratio,
+                            x: MIN_BALL_POSITION,
                             y: this.height - 109 * ratio,
                             radius: 40,
                             velocity: { x: 0, y: 0 },
@@ -211,7 +211,7 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
                         const ball = this.elements.ball;
                         ball.launched = true;
                         ball.velocity.x = xTraj;
-                        ball.velocity.y = -1750;
+                        ball.velocity.y = -1450;
                         // Добавляем вращение как в оригинале
                         ball.rotationSpeed = xTraj / 3;
                         this.physics.gravity.y = 3000;
@@ -337,8 +337,8 @@ export const useGame = ({ width, height, dpr, onMiss }) => {
 
                         // Случайная позиция по X в пределах canvas (с отступами от краев)
                         const canvasWidth = this.width;
-                        const minX = 60;
-                        const maxX = canvasWidth - 60;
+                        const minX = MIN_BALL_POSITION;
+                        const maxX = canvasWidth - MIN_BALL_POSITION;
                         const randomX = minX + Math.random() * (maxX - minX);
 
                         this.elements.ball = {
