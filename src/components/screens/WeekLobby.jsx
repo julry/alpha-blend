@@ -65,19 +65,20 @@ export const WeekLobby = ({isHideUnavailable}) => {
     const [isClosedInfo, setIsClosedInfo] = useState(false);
 
     const ratio = useSizeRatio();
+    const lastWeek = (passedWeeks[passedWeeks.length - 1] ?? 0);
 
     const getIsFloorActive = (index) => {
         if (index > CURRENT_WEEK) return;
 
         const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
 
-        return isWeekPassed ? index === CURRENT_WEEK : index === (passedWeeks[passedWeeks.length - 1] ?? 0) + 1;
+        return isWeekPassed ? index === CURRENT_WEEK : (index === lastWeek + 1);
     };
 
     const getIsFloorUnavailable = (index) => {
         const isWeekPassed = passedWeeks.includes(CURRENT_WEEK);
         
-        return isWeekPassed ? index > CURRENT_WEEK : (index > ((passedWeeks[passedWeeks.length - 1] ?? 0) + 1));
+        return isWeekPassed ? index > CURRENT_WEEK : (index > lastWeek + 1);
     }
 
     const handleFloorClick = (index) => {

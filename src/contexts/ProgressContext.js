@@ -77,8 +77,6 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
-    return 1;
-
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;
@@ -91,8 +89,6 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
-    return DAYS.Friday;
-
     const day = getMoscowTime().getDay();
 
     switch (day) {
@@ -396,31 +392,6 @@ export function ProgressProvider(props) {
         setTotalPoints(prev => data?.scriptData.totalPoints ?? prev + finishPoints);
     }
 
-    const rewritePoints = async ({finishPoints, gameName, week, day,}) => {
-        const prevPoints = user[gameName][day].points ?? 0;
-        //TODO: уточнить как перезаписывать: вообще или только если лучше результат
-        if (week === CURRENT_WEEK) {
-            setWeekPoints(prev => prev  - prevPoints + finishPoints);
-        }
-
-        const endTimeMsc = getMoscowTime();
-
-        const userPoints = (user.points ?? 0) + finishPoints - prevPoints;
-        const userWeekPoints = (user[`week${week}Points`] ?? 0) + finishPoints - prevPoints;
-
-        await updateUser(
-            {
-                [`week${week}Points`]: userWeekPoints > 0 ? userWeekPoints : 0,
-                [gameName]: { ...user[gameName], [day]: {
-                    ...user[gameName][day],
-                    completedAt: formatDate(endTimeMsc),
-                    points: finishPoints
-                }},
-                points: userPoints > 0 ? userPoints : 0,
-            }
-        );
-    }
-
     const updateTotalPoints = async () => {
         const data = await loadRecord();
 
@@ -529,7 +500,6 @@ export function ProgressProvider(props) {
         setIsShowWeekLobbyInfo,
         updateTotalPoints,
         tgInfo,
-        rewritePoints
     }
 
     return (

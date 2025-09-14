@@ -190,6 +190,11 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             if (isBulbShown) {
                 setIsFindingModal(true);
                 readLifehack(week, day);
+
+                if (day === DAYS.Friday && !user?.passedWeeks.includes(week)) {
+                    updateUser({passedWeeks: [...(user.passedWeeks ?? []), week]});
+                    setPassedWeeks(prev => prev.includes(week) ? prev : [...prev, week]);
+                }
                 return;
             }
         }
@@ -204,7 +209,6 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             updateUser({passedWeeks: [...(user.passedWeeks ?? []), week]});
             setPassedWeeks(prev => prev.includes(week) ? prev : [...prev, week]);
         }
-
         setHasClosed(true);
         setFinishModal({shown: false});
     };

@@ -21,6 +21,7 @@ import {
 } from '../components/screens/week3';
 
 import { SCREENS } from "./screens";
+import { PuzzleGame } from "../components/shared/games/PuzzleGame";
 
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
@@ -56,6 +57,7 @@ export const screens = {
     [SCREENS.BLENDER3M]: Blender3M,
     [SCREENS.BLENDER3W]: Blender3W,
     [SCREENS.BLENDER3F]: Blender3F,
+    [SCREENS.GAME3M]: PuzzleGame,
 
 };
 

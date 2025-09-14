@@ -61,7 +61,7 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
     );
     const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 2).challengeCollegueMessage[day], [day]);
 
-    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr, });
+    const { gameContainerRef, currentScore } = useGame({ width, height, dpr, });
 
     const handleBack = () => {
         next(SCREENS.LOBBY2);
@@ -74,12 +74,6 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
         setHeight(rect.height > 700 ? 700 : rect.height);
         setDpr(window?.devicePixelRatio || 1);
     }, []);
-
-    const restartGame = () => {
-        $timerId.current = uid();
-        setIsEndModal();
-        setCurrentScore(0);
-    }
 
     const finishGame = (isTime) => {
         endGame({ finishPoints: currentScore, gameName: 'gameBasket', week: 2, day });

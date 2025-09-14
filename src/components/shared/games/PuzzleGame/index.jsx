@@ -5,15 +5,16 @@ import { useProgress } from '../../../../contexts/ProgressContext';
 import { weekInfo } from '../../../../constants/weeksInfo';
 import { SCREENS } from '../../../../constants/screens';
 import { useSizeRatio } from '../../../../hooks/useSizeRatio';
-import { CommonModal, SkipModal } from '../../modals';
+import { CommonModal, SkipModal, EndGameModal } from '../../modals';
 import { FlexWrapper } from '../../ContentWrapper';
 import { BackHeader } from '../../BackHeader';
 import { Bold, RedText } from '../../Spans';
 import { Timer } from '../parts';
 import { MAX_TIME } from './constants';
 import { RulesModal } from './RulesModal';
-import { EndGameModal } from './EndGameModal';
 import { useGame } from './useGame';
+import { puzzlesM } from './puzzles';
+import mondayField from './assets/mondayBg.svg';
 
 const Wrapper = styled(FlexWrapper)`
     padding: 0;
@@ -21,21 +22,16 @@ const Wrapper = styled(FlexWrapper)`
 
 const CanvasWrapper = styled(FlexWrapper)`
     justify-content: flex-end;
+    flex: 1;
+    height: auto;
+    min-height: unset;
     padding: 0;
 `;
 
 const InfoContainer = styled.div`
-    position: absolute;
-    z-index: 4;
-    top: 0;
-    left: 0;
     width: 100%;
     padding: var(--spacing_x4);
     padding-bottom: 0;
-
-    & > div:first-child {
-      margin-bottom: var(--spacing_x5);
-    }
 `;
 
 const Amount = styled.p`
@@ -43,7 +39,7 @@ const Amount = styled.p`
     font-weight: 400;
 `;
 
-export const PuzzleGame = ({ day, startText, endText }) => {
+export const PuzzleGame = ({ day, startText, endText, puzzles, fieldPic }) => {
     const { next, endGame } = useProgress();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
@@ -61,7 +57,7 @@ export const PuzzleGame = ({ day, startText, endText }) => {
     );
     const collegueMessage = useMemo(() => weekInfo.find((info) => info.week === 3).challengeCollegueMessage[day], [day]);
 
-    const { gameContainerRef, currentScore, setCurrentScore } = useGame({ width, height, dpr });
+    const { gameContainerRef, currentScore } = useGame({ width, height, dpr, initialPuzzles: puzzlesM, fieldPic: mondayField });
 
     const handleBack = () => {
         next(SCREENS.LOBBY3);
@@ -75,27 +71,31 @@ export const PuzzleGame = ({ day, startText, endText }) => {
         setDpr(window?.devicePixelRatio || 1);
     }, []);
 
-
     const finishGame = () => {
         endGame({ finishPoints: currentScore, gameName: 'gamePuzzle', week: 3, day });
         setIsEndModal({ shown: true });
+    }
+
+    const handleCloseFinish = () => {
+        setIsCollegueModal(true);
+        setIsEndModal({shown: false});
     }
 
     return (
         <Wrapper>
             <InfoContainer>
                 <BackHeader onInfoClick={() => setIsRulesModal(true)} onBack={() => setIsSkipping(true)}>
-                    <Timer
+                    {/* <Timer
                         key={$timerId.current}
                         initialTime={MAX_TIME}
                         isStart={isGameActive}
                         onFinish={() => finishGame(true)}
-                    />
+                    /> */}
                     <Amount $ratio={ratio}>{currentScore}</Amount>
                 </BackHeader>
             </InfoContainer>
             <CanvasWrapper ref={gameContainerRef} />
-            <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
+            {/* <RulesModal isOpen={isRulesModal} onClose={() => setIsRulesModal(false)} />
             <CommonModal isOpen={isFirstMessage} btnText="Играть" onClose={() => setIsFirstMessage(false)}>
                 {startText}
                 <p>Собери картинку из кусочков пазла<Bold> за <RedText>3</RedText> минуты.</Bold></p>
@@ -107,7 +107,8 @@ export const PuzzleGame = ({ day, startText, endText }) => {
             <EndGameModal
                 isOpen={isEndModal?.shown}
                 points={currentScore}
-            />
+                onClose={handleCloseFinish}
+            /> */}
         </Wrapper>
     );
 };
