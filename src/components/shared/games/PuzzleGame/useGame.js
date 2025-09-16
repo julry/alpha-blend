@@ -74,7 +74,6 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                         const ctx = canvas.getContext('2d');
                         
                         ctx.scale(dpr, dpr);
-                        ctx.imageSmoothingEnabled = false;
 
                         this.ctx = ctx;
                         this.canvas = canvas;
@@ -238,10 +237,6 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
 
                         // Очищаем холст
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.mozImageSmoothingEnabled = false;
-                        ctx.webkitImageSmoothingEnabled = false;
-                        ctx.msImageSmoothingEnabled = false;
-                        ctx.imageSmoothingEnabled = false;
 
                         const backImg = this.images.field;
                         if (backImg) {

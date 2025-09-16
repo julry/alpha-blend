@@ -9,6 +9,7 @@ import { uid } from 'uid';
 import { WEEK_TO_CHALLENGE_NAME } from '../constants/weeksInfo';
 import { useImagePreloader } from '../hooks/useImagePreloader';
 import { initialImages } from '../constants/preloadImages';
+import { reachMetrikaGoal } from '../utils/reachMetrikaGoal';
 
 const INITIAL_DAY_ACTIVITY = {
     completedAt: null,
@@ -77,6 +78,7 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
+    return 2;
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;
@@ -89,6 +91,8 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
+    return DAYS.Friday;
+    
     const day = getMoscowTime().getDay();
 
     switch (day) {
@@ -237,6 +241,7 @@ export function ProgressProvider(props) {
             }
 
             if (!info.data.email) {
+                reachMetrikaGoal('open game');
                 setCurrentScreen(INITIAL_STATE.screen);
                 return;
             } else if (!info.data.seenStartInfo) {

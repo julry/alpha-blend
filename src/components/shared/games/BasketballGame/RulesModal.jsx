@@ -27,10 +27,10 @@ export const RulesModal = ({ onClose, isOpen }) => {
                     Зажми мяч и проведи пальцем вверх, чтобы бросить его в кольцо. 
                 </p>
                 <p>
-                    Попадание приносит <Bold><RedText>10</RedText> очков,</Bold> промах — минус одна жизнь. Всего у тебя <Bold><RedText>3</RedText> жизни.</Bold> Пока они не закончились, можно пробовать снова. 
+                    Попадание приносит <Bold><RedText>10</RedText> очков.</Bold>
                 </p>
                  <p>
-                    Игра длится <Bold><RedText>1</RedText> минуту</Bold> или до того момента, как закончатся все жизни.
+                    Игра длится <Bold><RedText>1</RedText> минуту.</Bold>
                 </p>
             </Content>
         </Modal>

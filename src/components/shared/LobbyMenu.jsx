@@ -8,6 +8,7 @@ import { DAYS } from "../../constants/days";
 import { WEEK_TO_CHALLENGE_NAME } from "../../constants/weeksInfo";
 import { GAME_SCREENS_WEEK1, GAME_SCREENS_WEEK2, GAME_SCREENS_WEEK3, GAME_SCREENS_WEEK4 } from "../../constants/screens";
 import { useState } from "react";
+import { reachMetrikaGoal } from "../../utils/reachMetrikaGoal";
 
 const Wrapper = styled(motion.div)`
     position: absolute;
@@ -110,6 +111,10 @@ export const LobbyMenu = ({ week, type, onClose }) => {
 
                 return;
             };
+
+            if (day === DAYS.Friday && type === 'planner') {
+                reachMetrikaGoal(`start planner week${week}`);
+            }
 
             next(WEEK_TO_GAME_SCREENS[week][type][day]);
 

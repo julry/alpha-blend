@@ -11,6 +11,7 @@ import { Title } from "../shared/Title";
 import { Input } from "../shared/Input";
 import { emailRegExp } from "../../constants/regexp";
 import { SCREENS } from "../../constants/screens";
+import { reachMetrikaGoal } from "../../utils/reachMetrikaGoal";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x10);
@@ -120,7 +121,6 @@ export const Registration1 = () => {
     const [isAlreadyHas, setIsAlreadyHas] = useState(false);
 
     const handleClick = async () => {
-        // const id = uid(7);
         setIsNetworkError(false);
 
         if (isSending) return;
@@ -135,6 +135,8 @@ export const Registration1 = () => {
             return;
         }
 
+        const isTargeted = fac.id !== undefined && fac.name !== 'Другое';
+        
         const regRes = await registrateUser({ 
             name: `${name.trim()} ${surname.trim()}`, 
             email: email.trim(), 
@@ -143,9 +145,10 @@ export const Registration1 = () => {
             isAddsAgreed: isMailsAgreed,
             faculty: fac.name !== 'Другое' ? fac.name : '', 
             facultyId: fac.name !== 'Другое' ? fac.id : undefined,
-            isTargeted: fac.id !== undefined && fac.name !== 'Другое'
+            isTargeted,
         });
 
+        reachMetrikaGoal(`registration ${!isTargeted ? 'non ': ''}target`);
         setIsSending(false);
 
         if (regRes?.isError) {

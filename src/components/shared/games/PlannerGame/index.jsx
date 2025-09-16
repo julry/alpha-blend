@@ -14,6 +14,8 @@ import { EndGameModal } from "./EndGameModal";
 import { TimeBlock } from "./TimeBlock";
 import { RulesModal } from "./RulesModal";
 import { PlanCard } from "./PlanCard";
+import { DAYS } from "../../../../constants/days";
+import { reachMetrikaGoal } from "../../../../utils/reachMetrikaGoal";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -124,6 +126,9 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
         let isWin = false;
         if (!shownCards.find((card) => card.isSpecial)) {
             isWin = true;
+            if (day === DAYS.Friday) {
+                reachMetrikaGoal(`finish planner week${week}`);
+            }
             endGame({finishPoints: 10, gameName: `planner${week}`, week, day, addictiveData: {
                 findings: [...user.findings, findingId],
             }});
