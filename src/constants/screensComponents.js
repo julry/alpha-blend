@@ -22,6 +22,7 @@ import {
 
 import { SCREENS } from "./screens";
 import { PuzzleGame } from "../components/shared/games/PuzzleGame";
+import WhackAMole from "../components/shared/games/MoleGame";
 
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
@@ -58,7 +59,7 @@ export const screens = {
     [SCREENS.BLENDER3W]: Blender3W,
     [SCREENS.BLENDER3F]: Blender3F,
     [SCREENS.GAME3M]: PuzzleGame,
-
+    [SCREENS.GAME4M]: WhackAMole
 };
 
 export const preloadImages = [];

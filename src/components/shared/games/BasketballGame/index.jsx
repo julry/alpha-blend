@@ -13,6 +13,7 @@ import { Timer } from '../parts';
 import { MAX_TIME } from './constants';
 import { RulesModal } from './RulesModal';
 import { useGame } from './useGame';
+import { DAYS } from '../../../../constants/days';
 
 const Wrapper = styled(FlexWrapper)`
     padding: 0;
@@ -43,7 +44,7 @@ const Amount = styled.p`
 `;
 
 export const BasketballGame = ({ isNeverPlayed, day }) => {
-    const { next, endGame,} = useProgress();
+    const { next, endGame, user} = useProgress();
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [dpr, setDpr] = useState(0);
@@ -76,10 +77,23 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
     }, []);
 
     const finishGame = (isTime) => {
-        endGame({ finishPoints: currentScore, gameName: 'gameBasket', week: 2, day });
-       
         setIsEndModal({ shown: true, isTime });
     }
+
+
+    useEffect(() => {
+        if (isEndModal.shown) {
+            const hasAchieve = day === DAYS.Friday && user.gameBasket[DAYS.Monday].isCompleted && user.gameBasket[DAYS.Wednesday].isCompleted && !user.achieves.includes(7);
+        
+            endGame({ 
+                finishPoints: currentScore, 
+                gameName: 'gameBasket', 
+                week: 2, 
+                day,
+                achieve: hasAchieve ? 7 : undefined,
+            });
+        }
+    }, [isEndModal]);
 
     const handleCloseEndModal = () => {
         setIsEndModal({ shown: false });
@@ -109,7 +123,7 @@ export const BasketballGame = ({ isNeverPlayed, day }) => {
                 <p>
                     Зажми мяч и проведи пальцем вверх, чтобы совершить бросок. Точное попадание в кольцо даёт <Bold><RedText>10</RedText> баллов.</Bold>
                 </p>
-                <p><Bold>Промах — минус жизнь.</Bold> У тебя их <Bold>всего <RedText>3</RedText>.</Bold> Успей набрать максимум баллов <Bold>за <RedText>1</RedText> минуту!</Bold></p>
+                <p>Успей набрать максимум баллов <Bold>за <RedText>1</RedText> минуту!</Bold></p>
             </CommonModal>
             <CommonModal isOpen={isCollegueModal} isCollegue onClose={() => next(SCREENS.LOBBY2)} btnText="В комнату">
                 {typeof collegueMessage === 'function' ? collegueMessage() : <p>{collegueMessage}</p>}

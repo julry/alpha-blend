@@ -4,6 +4,7 @@ import {useProgress} from "../../../../contexts/ProgressContext";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import {useCallbackRef} from "../../../../hooks/useCallbackRef";
 import { weekInfo } from "../../../../constants/weeksInfo";
+import { DAYS } from "../../../../constants/days";
 import { BackHeader } from "../../BackHeader";
 import { FlexWrapper } from "../../ContentWrapper";
 import { CommonModal, EndGameModal, SkipModal, StartGameModal } from "../../modals";
@@ -32,7 +33,7 @@ const Amount = styled.p`
 const TRIES_AMOUNT = 3;
 
 export function Game2048({isFirst, lobbyScreen, day}) {
-    const {next, endGame } = useProgress();
+    const {next, endGame, registrateAchieve, user } = useProgress();
     const ratio = useSizeRatio();
     const [isRulesModal, setIsRulesModal] = useState();
     const [isFirstMessage, setIsFirstMessage] = useState(isFirst);
@@ -66,7 +67,14 @@ export function Game2048({isFirst, lobbyScreen, day}) {
 
     useEffect(() => {
         if (isEndModal.shown) {
-            endGame({finishPoints: score, gameName: 'game2048', week: 1, day})
+            const hasAchieve = day === DAYS.Friday && user.game2048[DAYS.Monday].isCompleted && user.game2048[DAYS.Wednesday].isCompleted && !user.achieves.includes(6);
+            endGame({
+                finishPoints: score, 
+                gameName: 'game2048', 
+                week: 1, 
+                day,
+                achieve: hasAchieve ? 6 : undefined
+            });
         }
     }, [isEndModal, score]);
     

@@ -62,6 +62,7 @@ function generateQueueGroups(totalPeople, maxSize) {
 // Генерация назначений с учетом ограничений
 export function getPersonsArray({ isBased, peopleAmount, maxSize, ingridientsProbability }) {
     const playedDrinks = isBased ? drinks.filter(({ isBased }) => isBased) : drinks;
+
     const assignments = [];
     let availableDrinks = shuffleArray(playedDrinks);
     let drinkIndex = 0;
@@ -112,12 +113,12 @@ export function getPersonsArray({ isBased, peopleAmount, maxSize, ingridientsPro
 
             // Назначаем напиток (с циклическим повторением)
             if (drinkIndex >= availableDrinks.length) {
-                availableDrinks = shuffleArray(drinks);
+                availableDrinks = shuffleArray(availableDrinks);
                 drinkIndex = 0;
             }
 
             const ingridientsAmount = generateIngridientsAmount(ingridientsProbability);
-            const ingridients = availableDrinks[drinkIndex].recipe.slice(0, availableDrinks[drinkIndex].isBased ? ingridientsAmount : 3);
+            const ingridients = availableDrinks[drinkIndex].recipe.slice(0, ingridientsAmount);
 
             assignments.push({
                 queue: queueNumber,

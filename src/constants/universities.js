@@ -32,6 +32,10 @@ export const universities = [
         name: 'ФУ Москва'
     },
     {
+        id: 'u9',
+        name: 'МГУ Москва'
+    },
+    {
         id: 'other',
         name: 'Другое'
     }
@@ -44,9 +48,9 @@ export const faculties = [
         name: 'Мегафакультет компьютерных технологий и управления',
     },
     {
-        id: 'f2',
-        university: 'u2',
-        name: 'Высшая школа бизнеса',
+        id: 'f10',
+        university: 'u9',
+        name: 'Экономический факультет',
     },
     {
         id: 'f3',

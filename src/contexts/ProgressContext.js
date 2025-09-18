@@ -92,7 +92,7 @@ const getCurrentWeek = () => {
 
 const getCurrentDay = () => {
     return DAYS.Friday;
-    
+
     const day = getMoscowTime().getDay();
 
     switch (day) {
@@ -360,7 +360,8 @@ export function ProgressProvider(props) {
         hour12: false
     }).format(date).replace(',', '');
 
-    const endGame = async ({finishPoints, gameName, week, day, addictiveData}) => {
+    const endGame = async ({finishPoints, gameName, week, day, addictiveData, achieve}) => {
+        const newAchieves = [];
         if (user[gameName][day].isCompleted) return;
 
         if (week === CURRENT_WEEK) {
@@ -377,7 +378,54 @@ export function ProgressProvider(props) {
             times += Object.values(user.blender3).filter(val => val.isCompleted).length;
             times += Object.values(user.blender4).filter(val => val.isCompleted).length;
 
-            if (times > 2) registrateAchieve(4);
+            if (times > 2) {
+                newAchieves.push(4);
+            }
+        }
+
+        if (!user.achieves.includes(1)) {
+            const isPlayedChallenge = gameName === `game${WEEK_TO_CHALLENGE_NAME[week]}` || Object.values(user[`game${WEEK_TO_CHALLENGE_NAME[week]}`]).some(val => val.isCompleted);
+            const isPlayedBlender = gameName.includes('blender') || Object.values(user[`blender${week}`]).some(val => val.isCompleted);
+            const isPlayedPlanner = gameName.includes('planner') || Object.values(user[`planner${week}`]).some(val => val.isCompleted);
+
+            if (isPlayedBlender && isPlayedPlanner && isPlayedChallenge) newAchieves.push(1);
+        }
+
+        if (!user.achieves.includes(2) && week === 4 && day === DAYS.Friday) {
+            let isAllPlayed = true;
+
+            const newUserGames = {
+                ...user,
+                [gameName]: {
+                    ...user[gameName], [day]: {
+                        isCompleted: true,
+                        completedAt: formatDate(endTimeMsc),
+                        points: finishPoints
+                    }
+                }
+            };
+
+            for (let i = 0; i < 5; i++ ) {
+                const isPlayedChallenge = Object.values(newUserGames[`game${WEEK_TO_CHALLENGE_NAME[i]}`]).every(val => val.isCompleted);
+                const isPlayedBlender = Object.values(newUserGames[`blender${i}`]).every(val => val.isCompleted);
+                const isPlayedPlanner = Object.values(newUserGames[`planner${week}`]).every(val => val.isCompleted);
+
+                isAllPlayed = isPlayedPlanner && isPlayedBlender && isPlayedChallenge;
+
+                if (!isAllPlayed) break;
+            }
+
+            if (isAllPlayed) {
+                newAchieves.push(2);
+            }
+        }
+
+        if (achieve !== undefined) {
+            newAchieves.push(achieve);
+        }
+
+        if (newAchieves.length) { 
+            setNewAchieve(prev => [...prev, ...newAchieves]);
         }
 
         await updateUser(
@@ -389,6 +437,7 @@ export function ProgressProvider(props) {
                     points: finishPoints
                 }},
                 points: (user.points ?? 0) + finishPoints,
+                achieves: newAchieves.length > 0 ? [...user.achieves, ...newAchieves] : user.achieves,
                 ...addictiveData,
             }
         );

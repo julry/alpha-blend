@@ -399,7 +399,7 @@ export const planCardsWeek2_Friday = [
         icon: meeting,
     },
     {
-        id: 2,
+        id: 232,
         text: 'творчество',
         icon: art,
     },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { useProgress } from "../../../../contexts/ProgressContext";
@@ -72,6 +72,7 @@ const MAX_AMOUNT = 9;
 export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCloseRules }) => {
     const { user, next, endGame } = useProgress();
     const ratio = useSizeRatio();
+    const tries = useRef(0);
  
     const [dayCards, setDayCards] = useState([]);
     const [morningCards, setMorningCards] = useState([]);
@@ -129,9 +130,17 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
             if (day === DAYS.Friday) {
                 reachMetrikaGoal(`finish planner week${week}`);
             }
-            endGame({finishPoints: 10, gameName: `planner${week}`, week, day, addictiveData: {
-                findings: [...user.findings, findingId],
-            }});
+            const hasAchieve = tries.current < 1 && !user.achieves.includes(3);
+            endGame({
+                finishPoints: 10, 
+                gameName: `planner${week}`, 
+                week, 
+                day,
+                addictiveData: {
+                    findings: [...user.findings, findingId],
+                },
+                achieve: hasAchieve ? 3 : undefined
+        });
         }
 
         setEndModal({shown: true, isWin});
@@ -141,6 +150,7 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
         if (endModal.isWin) {
             setIsCollegue(true);
         } else {
+            tries.current += 1;
             setShownCards(cards);
             setMorningCards([]);
             setEveningCards([]);
