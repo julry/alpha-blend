@@ -98,11 +98,11 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const weekName = `week${week}`;
     const weekMessages = weekInfo.find((info) => info.week === week);
 
-    const getBlenderShow= () => {
+    const getBlenderShow = () => {
         const dayIndex = DAY_ARR.indexOf(day) + +(user?.[`planner${week}`][day]?.isCompleted);
         const days = Object.keys(DAYS).slice(0, dayIndex);
 
-        return days.some((key) => !user?.[`blender${week}`][key]?.isCompleted);
+        return user?.[`planner${week}`][DAYS.Monday].isCompleted && days.some((key) => !user?.[`blender${week}`][key]?.isCompleted);
     }
 
     const isLetterShown = isLaptopLetter || !user.readenLetters?.[weekName];

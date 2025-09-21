@@ -212,8 +212,8 @@ export function ProgressProvider(props) {
 
             if (checkDay === 1 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
                 await updateUser({
-                    points: (user?.points ?? 0) + 50,
-                    [`week${CURRENT_WEEK}Points`]: (user[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
+                    points: (data?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (data[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Monday]: 50,
@@ -222,8 +222,8 @@ export function ProgressProvider(props) {
             }
             if (checkDay === 3 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Wednesday]) {
                 await updateUser({
-                    points: (user?.points ?? 0) + 50,
-                    [`week${CURRENT_WEEK}Points`]: (user?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
+                    points: (data?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (data?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Wednesday]: 50,
@@ -232,8 +232,8 @@ export function ProgressProvider(props) {
             }
             if (checkDay === 5 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Friday]) {
                 await updateUser({
-                    points: (user?.points ?? 0) + 50,
-                    [`week${CURRENT_WEEK}Points`]: (user?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
+                    points: (data?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (data?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Friday]: 50,
