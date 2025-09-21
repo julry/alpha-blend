@@ -89,7 +89,13 @@ export const IntroRules = () => {
     }
 
     const handleClose = () => {
-        updateUser({ seenStartInfo: true, readenLetters: {...user.readenLetters, week1: true}, achieves: [...user.achieves, 0] });
+        updateUser({ 
+            seenStartInfo: true, 
+            readenLetters: {...user.readenLetters, week1: true}, 
+            achieves: [...user.achieves, 0],
+            points: (user?.points ?? 0) + 5,
+            week1Points: (user?.week1Points ?? 0) + 5
+        });
         setNewAchieve(prev => [...prev, 0]);
         next();
     };
