@@ -192,8 +192,6 @@ export function ProgressProvider(props) {
         try {
             const info = await loadRecord();
 
-            tgInfo.current = info.systemData;
-
             if (isDesktop.current) {
                 setCurrentScreen(SCREENS.DESKTOP);
 
@@ -204,13 +202,18 @@ export function ProgressProvider(props) {
                 setTgError({isError: true, message: ''});
             }
 
+            tgInfo.current = info?.systemData;
+
             setUserBdData(info);
 
             const {data = {}} = info
             const checkDay = getMoscowTime().getDay();
 
+
             if (checkDay === 1 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
-                updateUser({
+                await updateUser({
+                    points: (user?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (user[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Monday]: 50,
@@ -218,7 +221,9 @@ export function ProgressProvider(props) {
                 });
             }
             if (checkDay === 3 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Wednesday]) {
-                updateUser({
+                await updateUser({
+                    points: (user?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (user?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Wednesday]: 50,
@@ -226,7 +231,9 @@ export function ProgressProvider(props) {
                 });
             }
             if (checkDay === 5 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Friday]) {
-                updateUser({
+                await updateUser({
+                    points: (user?.points ?? 0) + 50,
+                    [`week${CURRENT_WEEK}Points`]: (user?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
                         [DAYS.Friday]: 50,
@@ -290,7 +297,7 @@ export function ProgressProvider(props) {
         ) {
                 isDesktop.current = true;
 
-                return;
+                return {};
         }
     
         if (webAppInitData) {
@@ -362,6 +369,8 @@ export function ProgressProvider(props) {
 
     const endGame = async ({finishPoints, gameName, week, day, addictiveData, achieve}) => {
         const newAchieves = [];
+        let totalGamePoints = finishPoints;
+        const achieveCost = user.isTargeted ? 0 : 5;
         if (user[gameName][day].isCompleted) return;
 
         if (week === CURRENT_WEEK) {
@@ -370,31 +379,7 @@ export function ProgressProvider(props) {
 
         const endTimeMsc = getMoscowTime();
 
-        if (!user.achieves.includes(4) && gameName.includes('blender')) {
-            let times = 0;
-
-            times += Object.values(user.blender1).filter(val => val.isCompleted).length;
-            times += Object.values(user.blender2).filter(val => val.isCompleted).length;
-            times += Object.values(user.blender3).filter(val => val.isCompleted).length;
-            times += Object.values(user.blender4).filter(val => val.isCompleted).length;
-
-            if (times > 2) {
-                newAchieves.push(4);
-            }
-        }
-
-        if (!user.achieves.includes(1)) {
-            const isPlayedChallenge = gameName === `game${WEEK_TO_CHALLENGE_NAME[week]}` || Object.values(user[`game${WEEK_TO_CHALLENGE_NAME[week]}`]).some(val => val.isCompleted);
-            const isPlayedBlender = gameName.includes('blender') || Object.values(user[`blender${week}`]).some(val => val.isCompleted);
-            const isPlayedPlanner = gameName.includes('planner') || Object.values(user[`planner${week}`]).some(val => val.isCompleted);
-
-            if (isPlayedBlender && isPlayedPlanner && isPlayedChallenge) newAchieves.push(1);
-        }
-
-        if (!user.achieves.includes(2) && week === 4 && day === DAYS.Friday) {
-            let isAllPlayed = true;
-
-            const newUserGames = {
+         const newUserGames = {
                 ...user,
                 [gameName]: {
                     ...user[gameName], [day]: {
@@ -404,6 +389,34 @@ export function ProgressProvider(props) {
                     }
                 }
             };
+
+        if (!user.achieves.includes(4) && gameName.includes('blender')) {
+            let times = 0;
+
+            times += Object.values(newUserGames.blender1).filter(val => val.isCompleted).length;
+            times += Object.values(newUserGames.blender2).filter(val => val.isCompleted).length;
+            times += Object.values(newUserGames.blender3).filter(val => val.isCompleted).length;
+            times += Object.values(newUserGames.blender4).filter(val => val.isCompleted).length;
+
+            if (times > 2) {
+                newAchieves.push(4);
+                totalGamePoints += achieveCost;
+            }
+        }
+
+        if (!user.achieves.includes(1)) {
+            const isPlayedChallenge = gameName === `game${WEEK_TO_CHALLENGE_NAME[week]}` || Object.values(user[`game${WEEK_TO_CHALLENGE_NAME[week]}`]).some(val => val.isCompleted);
+            const isPlayedBlender = gameName.includes('blender') || Object.values(user[`blender${week}`]).some(val => val.isCompleted);
+            const isPlayedPlanner = gameName.includes('planner') || Object.values(user[`planner${week}`]).some(val => val.isCompleted);
+
+            if (isPlayedBlender && isPlayedPlanner && isPlayedChallenge) {
+                newAchieves.push(1);
+                totalGamePoints += achieveCost;
+            }
+        }
+
+        if (!user.achieves.includes(2) && week === 4 && day === DAYS.Friday) {
+            let isAllPlayed = true;
 
             for (let i = 0; i < 5; i++ ) {
                 const isPlayedChallenge = Object.values(newUserGames[`game${WEEK_TO_CHALLENGE_NAME[i]}`]).every(val => val.isCompleted);
@@ -417,11 +430,13 @@ export function ProgressProvider(props) {
 
             if (isAllPlayed) {
                 newAchieves.push(2);
+                totalGamePoints += achieveCost;
             }
         }
 
         if (achieve !== undefined) {
             newAchieves.push(achieve);
+            totalGamePoints += achieveCost;
         }
 
         if (newAchieves.length) { 
@@ -436,7 +451,7 @@ export function ProgressProvider(props) {
                     completedAt: formatDate(endTimeMsc),
                     points: finishPoints
                 }},
-                points: (user.points ?? 0) + finishPoints,
+                points: (user.points ?? 0) + totalGamePoints,
                 achieves: newAchieves.length > 0 ? [...user.achieves, ...newAchieves] : user.achieves,
                 ...addictiveData,
             }
@@ -474,9 +489,9 @@ export function ProgressProvider(props) {
         }
     }
 
-    const registrateAchieve = (id) => {
+    const registrateAchieve = async (id) => {
         setNewAchieve(prev => [...prev, id]);
-        updateUser({achieves: [...user.achieves, id]});
+        await updateUser({achieves: [...user.achieves, id], points: user.points + (user?.isTargeted ? 0 : 5)});
     };
 
     const registrateUser = async (args) => {

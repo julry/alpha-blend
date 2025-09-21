@@ -76,7 +76,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const { 
         next, user, day, newAchieve, setNewAchieve, 
         isJustEntered, setIsJustEntered, readLifehack, 
-        readWeekLetter, updateTotalPoints, updateUser,
+        readWeekLetter, updateUser,
         setPassedWeeks,
      } = useProgress();
     const [isUserModal, setIsUserModal] = useState(false);
@@ -122,10 +122,6 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const letterMessage = weekMessages?.letterMessage;
     let endMessage = weekMessages?.dayEndMessages?.[day];
     endMessage = endMessage ?? (user.isTargeted ? weekMessages?.weekEndMessageVip : weekMessages.weekEndMessage);
-
-    useEffect(() => {
-        updateTotalPoints().catch(() => {});
-    }, []);
 
     useEffect(() => {
         if (tipsClosed.current.cup) return;

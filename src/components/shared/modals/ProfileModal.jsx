@@ -3,7 +3,7 @@ import { CURRENT_WEEK, useProgress } from "../../../contexts/ProgressContext";
 import { useSizeRatio } from "../../../hooks/useSizeRatio";
 import { Block } from "../Block";
 import { Modal } from "./Modal";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 const Content = styled(Block)`
     position: absolute;
@@ -120,7 +120,7 @@ const RefDesc = styled.div`
 export const ProfileModal = memo(({isOpen, ...props}) => {
     const [isSuccessCopy, setIsSuccessCopy] = useState(false);
     const ratio = useSizeRatio();
-    const { user, totalPoints, tgInfo } = useProgress();
+    const { user, totalPoints, tgInfo, updateTotalPoints } = useProgress();
 
     const handleCopy = useCallback(() => {
         if (!tgInfo.current.tgInitBotName || !tgInfo.current.tgUserId) return;
@@ -133,6 +133,12 @@ export const ProfileModal = memo(({isOpen, ...props}) => {
             });
         }
     }, []);
+    
+    useEffect(() => {
+        if (isOpen) {
+            updateTotalPoints().catch(() => {});
+        }
+    }, [isOpen]);
 
     return (
         <Modal isDarken isOpen={isOpen}>
