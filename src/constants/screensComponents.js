@@ -21,6 +21,10 @@ import {
     GamePuzzleM, GamePuzzleF, GamePuzzleW
 } from '../components/screens/week3';
 
+import { 
+    Blender4F, Blender4M, Blender4W, Planner4F, Planner4M, Planner4W, Lobby4,
+} from '../components/screens/week4';
+
 import { SCREENS } from "./screens";
 import WhackAMole from "../components/shared/games/MoleGame";
 
@@ -61,7 +65,14 @@ export const screens = {
     [SCREENS.GAME3M]: GamePuzzleM,
     [SCREENS.GAME3F]: GamePuzzleF,
     [SCREENS.GAME3W]: GamePuzzleW,
-    [SCREENS.GAME4M]: WhackAMole
+    [SCREENS.LOBBY4]: Lobby4,
+    [SCREENS.PLANNER4M]: Planner4M,
+    [SCREENS.PLANNER4W]: Planner4W,
+    [SCREENS.PLANNER4F]: Planner4F,
+    [SCREENS.BLENDER4M]: Blender4M,
+    [SCREENS.BLENDER4W]: Blender4W,
+    [SCREENS.BLENDER4F]: Blender4F,
+    [SCREENS.GAME4M]: WhackAMole,
+    [SCREENS.GAME4W]: WhackAMole,
+    [SCREENS.GAME4F]: WhackAMole,
 };
-
-export const preloadImages = [];
