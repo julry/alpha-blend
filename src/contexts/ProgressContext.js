@@ -78,7 +78,7 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
-    return 2;
+    return 3;
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;
@@ -91,7 +91,7 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
-    return DAYS.Friday;
+    return DAYS.Monday;
 
     const day = getMoscowTime().getDay();
 
@@ -157,9 +157,9 @@ export function ProgressProvider(props) {
 
     useImagePreloader(initialImages);
 
-    const setUserBdData = (record) => {
+    const setUserBdData = (record = {}) => {
         recordId.current = record?.id;
-        const { data = {}, scriptData = {}} = record;
+        const { data = {}, scriptData = {}} = record ?? {};
         const passedWeeksBd = data.passedWeeks ?? [];
         const week = (passedWeeksBd[passedWeeksBd.length - 1] >= CURRENT_WEEK - 1) ? CURRENT_WEEK : passedWeeksBd[passedWeeksBd.length - 1] ?? 1;
 
@@ -202,17 +202,24 @@ export function ProgressProvider(props) {
                 setTgError({isError: true, message: ''});
             }
 
-            tgInfo.current = info?.systemData;
+            tgInfo.current = info?.systemData ?? {};
 
-            setUserBdData(info);
+            setUserBdData(info ?? {});
 
-            const {data = {}} = info
+            const {data = {}} = info ?? {};
+            let dataPoints = data?.points ?? 0;
+
             const checkDay = getMoscowTime().getDay();
 
+            if (!data?.achieves?.includes(6) && data?.game2048?.[DAYS.Monday]?.isCompleted 
+                && data?.game2048?.[DAYS.Wednesday]?.isCompleted && data?.game2048?.[DAYS.Friday]?.isCompleted) {
+                    dataPoints += data?.isTargeted ? 0 : 5;
+                    await updateUser({achieves: [...(data?.achieves ?? []), 6],  points: dataPoints,});
+                }
 
-            if (checkDay === 1 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
+            if (checkDay === 1 && !data?.[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
                 await updateUser({
-                    points: (data?.points ?? 0) + 50,
+                    points: dataPoints + 50,
                     [`week${CURRENT_WEEK}Points`]: (data[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
@@ -222,7 +229,7 @@ export function ProgressProvider(props) {
             }
             if (checkDay === 3 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Wednesday]) {
                 await updateUser({
-                    points: (data?.points ?? 0) + 50,
+                    points: dataPoints + 50,
                     [`week${CURRENT_WEEK}Points`]: (data?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 
@@ -232,7 +239,7 @@ export function ProgressProvider(props) {
             }
             if (checkDay === 5 && !data[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Friday]) {
                 await updateUser({
-                    points: (data?.points ?? 0) + 50,
+                    points: dataPoints + 50,
                     [`week${CURRENT_WEEK}Points`]: (data?.[`week${CURRENT_WEEK}Points`] ?? 0) + 50,
                     [`week${CURRENT_WEEK}EnterPoints`]: {
                         ...data[`week${CURRENT_WEEK}EnterPoints`], 

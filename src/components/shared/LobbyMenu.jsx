@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { useProgress } from "../../contexts/ProgressContext"
+import { CURRENT_DAY, CURRENT_WEEK, useProgress } from "../../contexts/ProgressContext"
 import { Block } from "./Block";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bold } from "./Spans";
 import { useSizeRatio } from "../../hooks/useSizeRatio";
-import { DAYS } from "../../constants/days";
+import { DAY_ARR, DAYS } from "../../constants/days";
 import { WEEK_TO_CHALLENGE_NAME } from "../../constants/weeksInfo";
 import { GAME_SCREENS_WEEK1, GAME_SCREENS_WEEK2, GAME_SCREENS_WEEK3, GAME_SCREENS_WEEK4 } from "../../constants/screens";
 import { useState } from "react";
@@ -76,7 +76,7 @@ const WEEK_TO_GAME_SCREENS = {
 
 const TYPE_TO_GAME_NAME = {
     game: 'Челлендж недели',
-    planner: 'Планнер',
+    planner: 'Планер',
     blender: 'Блендер'
 }
 
@@ -97,13 +97,28 @@ export const LobbyMenu = ({ week, type, onClose }) => {
     const icon = TYPE_TO_SVG[type];
 
     const getIsCompleted = (day) => user[gameName]?.[day]?.isCompleted;
-    const getIsCurrent = (day, prevDay) => !getIsCompleted(day) && (day === DAYS.Monday || getIsCompleted(prevDay));
+    const getIsCurrent = (day, prevDay) => {
+        const isUnCompleted = !getIsCompleted(day);
+        const isCurrent = day === DAYS.Monday || getIsCompleted(prevDay);
+        const isCurrentWeek = week === CURRENT_WEEK;
+
+        if (isCurrentWeek) {
+            if (DAY_ARR.indexOf(CURRENT_DAY) >= DAY_ARR.indexOf(day)) {
+                return isUnCompleted && isCurrent;
+            }
+
+            return false;
+        }
+
+        return !getIsCompleted(day) && (day === DAYS.Monday || getIsCompleted(prevDay));
+    }
     const getIsCurrentShown = (day, prevDay) => (type === 'planner' && getIsCurrent(day, prevDay))
         || (type !== 'planner' && user[`planner${week}`][day]?.isCompleted && getIsCurrent(day, prevDay));
 
+    
     const handleClick = (day, prevDay) => {
         if (getIsCurrent(day, prevDay)) {
-            if (type !== 'planner' && !user[`planner${week}`][day].isCompleted) {
+            if (type !== 'planner' && !user[`planner${week}`]?.[day].isCompleted) {
                 setIsClosed();
                 setIsAlreadyDone(false);
                 setIsInitial(false);
@@ -204,7 +219,7 @@ export const LobbyMenu = ({ week, type, onClose }) => {
                     isClosedThisDay && (
                         <InfoWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                             <Block>
-                                <p><Bold>Пока закрыто — пройди планнер</Bold>, чтобы открыть эту игру.</p>
+                                <p><Bold>Пока закрыто — пройди планер</Bold>, чтобы открыть эту игру.</p>
                             </Block>
                         </InfoWrapper>
                     )

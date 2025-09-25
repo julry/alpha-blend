@@ -421,8 +421,6 @@ export const planCardsWeek2_Friday = [
     },
 ];
 
-//TODO: Перепроверить
-
 export const planCardsWeek3_Monday = [
     {
         id: 3,

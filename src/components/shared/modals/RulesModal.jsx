@@ -28,7 +28,7 @@ export const RulesModal = ({ onClose, isOpen }) => {
                 <TitleStyled>ПРАВИЛА</TitleStyled>
                 <Button onClick={() => setOpenedPart(0)}>Общая информация</Button>
                 <Button onClick={() => setOpenedPart(1)}>Баллы</Button>
-                <Button onClick={() => setOpenedPart(2)}>Планнер</Button>
+                <Button onClick={() => setOpenedPart(2)}>Планер</Button>
                 <Button onClick={() => setOpenedPart(3)}>Челлендж недели</Button>
                 <Button onClick={() => setOpenedPart(4)}>Блендер</Button>
             </Content>

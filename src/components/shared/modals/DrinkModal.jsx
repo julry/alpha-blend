@@ -82,7 +82,7 @@ export const DrinkModal = ({ isOpen, onClose, drink = {}}) => {
                 <Description>{drink?.description}</Description>
             </InfoBlock>
             <FullWidth>
-                <p><Bold>Ингридиенты</Bold></p>
+                <p><Bold>Ингредиенты</Bold></p>
                 <UlStyled>
                     {drink.ingridientsText?.map((text) => (
                         <LiStyled key={text.slice(0, 20)}>{text}</LiStyled>

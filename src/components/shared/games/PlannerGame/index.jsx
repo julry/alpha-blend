@@ -87,9 +87,9 @@ export const PlannerGame = ({ isNeverPlayed, cards, week, day, lobbyScreen, onCl
     const [endModal, setEndModal] = useState({shown: false});
 
     const weekData = weekInfo.find((info) => info.week === week);
-    const collegueMessage = weekData.plannersCollegueMessage[day];
+    const collegueMessage = weekData.plannersCollegueMessage?.[day];
 
-    const findingId = findings.find((finding) => finding.day === day && finding.week === week).id;
+    const findingId = findings.find((finding) => finding.day === day && finding.week === week)?.id;
 
     const commonAmount = morningCards.length + dayCards.length + eveningCards.length;
 

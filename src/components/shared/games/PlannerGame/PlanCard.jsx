@@ -19,11 +19,15 @@ const Wrapper = styled(motion.div)`
     ${({$isSpecial}) => $isSpecial ? 'border: 1px solid rgba(239, 49, 36, 0.6); box-shadow: 0px 0px 10px var(--color-red);' : ''};
 `;
 
+const IconWrapper = styled.div`
+    flex: 1;
+    overflow: hidden;
+    margin-bottom: var(--spacing_x1);
+`;
+
 const Icon = styled.img`
     width: 100%;
-    flex: 1;
-    margin-bottom: var(--spacing_x1);
-    flex-shrink: 0;
+    height: 100%;
 `;
 
 const Text = styled.p`
@@ -54,11 +58,14 @@ export const PlanCard = memo(({ card, isNotDraggable, isPicked, onClick }) => {
             transition={{ duration: 0.1 }}
             onClick={onClick}
         >
-            <Icon 
-                src={icon} 
-                alt={text} 
-                $ratio={ratio}
-            />
+            <IconWrapper>
+                <Icon 
+                    src={icon} 
+                    alt={text} 
+                    $ratio={ratio}
+                />
+            </IconWrapper>
+            
             <Text 
                 $ratio={ratio}
             >
