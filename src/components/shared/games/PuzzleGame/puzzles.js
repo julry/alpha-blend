@@ -538,8 +538,8 @@ export const puzzlesF = [
     {
         id: 'puzzle0',
         position: {
-            x: 100,
-            y: 405,
+            x: 201,
+            y: 58,
         },
         originalPosition: {
             x: 0,
@@ -558,8 +558,8 @@ export const puzzlesF = [
     {
         id: 'puzzle1',
         position: {
-            x: 10,
-            y: 437,
+            x: 207,
+            y: 412,
         },
         originalPosition: {
             x: 119,
@@ -579,34 +579,34 @@ export const puzzlesF = [
     {
         id: 'puzzle2',
         position: {
-            x: 1,
-            y: 33,
+            x: 146,
+            y: 149,
         },
         originalPosition: {
             x: 235,
             y: 0,
         },
         width: 96,
-        height: 105,
+        height: 104,
         image: imgF3,
         verticesRel: [
             {x: 0, y: 0},
-            {x: 95, y: 0},
-            {x: 27, y: 105},
-            {x: 95, y: 84},
+            {x: 96, y: 0},
+            {x: 27, y: 104},
+            {x: 96, y: 84},
         ]
     },
     {
         id: 'puzzle3',
         position: {
-            x: 254,
-            y: 400,
+            x: 34,
+            y: 437,
         },
         originalPosition: {
             x: 0,
             y: 115,
         },
-        width: 130,
+        width: 131,
         height: 150,
         image: imgF4,
         verticesRel: [
@@ -617,18 +617,18 @@ export const puzzlesF = [
             {x: 67, y: 0},
         ]
     },
-     {
+    {
         id: 'puzzle4',
         position: {
-            x: 203,
-            y: 64,
+            x: 1,
+            y: 105,
         },
         originalPosition: {
-            x: 65,
+            x: 67,
             y: 110,
         },
-        width: 164.5,
-        height: 150,
+        width: 163,
+        height: 152,
         image: imgF5,
         verticesRel: [
             {x: 0, y: 5},
@@ -641,28 +641,28 @@ export const puzzlesF = [
     {
         id: 'puzzle5',
         position: {
-            x: 0,
-            y: 150,
+            x: 21,
+            y: 234,
         },
         originalPosition: {
             x: 198,
-            y: 85,
+            y: 83,
         },
-        width: 132,
-        height: 176,
+        width: 133,
+        height: 179,
         image: imgF6,
         verticesRel: [
             {x: 0, y: 40},
             {x: 31, y: 176},
-            {x: 133.5, y: 87},
-            {x: 133.5, y: 0},
+            {x: 133, y: 87},
+            {x: 133, y: 0},
         ]
     },
     {
         id: 'puzzle6',
         position: {
-            x: -10,
-            y: 273,
+            x: 242,
+            y: 272,
         },
         originalPosition: {
             x: 0,
@@ -681,14 +681,14 @@ export const puzzlesF = [
     {
         id: 'puzzle7',
         position: {
-            x: 60,
-            y: 120,
+            x: 108,
+            y: 215,
         },
         originalPosition: {
             x: 94,
-            y: 210,
+            y: 211.5,
         },
-        width: 135,
+        width: 136,
         height: 157,
         image: imgF8,
         verticesRel: [
@@ -702,15 +702,15 @@ export const puzzlesF = [
     {
         id: 'puzzle8',
         position: {
-            x: 126,
-            y: 52,
+            x: 21,
+            y: 234,
         },
         originalPosition: {
-            x: 218,
-            y: 172,
+            x: 217,
+            y: 171,
         },
-        width: 112,
-        height: 196,
+        width: 114,
+        height: 198,
         image: imgF9,
         verticesRel: [
             {x: 10, y: 87},
@@ -723,8 +723,8 @@ export const puzzlesF = [
     {
         id: 'puzzle9',
         position: {
-            x: 249,
-            y: 260,
+            x: 129,
+            y: 372,
         },
         originalPosition: {
             x: 0,
@@ -747,7 +747,7 @@ export const puzzlesF = [
             y: 40,
         },
         originalPosition: {
-            x: 100,
+            x: 102,
             y: 346,
         },
         width: 146,
@@ -763,11 +763,11 @@ export const puzzlesF = [
     {
         id: 'puzzle11',
         position: {
-            x: 100,
-            y: 240,
+            x: 5,
+            y: 217,
         },
         originalPosition: {
-            x: 218,
+            x: 219,
             y: 301,
         },
         width: 112,

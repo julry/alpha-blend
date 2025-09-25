@@ -215,7 +215,6 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
 
                             this.getSelectedPiece(x, y);
 
-                            console.log(x,y);
                              if (this.selectedPiece) {
                                 this.isDragging = true;
                                 this.dragOffsetX = x - this.selectedPiece.position.x;
@@ -300,7 +299,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
 
                             if (!puzzImage) continue;
 
-                            ctx.drawImage(puzzImage, puzzle.originalPosition.x * ratio, puzzle.originalPosition.y * ratio, puzzle.width, puzzle.height)
+                            ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
                         }
 
                         if (this.selectedPiece) {
