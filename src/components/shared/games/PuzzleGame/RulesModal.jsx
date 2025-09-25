@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Bold, RedText } from "../../Spans";
+import { Bold } from "../../Spans";
 import { Block } from "../../Block";
 import { Title } from "../../Title";
 import { Modal } from "../../modals";
@@ -24,13 +24,13 @@ export const RulesModal = ({ onClose, isOpen }) => {
             <Content hasCloseIcon onClose={onClose}>
                 <TitleStyled>как играть?</TitleStyled>
                 <p>
-                   
+                   Перед тобой пазл с особыми локациями — местами культуры, знаний и вдохновения. У тебя есть <Bold>3 минуты</Bold>, чтобы собрать картинку!
                 </p>
                 <p>
-                    <Bold><RedText>10</RedText> очков,</Bold>  
+                    Каждый правильно поставленный кусочек даёт <Bold>+5 баллов</Bold>. Успеешь собрать весь пазл до конца таймера — получишь ещё <Bold>+15 баллов</Bold>!
                 </p>
                  <p>
-                    Игра длится <Bold><RedText>1</RedText> минуту</Bold>
+                   Перетащи кусочек пазла, чтобы поставить его в нужное место. Если кусочек встал правильно, он закрепится и больше не сдвинется.
                 </p>
             </Content>
         </Modal>

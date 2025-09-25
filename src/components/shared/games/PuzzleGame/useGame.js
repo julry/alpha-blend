@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
-import { GAME_POINTS, MIN_BALL_POSITION } from "./constants";
+import { useProgress } from "../../../../contexts/ProgressContext";
+import fieldPic from "./assets/fieldBg.svg";
 
-export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
+export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
     const ratio = useSizeRatio();
+    const {endGame} = useProgress();
     const gameContainerRef = useRef(null);
+    const [endModal, setEndModal] = useState({shown: false, isWin: false});
     const [currentScore, setCurrentScore] = useState(0);
     const gameRef = useRef(null);
 
@@ -28,6 +31,12 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
 
         return Promise.all(promises);
     };
+
+    const stopGame = useCallback(({isWin}) => {
+        endGame({ finishPoints: currentScore, gameName: 'gamePuzzle', week: 3, day });
+
+        setEndModal({shown: true, isWin});
+    }, [currentScore, day]);
 
     useEffect(() => {
         if (!height || !width || !dpr) return;
@@ -120,10 +129,16 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                         const distance = Math.sqrt(dx * dx + dy * dy);
                             
                         if (distance < 20) {
-                            setCurrentScore(prev => prev + 10);
                             this.puzzles[this.selectedPiece.id] = {...piece, position: {...piece.originalPosition, x: originalX, y: originalY}, isLocked: true, timestamp: Date.now()};
                             this.lockedPuzzles.push({...piece, position: {...piece.originalPosition, x: originalX, y: originalY}, isLocked: true});
                             this.unlockedPuzzles = this.unlockedPuzzles.filter(puzz => puzz.id !== piece.id);
+
+                            if (this.unlockedPuzzles.length < 1) {
+                                setCurrentScore(prev => prev + 20);
+                                stopGame({isWin: true});
+                            } else {
+                                setCurrentScore(prev => prev + 5);
+                            }
                         }
 
                         this.selectedPiece = null;
@@ -276,19 +291,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
                         }
 
-                        // for (let i = 0; i < puzzles.length; i++) {
-                        //     const puzzle = puzzles[i];
-                        //     if (puzzle.isLocked) continue;
-                        //     if (puzzle.id === this.selectedPiece?.id) continue;
-
-                        //     const puzzImage = this.images[puzzle.id];
-
-                        //     if (!puzzImage) continue;
-
-                        //     ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
-                        // }
-
-                         for (let i = 0; i < puzzles.length; i++) {
+                        for (let i = 0; i < puzzles.length; i++) {
                             const puzzle = puzzles[i];
                             if (puzzle.isLocked) continue;
                             if (puzzle.id === this.selectedPiece?.id) continue;
@@ -340,5 +343,5 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
         };
     }, [ratio, width, height, dpr]);
 
-    return { gameContainerRef, currentScore, setCurrentScore };
+    return { gameContainerRef, currentScore, setCurrentScore, endModal, stopGame, setEndModal };
 }

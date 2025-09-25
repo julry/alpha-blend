@@ -17,11 +17,11 @@ import {
 } from '../components/screens/week2';
 
 import { 
-    Blender3F, Blender3M, Blender3W, Planner3F, Planner3M, Planner3W, Lobby3 
+    Blender3F, Blender3M, Blender3W, Planner3F, Planner3M, Planner3W, Lobby3,
+    GamePuzzleM, GamePuzzleF, GamePuzzleW
 } from '../components/screens/week3';
 
 import { SCREENS } from "./screens";
-import { PuzzleGame } from "../components/shared/games/PuzzleGame";
 import WhackAMole from "../components/shared/games/MoleGame";
 
 export const screens = {
@@ -58,7 +58,9 @@ export const screens = {
     [SCREENS.BLENDER3M]: Blender3M,
     [SCREENS.BLENDER3W]: Blender3W,
     [SCREENS.BLENDER3F]: Blender3F,
-    [SCREENS.GAME3M]: PuzzleGame,
+    [SCREENS.GAME3M]: GamePuzzleM,
+    [SCREENS.GAME3F]: GamePuzzleF,
+    [SCREENS.GAME3W]: GamePuzzleW,
     [SCREENS.GAME4M]: WhackAMole
 };
 

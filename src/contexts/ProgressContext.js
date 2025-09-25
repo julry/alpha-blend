@@ -374,11 +374,12 @@ export function ProgressProvider(props) {
         hour12: false
     }).format(date).replace(',', '');
 
+    console.log(user.gamePuzzle)
     const endGame = async ({finishPoints, gameName, week, day, addictiveData, achieve}) => {
         const newAchieves = [];
         let totalGamePoints = finishPoints;
         const achieveCost = user.isTargeted ? 0 : 5;
-        if (user[gameName][day].isCompleted) return;
+        if (user[gameName]?.[day]?.isCompleted) return;
 
         if (week === CURRENT_WEEK) {
             setWeekPoints(prev => prev + finishPoints);
