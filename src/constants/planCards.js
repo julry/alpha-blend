@@ -674,10 +674,30 @@ export const planCardsWeek4_Monday = [
 ];
 
 export const planCardsWeek4_Wednesday = [
-     {
+    {
+        id: 7,
+        text: 'медитация',
+        icon: med,
+    },
+    {
+        id: 8,
+        text: 'отдых',
+        icon: relax
+    },
+    {
+        id: 439,
+        text: 'уборка',
+        icon: cleaning,
+    },
+    {
         id: 3,
         text: 'саморазвитие',
         icon: selfImprov,
+    },
+    {
+        id: 7023,
+        text: 'Быстрый\nперекус',
+        icon: snack,
     },
     {
         id: 0,
@@ -685,22 +705,7 @@ export const planCardsWeek4_Wednesday = [
         icon: smoothie,
     },
     {
-        id: 1,
-        text: 'Игра\nна инструменте',
-        icon: guitar,
-    },
-    {
-        id: 2,
-        text: 'Аффирмации',
-        icon: affirm,
-    },
-    {
-        id: 7,
-        text: 'Быстрый\nперекус',
-        icon: snack,
-    },
-    {
-        id: 8,
+        id: 842,
         text: 'разбор задач',
         icon: tasks,
     },
@@ -715,14 +720,14 @@ export const planCardsWeek4_Wednesday = [
         icon: meeting,
     },
     {
-        id: 4,
-        text: 'творчество',
-        icon: art,
+        id: 1023,
+        text: 'музыка',
+        icon: music,
     },
-     {
-        id: 439,
-        text: 'уборка',
-        icon: cleaning,
+    {
+        id: 53,
+        text: 'зарядка',
+        icon: sport,
     },
      {
         id: 46,
@@ -732,14 +737,33 @@ export const planCardsWeek4_Wednesday = [
     //TODO: картинка
     {
         id: 130,
-        text: 'сходить\nна балет',
+        text: 'сняться\nв кино',
         icon: hack,
         isSpecial: true,
     },
 ];
 
-
 export const planCardsWeek4_Friday = [
+     {
+        id: 1,
+        text: 'Игра на\nинструменте',
+        icon: guitar,
+    },
+    {
+        id: 2,
+        text: 'Аффирмации',
+        icon: affirm,
+    },
+    {
+        id: 24,
+        text: 'пробежка',
+        icon: running,
+    },
+    {
+        id: 342,
+        text: 'шоппинг',
+        icon: shopping,
+    },
     {
         id: 3,
         text: 'планирование\nдня',
@@ -749,16 +773,6 @@ export const planCardsWeek4_Friday = [
         id: 0,
         text: 'завтрак',
         icon: breakfast,
-    },
-    {
-        id: 1,
-        text: 'музыка',
-        icon: music,
-    },
-    {
-        id: 2,
-        text: 'пробежка',
-        icon: running,
     },
     {
         id: 472,
@@ -776,29 +790,19 @@ export const planCardsWeek4_Friday = [
         icon: phone,
     },
     {
-        id: 7,
-        text: 'медитация',
-        icon: med,
-    },
-    {
-        id: 8,
-        text: 'отдых',
-        icon: relax
+        id: 803,
+        text: 'творчество',
+        icon: art
     },
     {
         id: 4,
         text: 'путешествие',
         icon: travel,
     },
-    {
-        id: 5,
-        text: 'забота\nо растениях',
-        icon: plants,
-    },
     //TODO: картинка
     {
         id: 130,
-        text: 'посетить\nджазовый клуб',
+        text: 'пойти в поход',
         icon: hack,
         isSpecial: true,
     },

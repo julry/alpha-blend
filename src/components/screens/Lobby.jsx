@@ -72,6 +72,8 @@ const Tip = styled(Block)`
     bottom: calc(var(--spacing_x6) * 10 + var(--spacing_x1)/2);
 `;
 
+//TODO: модалки с пятницы 4 недели + заглушка 
+
 export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLaptopClick, ...props }) => {
     const { 
         next, user, day, newAchieve, setNewAchieve, 
