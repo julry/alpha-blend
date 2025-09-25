@@ -23,12 +23,11 @@ const ButtonStyled = styled(Button)`
     padding-top: calc(var(--spacing_x1) * 1.5);
     font-size: var(--font_sm);
     box-shadow: 0px 0px 46.4px -3px rgba(0, 0, 0, 0.15);
-    /* box-shadow: 0px 0px 46.4px -3px rgba(0, 0, 0, 0.15), inset 2px 2px 8.6px rgba(255, 255, 255, 0.15), inset 1px 1px 4.3px rgba(255, 255, 255, 0.65); */
 `;
 
 export const CookieInfo = ({onClose}) => (
     <BlockStyled>
-        <p>Мы используем <a href="https://pre-prod.fut.ru/cookie" target="_blank" rel="noreferrer">куки</a></p>
+        <p>Мы используем <a href="https://fut.ru/cookie" target="_blank" rel="noreferrer">куки</a></p>
         <ButtonStyled onClick={onClose}>ОК</ButtonStyled>
     </BlockStyled>
-)
+);
