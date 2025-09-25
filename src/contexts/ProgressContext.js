@@ -211,11 +211,50 @@ export function ProgressProvider(props) {
 
             const checkDay = getMoscowTime().getDay();
 
+            if (!data.isTargeted && !data.isResumUntarget && data.achieves?.length > 0) {
+                let untargetPoints = 0;
+
+                untargetPoints += Object.values(data.blender1).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.blender2).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.blender3).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.blender4).reduce((res, game) => res + game.points, 0);
+                
+                untargetPoints += Object.values(data.planner1).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.planner2).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.planner3).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.planner4).reduce((res, game) => res + game.points, 0);
+
+                untargetPoints += Object.values(data.game2048).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.gameBasket).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.gamePuzzle).reduce((res, game) => res + game.points, 0);
+                untargetPoints += Object.values(data.gameMoles).reduce((res, game) => res + game.points, 0);
+
+                untargetPoints += Object.values(data.week1EnterPoints).reduce((res, p) => res + p, 0);
+                untargetPoints += Object.values(data.week2EnterPoints).reduce((res, p) => res + p, 0);
+                untargetPoints += Object.values(data.week3EnterPoints).reduce((res, p) => res + p, 0);
+                untargetPoints += Object.values(data.week4EnterPoints).reduce((res, p) => res + p, 0);
+
+                untargetPoints += data.achieves.length * 5;
+
+                if (isNaN(untargetPoints)) {
+                    untargetPoints = 0;
+                }
+
+                if (untargetPoints > dataPoints) {
+                    dataPoints = untargetPoints;
+
+                    await updateUser({
+                        points: dataPoints,
+                        isResumUntarget: true,
+                    });
+                }
+            }
+
             if (!data?.achieves?.includes(6) && data?.game2048?.[DAYS.Monday]?.isCompleted 
                 && data?.game2048?.[DAYS.Wednesday]?.isCompleted && data?.game2048?.[DAYS.Friday]?.isCompleted) {
-                    dataPoints += data?.isTargeted ? 0 : 5;
-                    await updateUser({achieves: [...(data?.achieves ?? []), 6],  points: dataPoints,});
-                }
+                dataPoints += data?.isTargeted ? 0 : 5;
+                await updateUser({achieves: [...(data?.achieves ?? []), 6],  points: dataPoints,});
+            }
 
             if (checkDay === 1 && !data?.[`week${CURRENT_WEEK}EnterPoints`]?.[DAYS.Monday]) {
                 await updateUser({
@@ -374,7 +413,6 @@ export function ProgressProvider(props) {
         hour12: false
     }).format(date).replace(',', '');
 
-    console.log(user.gamePuzzle)
     const endGame = async ({finishPoints, gameName, week, day, addictiveData, achieve}) => {
         const newAchieves = [];
         let totalGamePoints = finishPoints;
@@ -426,10 +464,10 @@ export function ProgressProvider(props) {
         if (!user.achieves.includes(2) && week === 4 && day === DAYS.Friday) {
             let isAllPlayed = true;
 
-            for (let i = 0; i < 5; i++ ) {
+            for (let i = 1; i < 5; i++ ) {
                 const isPlayedChallenge = Object.values(newUserGames[`game${WEEK_TO_CHALLENGE_NAME[i]}`]).every(val => val.isCompleted);
                 const isPlayedBlender = Object.values(newUserGames[`blender${i}`]).every(val => val.isCompleted);
-                const isPlayedPlanner = Object.values(newUserGames[`planner${week}`]).every(val => val.isCompleted);
+                const isPlayedPlanner = Object.values(newUserGames[`planner${i}`]).every(val => val.isCompleted);
 
                 isAllPlayed = isPlayedPlanner && isPlayedBlender && isPlayedChallenge;
 
@@ -540,7 +578,6 @@ export function ProgressProvider(props) {
             return DAY_ARR[index + 1];
         })
     }
-
 
     const state = {
         screen,

@@ -2,10 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSizeRatio } from "../../../../hooks/useSizeRatio";
 import { useProgress } from "../../../../contexts/ProgressContext";
 import fieldPic from "./assets/fieldBg.svg";
+import { DAYS } from "../../../../constants/days";
 
 export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
     const ratio = useSizeRatio();
-    const {endGame} = useProgress();
+    const {endGame, user} = useProgress();
     const gameContainerRef = useRef(null);
     const [endModal, setEndModal] = useState({shown: false, isWin: false});
     const [currentScore, setCurrentScore] = useState(0);
@@ -33,7 +34,10 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
     };
 
     const stopGame = useCallback(({isWin}) => {
-        endGame({ finishPoints: currentScore, gameName: 'gamePuzzle', week: 3, day });
+        const hasAchieve = day === DAYS.Friday && user.gamePuzzle[DAYS.Monday].isCompleted && user.gamePuzzle[DAYS.Wednesday].isCompleted && !user.achieves.includes(8);
+        const finishPoints = currentScore + (!user.isTargeted && hasAchieve ? 5 : 0);
+        
+        endGame({ finishPoints, gameName: 'gamePuzzle', week: 3, day,  achieve: hasAchieve ? 8 : undefined });
 
         setEndModal({shown: true, isWin});
     }, [currentScore, day]);
