@@ -91,6 +91,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                                 width: puzzle.width * ratio, 
                                 height: puzzle.height * ratio,
                                 position: { x: puzzle.position.x * ratio, y: puzzle.position.y * ratio },
+                                originalPosition: { x: puzzle.originalPosition.x * ratio, y: puzzle.originalPosition.y * ratio },
                                 isLocked: false,
                                 verticesRel: puzzle.verticesRel.map(({x,y}) => ({x: x*ratio, y: y*ratio}))
                             };
@@ -103,6 +104,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                         canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
                         canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
                         canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
+                        canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
                         canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
                     },
                     checkPosition() {
@@ -119,7 +121,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             
                         if (distance < 20) {
                             setCurrentScore(prev => prev + 10);
-                            this.puzzles[this.selectedPiece.id] = {...piece, position: {...piece.originalPosition, x: originalX, y: originalY}, isLocked: true};
+                            this.puzzles[this.selectedPiece.id] = {...piece, position: {...piece.originalPosition, x: originalX, y: originalY}, isLocked: true, timestamp: Date.now()};
                             this.lockedPuzzles.push({...piece, position: {...piece.originalPosition, x: originalX, y: originalY}, isLocked: true});
                             this.unlockedPuzzles = this.unlockedPuzzles.filter(puzz => puzz.id !== piece.id);
                         }
@@ -135,7 +137,11 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             const intersect = ((yi > point.y) !== (yj > point.y)) &&
                                 (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
 
-                            if (intersect) inside = !inside;
+
+                            if (intersect) {
+                                 inside = true;
+                                 break;
+                            }
                         }
                         return inside;
                     },
@@ -144,7 +150,6 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                         // Проверка ограничивающего прямоугольника
                         if (clickX < shape.position.x || clickX > shape.position.x + shape.width ||
                             clickY < shape.position.y || clickY > shape.position.y + shape.height) {
-                                console.log('ne podoshlo :(')
                             return false;
                         }
                         
@@ -159,20 +164,15 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                     },
                     getSelectedPiece(x, y) {
                         // const selected = [];
-                        //TODO выяснить какой кусок лежит выше
                         for (let i = 0; i < Object.values(this.puzzles).length; i++) {
                             const piece = Object.values(this.puzzles)[i];
-                            console.log(piece.isLocked);
                             if (this.checkClickOnShape(x, y, piece) && !piece?.isLocked) {
-                                console.log('vot on')
                                 this.selectedPiece = piece;
-                                break;
                             }
                         }
                     },
                     handleMouseDown(e) {
                         const rect = this.canvas.getBoundingClientRect();
-                    
                         const x = e.clientX - rect.left;
                         const y = e.clientY - rect.top;
 
@@ -200,6 +200,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
 
                             this.getSelectedPiece(x, y);
 
+                            console.log(x,y);
                              if (this.selectedPiece) {
                                 this.isDragging = true;
                                 this.dragOffsetX = x - this.selectedPiece.position.x;
@@ -229,6 +230,28 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             puzzleY = height - this.selectedPiece.height;
                         }
                         this.puzzles[this.selectedPiece.id].position.x = puzzleX < 0 ? 0 : puzzleX;
+                        this.puzzles[this.selectedPiece.id].timestamp = Date.now();
+                        this.puzzles[this.selectedPiece.id].position.y = puzzleY < 0 ? 0 : puzzleY;
+                    },
+                    handleTouchMove(e) {
+                        if (!this.selectedPiece || !this.isDragging || !e.touches?.length) return;
+                        const rect = this.canvas.getBoundingClientRect();
+                    
+                        const x = e.touches[0].clientX- rect.left;
+                        const y = e.touches[0].clientY - rect.top;
+
+                        let puzzleX = x - this.dragOffsetX;
+                        let puzzleY = y - this.dragOffsetY;
+
+                        if (puzzleX > (width - (this.selectedPiece.width / 2))) {
+                            puzzleX = width - (this.selectedPiece.width / 2);
+                        }
+
+                        if (puzzleY > (height - (this.selectedPiece.height / 2))) {
+                            puzzleY = height - this.selectedPiece.height;
+                        }
+                        this.puzzles[this.selectedPiece.id].position.x = puzzleX < 0 ? 0 : puzzleX;
+                        this.puzzles[this.selectedPiece.id].timestamp = Date.now();
                         this.puzzles[this.selectedPiece.id].position.y = puzzleY < 0 ? 0 : puzzleY;
                     },
                     render() {
@@ -243,7 +266,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             ctx.drawImage(backImg, (width - 333*ratio) / 2, (height - 486 * ratio) / 2, 333 * ratio, 486 * ratio);
                         }
 
-                        const puzzles = Object.values(this.puzzles);
+                        const puzzles = Object.values(this.puzzles).sort((a, b) => (a?.timestamp ?? 0) - (b?.timestamp ?? 0));
 
                         for (let i = 0; i < this.lockedPuzzles.length; i++) {
                             const puzzle = this.lockedPuzzles[i];
@@ -253,12 +276,33 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
                             ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
                         }
 
-                        for (let i = 0; i < puzzles.length; i++) {
+                        // for (let i = 0; i < puzzles.length; i++) {
+                        //     const puzzle = puzzles[i];
+                        //     if (puzzle.isLocked) continue;
+                        //     if (puzzle.id === this.selectedPiece?.id) continue;
+
+                        //     const puzzImage = this.images[puzzle.id];
+
+                        //     if (!puzzImage) continue;
+
+                        //     ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
+                        // }
+
+                         for (let i = 0; i < puzzles.length; i++) {
                             const puzzle = puzzles[i];
-                            if (puzzle.isLocked) return;
+                            if (puzzle.isLocked) continue;
+                            if (puzzle.id === this.selectedPiece?.id) continue;
 
                             const puzzImage = this.images[puzzle.id];
-                            if (!puzzImage) return;
+
+                            if (!puzzImage) continue;
+
+                            ctx.drawImage(puzzImage, puzzle.originalPosition.x * ratio, puzzle.originalPosition.y * ratio, puzzle.width, puzzle.height)
+                        }
+
+                        if (this.selectedPiece) {
+                            const puzzle = this.selectedPiece;
+                            const puzzImage = this.images[puzzle.id];
 
                             ctx.drawImage(puzzImage, puzzle.position.x, puzzle.position.y, puzzle.width, puzzle.height)
                         }
@@ -280,8 +324,6 @@ export const useGame = ({ width, height, dpr, initialPuzzles, fieldPic }) => {
 
                 gameRef.current = game;
                 game.init();
-                console.log('aleee');
-
             } catch (error) {
                 console.error('Error initializing game:', error);
             }
