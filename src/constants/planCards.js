@@ -527,22 +527,22 @@ export const planCardsWeek3_Wednesday = [
         icon: meeting,
     },
     {
-        id: 2,
+        id: 232,
         text: 'творчество',
         icon: art,
     },
     {
-        id: 9,
+        id: 912,
         text: 'уборка',
         icon: cleaning,
     },
      {
-        id: 46,
+        id: 426,
         text: 'психолог',
         icon: doctor,
     },
     {
-        id: 10,
+        id: 130,
         text: 'сходить\nна балет',
         icon: ballet,
         isSpecial: true,

@@ -16,6 +16,11 @@ const CardsContainer = styled.div`
     margin-top: auto;
     background-color: white;
     border-radius: var(--border-radius-lg);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 `;
 
 const CardStyled = styled(PlanCard)`

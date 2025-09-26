@@ -18,6 +18,7 @@ const Icon = styled.img`
     height: 100%;
     width: 100%;
     flex-shrink: 0;
+    object-fit: contain;
 `;
 
 export const PlanCard = ({ className, card, children, onClick }) => {

@@ -56,7 +56,6 @@ const BlenderShadow = styled.div`
     filter: blur(3.25px);
 `;
 
-
 const DoneDrinksWrapper = styled.div `
     position: absolute;
     display: flex;
