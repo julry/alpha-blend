@@ -172,6 +172,8 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
                             return false;
                         }
                         
+                        if (shape.id === 'puzzle0') return true;
+                        
                         // Преобразование вершин в абсолютные координаты
                         const absVertices = shape.verticesRel.map(vertex => ({
                             x: shape.position.x + vertex.x,

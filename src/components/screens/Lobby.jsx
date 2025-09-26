@@ -127,7 +127,9 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
     useEffect(() => {
         if (tipsClosed.current.cup) return;
-        const isTipC = !user?.blender1[DAYS.Monday].isCompleted && user?.planner1[DAYS.Monday].isCompleted 
+        const isNoBlenderCompleted = !user?.blender1[DAYS.Monday].isCompleted && !user?.blender2[DAYS.Monday].isCompleted
+        && !user?.blender3[DAYS.Monday].isCompleted && !user?.blender4[DAYS.Monday].isCompleted;
+        const isTipC = isNoBlenderCompleted && user?.planner1[DAYS.Monday].isCompleted 
         && !menuType && !isLetterShown && !isPlanner;
 
         setIsCupTip(isTipC);

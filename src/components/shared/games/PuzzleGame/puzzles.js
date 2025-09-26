@@ -11,18 +11,18 @@ import imgM10 from './assets/puzzles/monday/9.png';
 import imgM11 from './assets/puzzles/monday/10.png';
 import imgM12 from './assets/puzzles/monday/11.png';
 
-import imgW1 from './assets/puzzles/monday/0.png';
-import imgW2 from './assets/puzzles/monday/1.png';
-import imgW3 from './assets/puzzles/monday/2.png';
-import imgW4 from './assets/puzzles/monday/3.png';
-import imgW5 from './assets/puzzles/monday/4.png';
-import imgW6 from './assets/puzzles/monday/5.png';
-import imgW7 from './assets/puzzles/monday/6.png';
-import imgW8 from './assets/puzzles/monday/7.png';
-import imgW9 from './assets/puzzles/monday/8.png';
-import imgW10 from './assets/puzzles/monday/9.png';
-import imgW11 from './assets/puzzles/monday/10.png';
-import imgW12 from './assets/puzzles/monday/11.png';
+import imgW1 from './assets/puzzles/wednesday/0.png';
+import imgW2 from './assets/puzzles/wednesday/1.png';
+import imgW3 from './assets/puzzles/wednesday/2.png';
+import imgW4 from './assets/puzzles/wednesday/3.png';
+import imgW5 from './assets/puzzles/wednesday/4.png';
+import imgW6 from './assets/puzzles/wednesday/5.png';
+import imgW7 from './assets/puzzles/wednesday/6.png';
+import imgW8 from './assets/puzzles/wednesday/7.png';
+import imgW9 from './assets/puzzles/wednesday/8.png';
+import imgW10 from './assets/puzzles/wednesday/9.png';
+import imgW11 from './assets/puzzles/wednesday/10.png';
+import imgW12 from './assets/puzzles/wednesday/11.png';
 
 import imgF1 from './assets/puzzles/friday/0.png';
 import imgF2 from './assets/puzzles/friday/1.png';
@@ -36,7 +36,6 @@ import imgF9 from './assets/puzzles/friday/8.png';
 import imgF10 from './assets/puzzles/friday/9.png';
 import imgF11 from './assets/puzzles/friday/10.png';
 import imgF12 from './assets/puzzles/friday/11.png';
-
 
 export const puzzlesM = [
     {
@@ -398,10 +397,10 @@ export const puzzlesW = [
         },
         originalPosition: {
             x: 198,
-            y: 85,
+            y: 84,
         },
         width: 132,
-        height: 176,
+        height: 177,
         image: imgW6,
         verticesRel: [
             {x: 0, y: 40},

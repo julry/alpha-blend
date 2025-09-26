@@ -91,7 +91,7 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
-    return DAYS.Monday;
+    return DAYS.Friday;
 
     const day = getMoscowTime().getDay();
 

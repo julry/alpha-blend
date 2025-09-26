@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.03af3f3c.css",
-    "main.js": "./static/js/main.2e39fdbc.js",
+    "main.js": "./static/js/main.8f0c92e7.js",
     "static/media/building.png": "./static/media/building.b82d3343adb3c8e3e1ca.png",
     "static/media/backLobby.png": "./static/media/backLobby.367e361e2249aecc4fbc.png",
     "static/media/lobbyBg.png": "./static/media/lobbyBg.9fcd260e08c0f26b97af.png",
@@ -16,17 +16,17 @@
     "static/media/StyreneALC-Bold.otf": "./static/media/StyreneALC-Bold.e0bfa5ee6e6532117573.otf",
     "static/media/StyreneALC-Black.otf": "./static/media/StyreneALC-Black.15eb00502b0f9bd64ba8.otf",
     "static/media/StyreneALC-Regular.otf": "./static/media/StyreneALC-Regular.7a999447d564875a5680.otf",
+    "static/media/7.png": "./static/media/7.dd7ac7a089fa89250765.png",
     "static/media/9.png": "./static/media/9.66010cd22a680eec6062.png",
     "static/media/11.png": "./static/media/11.cc092ab47501daabc7f4.png",
-    "static/media/7.png": "./static/media/7.dd7ac7a089fa89250765.png",
+    "static/media/10.png": "./static/media/10.364150a67a53317daa81.png",
     "static/media/5.png": "./static/media/5.54886f043182f9612023.png",
     "static/media/0.png": "./static/media/0.13d977bd85dadf3b1f25.png",
-    "static/media/10.png": "./static/media/10.364150a67a53317daa81.png",
     "static/media/4.png": "./static/media/4.ca32bcc145974423c55b.png",
+    "static/media/1.png": "./static/media/1.a76ea0c289a2bb56cab1.png",
     "static/media/3.png": "./static/media/3.da39f7cf013fbbbd68bf.png",
     "static/media/8.png": "./static/media/8.7e6473da561bb361110d.png",
     "static/media/6.png": "./static/media/6.5f233852458b3512131d.png",
-    "static/media/1.png": "./static/media/1.a76ea0c289a2bb56cab1.png",
     "static/media/blender.png": "./static/media/blender.d26f4f7c1ad4b352ed2e.png",
     "static/media/ball.png": "./static/media/ball.e41bc24abca83c3459a3.png",
     "static/media/2.png": "./static/media/2.bded0657e4d943bddf60.png",
@@ -55,10 +55,10 @@
     "static/media/side_rim.svg": "./static/media/side_rim.f8aedcdda3195b477570962757bf0dc3.svg",
     "static/media/front_rim.svg": "./static/media/front_rim.20748faad4c90feaa2e34412e22cfd7e.svg",
     "main.03af3f3c.css.map": "./static/css/main.03af3f3c.css.map",
-    "main.2e39fdbc.js.map": "./static/js/main.2e39fdbc.js.map"
+    "main.8f0c92e7.js.map": "./static/js/main.8f0c92e7.js.map"
   },
   "entrypoints": [
     "static/css/main.03af3f3c.css",
-    "static/js/main.2e39fdbc.js"
+    "static/js/main.8f0c92e7.js"
   ]
 }
