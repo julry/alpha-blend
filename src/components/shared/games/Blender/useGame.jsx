@@ -35,6 +35,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
 
     const correctAmount = useRef(0);
     const shownAmount = useRef(0);
+    const shownId = useRef(null);
 
     const shownCards = week > 2 ? ingridients : ingridients.filter(({isBased}) => isBased);
 
@@ -77,11 +78,14 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     }, [isStartGameModal]);
 
     useEffect(() => {
+        if (shownId.current || !comingFriends.length) return;
+        shownId.current = uid();
         const shown = comingFriends.filter((friend) => friend.queue === queue);
         const friends = shown.map((friend, index) => ({...friend, id: `${friend.person}_${uid()}`, position: POSITIONS[index], queueAmount: shown.length}));
 
         if (doneDrinks.length > 2) {
             loseLive();
+            return;
         };
 
         if (queue > 1 && isDelayed) {
@@ -102,6 +106,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
             return;
         }
 
+        shownId.current = null;
         setQueue(prev => prev + 1);
     }
 
@@ -130,6 +135,7 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
     };
 
     const replay = () => {
+        shownId.current = null;
         getFriends();
         setQueue(1);
         setDoneDrinks([]);
