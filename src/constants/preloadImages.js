@@ -86,6 +86,46 @@ import drink9_opened from '../assets/images/opened/drink9_opened.png';
 import drink10_opened from '../assets/images/opened/drink10_opened.png';
 import drink11_opened from '../assets/images/opened/drink11_opened.png';
 
+import puzzle0M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/0.png';
+import puzzle1M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/1.png';
+import puzzle2M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/2.png';
+import puzzle3M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/3.png';
+import puzzle4M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/4.png';
+import puzzle5M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/5.png';
+import puzzle6M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/6.png';
+import puzzle7M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/7.png';
+import puzzle8M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/8.png';
+import puzzle9M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/9.png';
+import puzzle10M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/10.png';
+import puzzle11M from '../components/shared/games/PuzzleGame/assets/puzzles/monday/11.png';
+
+import puzzle0W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/0.png';
+import puzzle1W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/1.png';
+import puzzle2W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/2.png';
+import puzzle3W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/3.png';
+import puzzle4W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/4.png';
+import puzzle5W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/5.png';
+import puzzle6W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/6.png';
+import puzzle7W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/7.png';
+import puzzle8W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/8.png';
+import puzzle9W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/9.png';
+import puzzle10W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/10.png';
+import puzzle11W from '../components/shared/games/PuzzleGame/assets/puzzles/wednesday/11.png';
+
+import puzzle0F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/0.png';
+import puzzle1F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/1.png';
+import puzzle2F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/2.png';
+import puzzle3F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/3.png';
+import puzzle4F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/4.png';
+import puzzle5F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/5.png';
+import puzzle6F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/6.png';
+import puzzle7F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/7.png';
+import puzzle8F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/8.png';
+import puzzle9F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/9.png';
+import puzzle10F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/10.png';
+import puzzle11F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/11.png';
+
+
 export const initialImages = [
     collegue, backLobby, blenderBg, building, lobbyBg,
     drink0, drink1, drink2, drink3, drink4, drink5, drink6,
@@ -104,5 +144,10 @@ export const commonImages = [
 
 export const week1Images = [...commonImages, hack, hackL, brain];
 export const week2Images = [...commonImages, bicycle, doctor, match, runTrain, shopping];
-export const week3Images = [...commonImages, matcha, pear, gallery, ballet, juzz];
+export const week3Images = [
+    ...commonImages, matcha, pear, gallery, ballet, juzz,
+    puzzle0M,puzzle1M, puzzle2M, puzzle3M, puzzle4M, puzzle5M, puzzle6M, puzzle7M, puzzle8M, puzzle9M, puzzle10M, puzzle11M,
+    puzzle0W,puzzle1W, puzzle2W, puzzle3W, puzzle4W, puzzle5W, puzzle6W, puzzle7W, puzzle8W, puzzle9W, puzzle10W, puzzle11W,
+    puzzle0F,puzzle1F, puzzle2F, puzzle3F, puzzle4F, puzzle5F, puzzle6F, puzzle7F, puzzle8F, puzzle9F, puzzle10F, puzzle11F,
+];
 export const week4Images = [...commonImages, matcha, pear];
