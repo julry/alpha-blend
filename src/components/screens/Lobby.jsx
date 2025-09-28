@@ -156,7 +156,9 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     };
 
     useEffect(() => {
-        if (isPlanerUndone || isChallengeUndone || hasClosed || !user?.lifehacks.includes(`week${week}day${day}`)) return;
+        const isSomethingUndone = isPlanerUndone || isChallengeUndone;
+        const isNotSeenLifehack = !user?.lifehacks.includes(`week${week}day${day}`) || isFindingModal;
+        if (isSomethingUndone || hasClosed || isNotSeenLifehack) return;
         const isPrevWeek = week < CURRENT_WEEK;
         const isPrevDay = !isPrevWeek && (DAY_ARR.indexOf(day) < DAY_ARR.indexOf(CURRENT_DAY));
         const hasMoreToPass = isPrevWeek || isPrevDay;
@@ -164,7 +166,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
         if (!hasMoreToPass && !isAllDone) return;
 
         setFinishModal({shown: true, hasMoreToPass, isAllDone});
-    }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed, user?.lifehacks]);
+    }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed, user?.lifehacks, isFindingModal]);
 
     const handleClickItem = (item) => {
         if (['game', 'planner', 'blender'].includes(item) && !hideTips) {

@@ -17,7 +17,7 @@ import { useGame } from "./useGame";
 import { ModalsPart } from "./ModalsPart";
 import { CardsField } from "./CardsField";
 import { MIN_MOCKUP_WIDTH } from "../../../ScreenTemplate";
-import { LEVEL_TO_PEOPLE_AMOUNT } from "./constants";
+import { LEVEL_TO_PEOPLE_AMOUNT, QUEUE_TO_PERSON_TIME_WEEK } from "./constants";
 
 const Wrapper = styled(FlexWrapper)`
     width: 100%;
@@ -144,6 +144,7 @@ export const BlenderGame = ({ isNeverPlayed, week, collegueMessage, drinkInfo, l
                                 points={friend.points}
                                 blenderDrop={blenderDrop}
                                 setBlenderDrop={setBlenderDrop}
+                                queuePersonTime={QUEUE_TO_PERSON_TIME_WEEK[week]}
                             />
                         ))}
                     </AnimatePresence>

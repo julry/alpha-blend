@@ -17,10 +17,24 @@ export const FINISH_SCORE = 256;
 export const MAX_TIME = 1 * 60 + 30;
 
 export const BLENDER_TIME = 1.5;
+
 export const QUEUE_TO_PERSON_TIME = {
     1: 15,
-    2: 15,
-    3: 16,
+    2: 16,
+    3: 17,
+}
+
+export const QUEUE_TO_PERSON_TIME_HARD = {
+    1: 15,
+    2: 17,
+    3: 22,
+}
+
+export const QUEUE_TO_PERSON_TIME_WEEK = {
+    1: QUEUE_TO_PERSON_TIME,
+    2: QUEUE_TO_PERSON_TIME,
+    3: QUEUE_TO_PERSON_TIME_HARD,
+    4: QUEUE_TO_PERSON_TIME_HARD
 }
 
 export const persons = [
