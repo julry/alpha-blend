@@ -36,6 +36,9 @@ import shopping from '../assets/images/planner/shopping.png';
 import gallery from '../assets/images/planner/gallery.png';
 import ballet from '../assets/images/planner/ballet.png';
 import juzz from '../assets/images/planner/juzz.png';
+import flight from '../assets/images/planner/flyght.png';
+import camp from '../assets/images/planner/camp.png';
+import movie from '../assets/images/planner/movie.png';
 
 export const planCardsWeek1_Monday = [
     {
@@ -664,11 +667,10 @@ export const planCardsWeek4_Monday = [
         text: 'дневник',
         icon: diary,
     },
-    //TODO: картинка
     {
         id: 130,
         text: 'отправиться\nв кругосветное\nпутешествие',
-        icon: hack,
+        icon: flight,
         isSpecial: true,
     },
 ];
@@ -734,11 +736,10 @@ export const planCardsWeek4_Wednesday = [
         text: 'психолог',
         icon: doctor,
     },
-    //TODO: картинка
     {
         id: 130,
         text: 'сняться\nв кино',
-        icon: hack,
+        icon: movie,
         isSpecial: true,
     },
 ];
@@ -799,11 +800,10 @@ export const planCardsWeek4_Friday = [
         text: 'путешествие',
         icon: travel,
     },
-    //TODO: картинка
     {
         id: 130,
         text: 'пойти в поход',
-        icon: hack,
+        icon: camp,
         isSpecial: true,
     },
 ];

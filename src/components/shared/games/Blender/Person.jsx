@@ -50,7 +50,7 @@ export const Person = memo(({ setBlenderDrop, blenderDrop, isStopped, ingridient
     const controls = useAnimation();
     const controlsInfo = useAnimation();
     const isFinishedPerson = useRef(false);
-    const personTime = useMemo(() => queuePersonTime[queueAmount], []);
+    const personTime = useMemo(() => queuePersonTime?.[queueAmount] ?? 15, []);
     const person = useMemo(() => persons.find(pers => pers.id === personId), []);
 
     const handleEnd = () => {

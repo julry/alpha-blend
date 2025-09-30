@@ -78,7 +78,7 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
-    return 3;
+    return 4;
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;

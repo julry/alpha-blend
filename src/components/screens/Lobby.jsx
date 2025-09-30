@@ -16,6 +16,7 @@ import { LobbyMenu } from "../shared/LobbyMenu";
 import { DAY_ARR, DAYS } from "../../constants/days";
 import { FinishContinuesModal } from "./FinishContinuesModal";
 import { Bold } from "../shared/Spans";
+import { FinishContinuesLastModal } from "./FinishContinuesLastModal";
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -87,6 +88,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
     const [isLetterModal, setIsLetterModal] = useState(false);
     const [isFindingModal, setIsFindingModal] = useState(false);
     const [finishModal, setFinishModal] = useState({shown: false});
+    const [lastModal, setLastModal] = useState({shown: false});
     const [isGameTip, setIsGameTip] = useState(false);
     const [isCupTip, setIsCupTip] = useState(false);
     const [hasClosed, setHasClosed] = useState(false);
@@ -165,8 +167,25 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
 
         if (!hasMoreToPass && !isAllDone) return;
 
+        if (week === 4 && day === DAYS.Friday) {
+            let isUndone = false;
+        
+            for (let i = 1; i < 5; i++) {
+                if (Object.values(user[`blender${i}`]).some(({isCompleted}) => !isCompleted) ||
+                    Object.values(user[`planner${i}`]).some(({isCompleted}) => !isCompleted) ||
+                    Object.values(user[`game${WEEK_TO_CHALLENGE_NAME[week]}`]).some(({isCompleted}) => !isCompleted)) {
+                        isUndone = true;
+                        break;
+                    }
+            }
+        
+            setLastModal({shown: true, hasMoreToPass: isUndone});
+
+            return;
+        }
+        
         setFinishModal({shown: true, hasMoreToPass, isAllDone});
-    }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed, user?.lifehacks, isFindingModal]);
+    }, [isPlanerUndone, isChallengeUndone, isAllDone, day, week, hasClosed, user?.lifehacks, isFindingModal, user]);
 
     const handleClickItem = (item) => {
         if (['game', 'planner', 'blender'].includes(item) && !hideTips) {
@@ -212,6 +231,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
             setPassedWeeks(prev => prev.includes(week) ? prev : [...prev, week]);
         }
         setHasClosed(true);
+      
         setFinishModal({shown: false});
     };
 
@@ -279,6 +299,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 endMessage={endMessage}
                 isAllDone={finishModal.isAllDone}
             />
+            <FinishContinuesLastModal isOpen={lastModal.shown} hasMore={lastModal.hasMoreToPass}  />
             <AnimatePresence>
                 {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
             </AnimatePresence>

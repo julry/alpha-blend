@@ -125,6 +125,17 @@ import puzzle9F from '../components/shared/games/PuzzleGame/assets/puzzles/frida
 import puzzle10F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/10.png';
 import puzzle11F from '../components/shared/games/PuzzleGame/assets/puzzles/friday/11.png';
 
+import batteryP from '../assets/images/moles/battery-p.png';
+import batteryN from '../assets/images/moles/battery-n.png';
+import bulbP from '../assets/images/moles/bulb-p.png';
+import bulbN from '../assets/images/moles/bulb-n.png';
+import cupP from '../assets/images/moles/cup-p.png';
+import cupN from '../assets/images/moles/cup-n.png';
+import diaryMole from '../assets/images/moles/diary.png';
+import letters from '../assets/images/moles/letters.png';
+import musicMole from '../assets/images/moles/music.png';
+import sportMole from '../assets/images/moles/sport.png';
+import clock from '../assets/images/moles/clock.png';
 
 export const initialImages = [
     collegue, backLobby, blenderBg, building, lobbyBg,
@@ -150,4 +161,7 @@ export const week3Images = [
     puzzle0W,puzzle1W, puzzle2W, puzzle3W, puzzle4W, puzzle5W, puzzle6W, puzzle7W, puzzle8W, puzzle9W, puzzle10W, puzzle11W,
     puzzle0F,puzzle1F, puzzle2F, puzzle3F, puzzle4F, puzzle5F, puzzle6F, puzzle7F, puzzle8F, puzzle9F, puzzle10F, puzzle11F,
 ];
-export const week4Images = [...commonImages, matcha, pear];
+export const week4Images = [ 
+    ...commonImages, matcha, pear, batteryP, batteryN, 
+    bulbN, bulbP, cupP, cupN, diaryMole, letters, musicMole, sportMole, clock
+];

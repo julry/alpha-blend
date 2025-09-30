@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.03af3f3c.css",
-    "main.js": "./static/js/main.64500c73.js",
+    "main.js": "./static/js/main.d9c857bc.js",
     "static/media/building.png": "./static/media/building.b82d3343adb3c8e3e1ca.png",
     "static/media/backLobby.png": "./static/media/backLobby.367e361e2249aecc4fbc.png",
     "static/media/lobbyBg.png": "./static/media/lobbyBg.9fcd260e08c0f26b97af.png",
@@ -31,17 +31,30 @@
     "static/media/ball.png": "./static/media/ball.e41bc24abca83c3459a3.png",
     "static/media/2.png": "./static/media/2.bded0657e4d943bddf60.png",
     "static/media/table.png": "./static/media/table.2e73e905fd6a22a97ba2.png",
+    "static/media/clock.png": "./static/media/clock.d3d113376b06e57294b3.png",
+    "static/media/letters.png": "./static/media/letters.07c7b885e1e85e8788e0.png",
     "static/media/drink10_opened.png": "./static/media/drink10_opened.e31cb51198c7b3019589.png",
     "static/media/drink9_opened.png": "./static/media/drink9_opened.d235dc996ff3983845f9.png",
+    "static/media/music.png": "./static/media/music.b4257bce26f62f6f36ae.png",
+    "static/media/battery-n.png": "./static/media/battery-n.92a90b1d589fd8c16e33.png",
     "static/media/drink6_opened.png": "./static/media/drink6_opened.265e5728c026f98dc584.png",
     "static/media/drink1_opened.png": "./static/media/drink1_opened.4749f11d630d16ea7dbc.png",
+    "static/media/cup-p.png": "./static/media/cup-p.3d613577117f508b42aa.png",
     "static/media/drink3_opened.png": "./static/media/drink3_opened.122c1513f2032c0d350b.png",
+    "static/media/diary.png": "./static/media/diary.7549c7ff361e8f898b7c.png",
     "static/media/drink8_opened.png": "./static/media/drink8_opened.72041fb34699a83b6f3f.png",
+    "static/media/battery-p.png": "./static/media/battery-p.c8a522a69fb4652b5bde.png",
+    "static/media/cup-n.png": "./static/media/cup-n.93fd7f110d11501ca3d5.png",
+    "static/media/bulb-n.png": "./static/media/bulb-n.303120ed383d1e948474.png",
     "static/media/drink4_opened.png": "./static/media/drink4_opened.ed085fd240d13e1154d6.png",
     "static/media/spa.png": "./static/media/spa.642e61e5dfc5c5a6cb9d.png",
     "static/media/drink0_opened.png": "./static/media/drink0_opened.952beab4681792278c8f.png",
     "static/media/drink5_opened.png": "./static/media/drink5_opened.b5460632014f4228aa27.png",
+    "static/media/sport.png": "./static/media/sport.08062f9eb78a1855ec3d.png",
+    "static/media/movie.png": "./static/media/movie.e72d0c2545624ae50ff3.png",
     "static/media/drink7_opened.png": "./static/media/drink7_opened.0c705743d3c4f92f9c35.png",
+    "static/media/bulb-p.png": "./static/media/bulb-p.626255eafff9e629803c.png",
+    "static/media/camp.png": "./static/media/camp.ff3e1dbbf9081ccc13db.png",
     "static/media/dairy.png": "./static/media/dairy.4fb74aac16cf2cdae14d.png",
     "static/media/drink2_opened.png": "./static/media/drink2_opened.4b88d062923825b61511.png",
     "static/media/meditation.png": "./static/media/meditation.c037e5531e9d572ffca4.png",
@@ -55,10 +68,10 @@
     "static/media/side_rim.svg": "./static/media/side_rim.f8aedcdda3195b477570962757bf0dc3.svg",
     "static/media/front_rim.svg": "./static/media/front_rim.20748faad4c90feaa2e34412e22cfd7e.svg",
     "main.03af3f3c.css.map": "./static/css/main.03af3f3c.css.map",
-    "main.64500c73.js.map": "./static/js/main.64500c73.js.map"
+    "main.d9c857bc.js.map": "./static/js/main.d9c857bc.js.map"
   },
   "entrypoints": [
     "static/css/main.03af3f3c.css",
-    "static/js/main.64500c73.js"
+    "static/js/main.d9c857bc.js"
   ]
 }

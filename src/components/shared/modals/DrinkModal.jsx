@@ -48,7 +48,7 @@ const DrinkWrapper = styled.div`
 
 const DrinkPic = styled.img`
     width: ${({$size}) => $size * 1.625}px;
-    height: ${({$size}) => $size * 1.625}px;
+    height: ${({$size, $imgPicHeight}) => $imgPicHeight ?? $size * 1.625}px;
     object-fit: contain;
 `;
 
@@ -77,7 +77,11 @@ export const DrinkModal = ({ isOpen, onClose, drink = {}}) => {
             <Title>{drink?.title}</Title>
             <InfoBlock $size={drink?.size * ratio}>
                 <DrinkWrapper $modalPicWidth={drink.modalPicWidth * ratio}>
-                    <DrinkPic src={drink.openedPic} $size={drink.size * ratio}/>
+                    <DrinkPic 
+                        src={drink.openedPic} 
+                        $size={drink.size * ratio} 
+                        $imgPicHeight={drink.imgPicHeight ? drink.imgPicHeight * ratio : undefined}
+                    />
                 </DrinkWrapper>
                 <Description>{drink?.description}</Description>
             </InfoBlock>

@@ -7,7 +7,7 @@ import { BlenderGame } from "../../shared/games/Blender";
 export const Blender3W = () => {
     const weekData = weekInfo.find((info) => info.week === 3);
     const collegueMessage = weekData.blenderCollegueMessage?.[DAYS.Wednesday];
-    const drinkInfo = drinks.find(drink => drink.id === 3);
+    const drinkInfo = drinks.find(drink => drink.id === 1);
 
     return (
         <BlenderGame 

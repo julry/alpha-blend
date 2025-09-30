@@ -11,6 +11,7 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
     const [endModal, setEndModal] = useState({shown: false, isWin: false});
     const [currentScore, setCurrentScore] = useState(0);
     const gameRef = useRef(null);
+    const score = useRef(0);
 
     // Функция для предзагрузки изображений
     const preloadImages = () => {
@@ -35,8 +36,8 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
 
     const stopGame = useCallback(({isWin}) => {
         const hasAchieve = day === DAYS.Friday && user.gamePuzzle[DAYS.Monday].isCompleted && user.gamePuzzle[DAYS.Wednesday].isCompleted && !user.achieves.includes(8);
-        const finishPoints = currentScore + (!user.isTargeted && hasAchieve ? 5 : 0);
-        
+        const finishPoints = score.current + (!user.isTargeted && hasAchieve ? 5 : 0);
+
         endGame({ finishPoints, gameName: 'gamePuzzle', week: 3, day,  achieve: hasAchieve ? 8 : undefined });
 
         setEndModal({shown: true, isWin});
@@ -139,9 +140,11 @@ export const useGame = ({ width, height, dpr, initialPuzzles, day }) => {
 
                             if (this.unlockedPuzzles.length < 1) {
                                 setCurrentScore(prev => prev + 20);
+                                score.current += 20;
                                 stopGame({isWin: true});
                             } else {
                                 setCurrentScore(prev => prev + 5);
+                                score.current += 5;
                             }
                         }
 

@@ -213,7 +213,6 @@ export const useGame = ({lobbyScreen, isNeverPlayed, gameName, week, drinkInfo, 
                 return;
             }
 
-
             shownAmount.current -= 1;
             if (shownAmount.current === 0) {
                 handleChangePerson();
