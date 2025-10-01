@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { FlexWrapper } from '../../ContentWrapper';
 import { BackHeader } from '../../BackHeader';
-import { Timer } from '../parts';
+import { Points, Timer } from '../parts';
 import { useSizeRatio } from '../../../../hooks/useSizeRatio';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MAX_TIME } from './constants';
@@ -135,6 +135,13 @@ const LogoWrapper = styled.div`
     }
 `;
 
+const PointsStyled = styled(Points)`
+    top: calc(0px - var(--spacing_x3));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 11;
+`;
+
 export const MoleGame = ({ day, isFirstTime }) => {
     const ratio = useSizeRatio();
     const {endGame, user, next} = useProgress();
@@ -148,6 +155,7 @@ export const MoleGame = ({ day, isFirstTime }) => {
     const [gameActive, setGameActive] = useState(false);
     const [holes, setHoles] = useState(Array(9).fill(null));
     const [level, setLevel] = useState(1);
+    const [shownPoints, setShownPoints] = useState([]);
 
     const finalScore = useRef(0);
 
@@ -169,6 +177,12 @@ export const MoleGame = ({ day, isFirstTime }) => {
             const points = holes[index]?.isPositive ? 5 : -5;
             finalScore.current = Math.max(finalScore.current + points, 0);
             setScore(prev => Math.max(prev + points, 0));
+            setShownPoints(prev => [...prev, {index, points}]);
+
+            setTimeout(() => {
+                setShownPoints(prev => prev.filter(ind => ind.index !== index));
+            }, 400);
+
             setHoles(prev => {
                 const newHoles = [...prev];
                 newHoles[index] = {...newHoles[index], isShown: false, isClicked: true};
@@ -287,6 +301,9 @@ export const MoleGame = ({ day, isFirstTime }) => {
                                         <img src={hole.img} alt={hole.isPositive ? '+5' : '-5'}/>
                                     </HoleItem>
                                 )} 
+                                {shownPoints.find(ind => ind.index === index) && (
+                                    <PointsStyled isShown shownPoints={shownPoints.find(ind => ind.index === index).points} />
+                                )}
                             </AnimatePresence>
                         </HoleContainer>
                     ))}

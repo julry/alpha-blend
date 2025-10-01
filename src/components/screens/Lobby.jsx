@@ -299,7 +299,7 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                 endMessage={endMessage}
                 isAllDone={finishModal.isAllDone}
             />
-            <FinishContinuesLastModal isOpen={lastModal.shown} hasMore={lastModal.hasMoreToPass}  />
+            <FinishContinuesLastModal isOpen={lastModal.shown} hasMore={lastModal.hasMoreToPass} onClose={() => setLastModal({shown: false})} />
             <AnimatePresence>
                 {menuType !== undefined && <LobbyMenu week={week} type={menuType} onClose={()=> setMenuType()}/>}
             </AnimatePresence>
