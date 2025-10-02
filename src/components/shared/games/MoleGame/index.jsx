@@ -5,7 +5,7 @@ import { BackHeader } from '../../BackHeader';
 import { Points, Timer } from '../parts';
 import { useSizeRatio } from '../../../../hooks/useSizeRatio';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MAX_TIME } from './constants';
+import { DAY_TO_LEVEL_SETTING, MAX_TIME } from './constants';
 import { getElements } from './utils';
 import { useProgress } from '../../../../contexts/ProgressContext';
 import { DAYS } from '../../../../constants/days';
@@ -136,9 +136,8 @@ const LogoWrapper = styled.div`
 `;
 
 const PointsStyled = styled(Points)`
-    top: calc(0px - var(--spacing_x3));
-    left: 50%;
-    transform: translateX(-50%);
+    top: calc(40 * ${({$ratio, $index}) => $ratio * Math.floor($index / 3)}px + var(--spacing_x6)* ${({$index}) => Math.floor($index / 3)});
+    left: calc(90 * ${({$ratio, $index}) => $ratio * (($index % 3))}px + 45 * ${({$ratio}) => $ratio}px + var(--spacing_x4)* ${({$index}) => $index % 3});
     z-index: 11;
 `;
 
@@ -163,14 +162,7 @@ export const MoleGame = ({ day, isFirstTime }) => {
 
     const collegueMessage = weekInfo.find((info) => info.week === 4).challengeCollegueMessage[day];
 
-    const levelSettings = {
-        1: { appearTime: 500, speed: 2.8 },
-        2: { appearTime: 450, speed: 3.0 },
-        3: { appearTime: 400, speed: 3.2 },
-        4: { appearTime: 400, speed: 3.6 },
-        5: { appearTime: 450, speed: 3.8 },
-        6: { appearTime: 300, speed: 4.0 }
-    };
+    const levelSettings = DAY_TO_LEVEL_SETTING[day];
 
     const whackMole = (index) => {
         if (holes[index] && !holes[index]?.isClicked && gameActive) {
@@ -217,12 +209,22 @@ export const MoleGame = ({ day, isFirstTime }) => {
             setTimeout(() => {
                 setHoles(prev => {
                     const newHoles = [...prev];
+                    if (newHoles[randomIndex]) {
+                        newHoles[randomIndex].isShown = false;
+                    }
+                    return newHoles;
+                });
+            }, levelSettings[level].appearTime * 2);
+
+            setTimeout(() => {
+                setHoles(prev => {
+                    const newHoles = [...prev];
                     if (newHoles[randomIndex]?.id === newHoles[randomIndex]?.id) {
                         newHoles[randomIndex] = null;
                     }
                     return newHoles;
                 });
-            }, levelSettings[level].appearTime * 2);
+            }, levelSettings[level].appearTime * 2.7);
         }
     }, [gameActive, holes, level]);
 
@@ -301,11 +303,11 @@ export const MoleGame = ({ day, isFirstTime }) => {
                                         <img src={hole.img} alt={hole.isPositive ? '+5' : '-5'}/>
                                     </HoleItem>
                                 )} 
-                                {shownPoints.find(ind => ind.index === index) && (
-                                    <PointsStyled isShown shownPoints={shownPoints.find(ind => ind.index === index).points} />
-                                )}
                             </AnimatePresence>
                         </HoleContainer>
+                    ))}
+                    {shownPoints.map(({index, points}) => (
+                        <PointsStyled $ratio={ratio} $index={index} isShown shownPoints={points} />
                     ))}
                 </HolesWrapper>
                 <LogoWrapper $ratio={ratio}>
