@@ -80,23 +80,23 @@ export const DAY_TO_LEVEL_SETTING = {
         2: { appearTime: 450, speed: 3.0 },
         3: { appearTime: 400, speed: 3.2 },
         4: { appearTime: 400, speed: 3.6 },
-        5: { appearTime: 450, speed: 3.8 },
-        6: { appearTime: 300, speed: 4.0 }
+        5: { appearTime: 350, speed: 3.8 },
+        6: { appearTime: 320, speed: 4.0 }
     },
     [DAYS.Wednesday]: {
-        1: { appearTime: 400, speed: 3.0 },
-        2: { appearTime: 350, speed: 3.2 },
-        3: { appearTime: 330, speed: 3.4 },
-        4: { appearTime: 320, speed: 3.6 },
-        5: { appearTime: 300, speed: 3.8 },
-        6: { appearTime: 290, speed: 4.0 }
+        1: { appearTime: 460, speed: 3.0 },
+        2: { appearTime: 430, speed: 3.2 },
+        3: { appearTime: 400, speed: 3.4 },
+        4: { appearTime: 380, speed: 3.6 },
+        5: { appearTime: 350, speed: 3.8 },
+        6: { appearTime: 310, speed: 4.0 }
     },
     [DAYS.Friday]: {
-        1: { appearTime: 360, speed: 3.2 },
-        2: { appearTime: 340, speed: 3.4 },
-        3: { appearTime: 320, speed: 3.6 },
-        4: { appearTime: 300, speed: 3.8 },
-        5: { appearTime: 290, speed: 4.0 },
-        6: { appearTime: 280, speed: 4.2 }
+        1: { appearTime: 450, speed: 3.2 },
+        2: { appearTime: 440, speed: 3.4 },
+        3: { appearTime: 420, speed: 3.6 },
+        4: { appearTime: 380, speed: 3.8 },
+        5: { appearTime: 340, speed: 4.0 },
+        6: { appearTime: 300, speed: 4.2 }
     },
 }
