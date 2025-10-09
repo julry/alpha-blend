@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useProgress } from "../../contexts/ProgressContext"
 import { CommonModal } from "../shared/modals";
 import { Bold } from "../shared/Spans";
+import { reachMetrikaGoal } from "../../utils/reachMetrikaGoal";
+
 
 const FirstP = styled.p`
     margin-top: var(--spacing_x2);
@@ -11,7 +13,8 @@ export const FinishContinuesLastModal = ({isOpen, hasMore, onClose}) => {
     const { user } = useProgress();
 
     const handleOpenLink = () => {
-        window.open('', '_blank');
+        reachMetrikaGoal('start career');
+        window.open('https://fut.ru/s/alfa0910', '_blank');
     }
 
     const vipContent = () => (

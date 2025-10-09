@@ -78,7 +78,7 @@ const getMoscowTime = (date) => {
 }
 
 const getCurrentWeek = () => {
-    return 4;
+    return 5;
     const today = getMoscowTime();
 
     if (today < getMoscowTime(new Date(2025, 8, 15))) return 0;
@@ -91,8 +91,6 @@ const getCurrentWeek = () => {
 }
 
 const getCurrentDay = () => {
-    return DAYS.Friday;
-
     const day = getMoscowTime().getDay();
 
     switch (day) {
@@ -161,6 +159,7 @@ export function ProgressProvider(props) {
         recordId.current = record?.id;
         const { data = {}, scriptData = {}} = record ?? {};
         const passedWeeksBd = data.passedWeeks ?? [];
+        const chances = scriptData?.chancesTotal;
         const week = (passedWeeksBd[passedWeeksBd.length - 1] >= CURRENT_WEEK - 1) ? CURRENT_WEEK : passedWeeksBd[passedWeeksBd.length - 1] ?? 1;
 
         let dayIndex = DAY_ARR.indexOf(CURRENT_DAY);
@@ -180,7 +179,7 @@ export function ProgressProvider(props) {
 
         setDay(DAY_ARR[dayIndex]);
         setIsShowWeekLobbyInfo(!data.planner1?.[DAYS.Monday]?.isCompleted);
-        setUserInfo(data);
+        setUserInfo({...data, chances});
         setTotalPoints(scriptData?.pointsTotal ?? data.points);
         setPoints(data.points);
         setPassedWeeks(passedWeeksBd);
@@ -207,6 +206,24 @@ export function ProgressProvider(props) {
             setUserBdData(info ?? {});
 
             const {data = {}} = info ?? {};
+
+            if (CURRENT_WEEK > 4) {
+                if (getUrlParam('screen')) {
+                    setCurrentScreen(getUrlParam('screen'));
+
+                    return;
+                }
+
+                if (data?.email) {
+                    setCurrentScreen(SCREENS.PLAYERLOCK);
+                } else {
+                    setCurrentScreen(SCREENS.LOCK)
+                }
+
+                return;
+            }
+
+
             let dataPoints = data?.points ?? 0;
 
             const checkDay = getMoscowTime().getDay();

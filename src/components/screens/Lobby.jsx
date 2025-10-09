@@ -17,6 +17,7 @@ import { DAY_ARR, DAYS } from "../../constants/days";
 import { FinishContinuesModal } from "./FinishContinuesModal";
 import { Bold } from "../shared/Spans";
 import { FinishContinuesLastModal } from "./FinishContinuesLastModal";
+import {reachMetrikaGoal} from '../../utils/reachMetrikaGoal';
 
 const Wrapper = styled(FlexWrapper)`
     padding-top: var(--spacing_x8);
@@ -179,6 +180,11 @@ export const Lobby = ({ isLaptopHighlightened, hideTips, isLaptopLetter, onLapto
                     }
             }
         
+            if (!user.hasFinished) {
+                updateUser({hasFinished: true});
+                reachMetrikaGoal(`finish game ${user.isTargeted ? 'target' : 'non target'}`);
+            }
+
             setLastModal({shown: true, hasMoreToPass: isUndone});
 
             return;

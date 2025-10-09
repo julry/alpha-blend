@@ -26,6 +26,8 @@ import {
 } from '../components/screens/week4';
 
 import { SCREENS } from "./screens";
+import {PlayerLockSсreen} from '../components/screens/PlayerLockScreen';
+import { LockSсreen } from "../components/screens/LockScreen";
 
 export const screens = {
     [SCREENS.INTRO_REG]: IntroRegistration,
@@ -74,4 +76,6 @@ export const screens = {
     [SCREENS.GAME4M]: GameMolesM,
     [SCREENS.GAME4W]: GameMolesW,
     [SCREENS.GAME4F]: GameMolesF,
+    [SCREENS.PLAYERLOCK]: PlayerLockSсreen,
+    [SCREENS.LOCK]: LockSсreen,
 };
