@@ -70,7 +70,7 @@ export const PlayerLockSсreen = ({ isLaptopHighlightened, hideTips, isLaptopLet
             <AchievesModal isOpen={isAchieveModal} onClose={() => setIsAchieveModal(false)} />
             <CommonModal isOpen={isCommonModal} btnText="Узнать о стажировке" onClose={handleOpenLink} onIconClose={() => setIsCommonModal(false)}>
                     <p>Игра от Альфа-Банка подошла к концу. Спасибо, что был с нами!</p>
-                    <p><Bold>Твой ID: {user.id}</Bold></p>
+                    <p><Bold>Твой ID:</Bold> {user.id}</p>
                     {isTargeted ? (
                         <p><Bold>Ты заработал <RedText>{user.week4Points}</RedText> баллов за 4 неделю и <RedText>{user.chances ?? 0}</RedText> шансов.</Bold></p>
                     ): (
